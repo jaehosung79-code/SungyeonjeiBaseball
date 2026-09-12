@@ -1344,7 +1344,21 @@
   },
   {
    "id": "mtyhjqai4ltzy",
-   "pas": [],
+   "pas": [
+    {
+     "id": "mtyhkgnn9c3om",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "K",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
    "def": [],
    "videos": [],
    "pdec": "",
@@ -1560,6 +1574,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-09-12T14:33:50.551Z",
+ "savedAt": "2026-09-12T14:34:24.801Z",
  "by": "성연제"
 }
