@@ -1427,6 +1427,29 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mu8aa71bsw5ua",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-09-18",
+   "opponent": "안양",
+   "venue": "양구 하리구장",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "myScore": "2",
+   "oppScore": "8",
+   "inn": 7,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -1623,6 +1646,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-09-14T12:04:26.296Z",
+ "savedAt": "2026-09-19T11:08:10.523Z",
  "by": "성연제"
 }
