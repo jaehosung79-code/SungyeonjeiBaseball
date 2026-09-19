@@ -1430,7 +1430,25 @@
   },
   {
    "id": "mu8aa71bsw5ua",
-   "pas": [],
+   "pas": [
+    {
+     "id": "mu8aalbm80619",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "LO",
+     "zone": {
+      "x": 204.2,
+      "y": 214.8,
+      "z2": 1
+     },
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
    "def": [],
    "videos": [],
    "pdec": "",
@@ -1646,6 +1664,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-09-19T11:08:10.523Z",
+ "savedAt": "2026-09-19T11:08:28.595Z",
  "by": "성연제"
 }
