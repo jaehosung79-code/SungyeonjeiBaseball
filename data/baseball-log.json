@@ -1464,6 +1464,19 @@
      "sb": 0,
      "cs": 0,
      "note": ""
+    },
+    {
+     "id": "mu8ab3z0s90er",
+     "inning": 3,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "K",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
     }
    ],
    "def": [],
@@ -1478,6 +1491,43 @@
    "myScore": "2",
    "oppScore": "8",
    "inn": 7,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
+  },
+  {
+   "id": "mu8abujvcxwo0",
+   "pas": [
+    {
+     "id": "mu8ac05tq7c7a",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "K",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-09-19",
+   "opponent": "상인천",
+   "venue": "양구 하리구장",
+   "homeAway": "원정",
+   "level": "",
+   "type": "official",
+   "myScore": "2",
+   "oppScore": "3",
+   "inn": 6,
    "dinn": [
     {
      "pos": "2B",
@@ -1681,6 +1731,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-09-19T11:08:42.930Z",
+ "savedAt": "2026-09-19T11:09:34.663Z",
  "by": "성연제"
 }
