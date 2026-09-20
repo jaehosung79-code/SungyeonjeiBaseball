@@ -1552,6 +1552,29 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "muag6djroxdxf",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-09-20",
+   "opponent": "아리BC",
+   "venue": "양구 하리구장",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "myScore": "3",
+   "oppScore": "8",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -1748,6 +1771,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-09-19T11:10:04.026Z",
+ "savedAt": "2026-09-20T23:28:42.106Z",
  "by": "성연제"
 }
