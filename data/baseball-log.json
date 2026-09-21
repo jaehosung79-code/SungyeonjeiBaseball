@@ -1829,7 +1829,7 @@
    "icon": "run",
    "col": "gray",
    "op": 20,
-   "time": "15:00",
+   "time": "14:00",
    "reps": 4,
    "title": "",
    "note": ""
@@ -1845,8 +1845,20 @@
    "reps": 3,
    "title": "",
    "note": ""
+  },
+  {
+   "id": "mual6h5ilh0zz",
+   "date": "2026-09-20",
+   "end": "",
+   "icon": "ball",
+   "col": "gray",
+   "op": 20,
+   "time": "17:00",
+   "reps": 2,
+   "title": "",
+   "note": ""
   }
  ],
- "savedAt": "2026-09-21T01:46:42.044Z",
+ "savedAt": "2026-09-21T01:49:17.586Z",
  "by": "성연제"
 }
