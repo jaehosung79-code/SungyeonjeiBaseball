@@ -1857,8 +1857,20 @@
    "reps": 2,
    "title": "",
    "note": ""
+  },
+  {
+   "id": "mual7fsrcug9r",
+   "date": "2026-09-26",
+   "end": "",
+   "icon": "run",
+   "col": "gray",
+   "op": 20,
+   "time": "13:30",
+   "reps": 5,
+   "title": "",
+   "note": ""
   }
  ],
- "savedAt": "2026-09-21T01:49:17.586Z",
+ "savedAt": "2026-09-21T01:49:29.925Z",
  "by": "성연제"
 }
