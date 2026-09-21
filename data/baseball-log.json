@@ -1821,8 +1821,32 @@
    "reps": 3,
    "title": "",
    "note": ""
+  },
+  {
+   "id": "mual356d2kdq5",
+   "date": "2026-09-24",
+   "end": "",
+   "icon": "run",
+   "col": "gray",
+   "op": 20,
+   "time": "15:00",
+   "reps": 4,
+   "title": "",
+   "note": ""
+  },
+  {
+   "id": "mual3njuklv89",
+   "date": "2026-09-18",
+   "end": "",
+   "icon": "run",
+   "col": "gray",
+   "op": 20,
+   "time": "",
+   "reps": 3,
+   "title": "",
+   "note": ""
   }
  ],
- "savedAt": "2026-09-20T23:30:10.059Z",
+ "savedAt": "2026-09-21T01:46:42.044Z",
  "by": "성연제"
 }
