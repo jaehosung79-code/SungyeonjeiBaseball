@@ -1651,6 +1651,24 @@
    "inn": 6,
    "dinn": [],
    "note": ""
+  },
+  {
+   "id": "mukgfaukp5fdg",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-10-09",
+   "opponent": "백운초",
+   "venue": "구의구장",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [],
+   "note": ""
   }
  ],
  "plans": [
@@ -1943,6 +1961,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-09-27T23:32:59.395Z",
+ "savedAt": "2026-09-27T23:33:24.368Z",
  "by": "성연제"
 }
