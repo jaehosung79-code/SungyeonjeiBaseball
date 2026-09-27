@@ -1829,7 +1829,7 @@
    "icon": "run",
    "col": "gray",
    "op": 20,
-   "time": "15:00",
+   "time": "14:00",
    "reps": 4,
    "title": "",
    "note": ""
@@ -1883,7 +1883,7 @@
    "note": ""
   },
   {
-   "id": "muhzro3lfz9c1",
+   "id": "mukflzd7v0bpw",
    "date": "2026-10-03",
    "end": "",
    "icon": "run",
@@ -1893,8 +1893,20 @@
    "reps": 6,
    "title": "",
    "note": ""
+  },
+  {
+   "id": "mukgdd6qq1lca",
+   "date": "2026-10-03",
+   "end": "2026-10-11",
+   "icon": "run",
+   "col": "blue",
+   "op": 20,
+   "time": "",
+   "reps": 0,
+   "title": "딜라이브",
+   "note": ""
   }
  ],
- "savedAt": "2026-09-27T23:10:51.152Z",
+ "savedAt": "2026-09-27T23:31:59.911Z",
  "by": "성연제"
 }
