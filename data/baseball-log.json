@@ -1534,7 +1534,19 @@
     }
    ],
    "def": [],
-   "videos": [],
+   "videos": [
+    {
+     "id": "mu8afg40kmxj2",
+     "kind": "link",
+     "url": "https://drive.google.com/file/d/1ckShZidEIFxF1VV79lgkcd7NsMivfkqX/view?usp=drivesdk",
+     "title": "2번째 타석 · 2회 안타",
+     "folder": "",
+     "paId": "mu8aceqaamt68",
+     "defId": null,
+     "note": "",
+     "createdAt": 1789816326480
+    }
+   ],
    "pdec": "",
    "date": "2026-09-19",
    "opponent": "상인천",
@@ -1979,6 +1991,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-09-27T23:34:12.412Z",
+ "savedAt": "2026-09-28T05:44:25.434Z",
  "by": "성연제"
 }
