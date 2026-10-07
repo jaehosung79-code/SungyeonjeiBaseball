@@ -2048,7 +2048,7 @@
    "col": "gray",
    "op": 20,
    "time": "17:00",
-   "reps": 5,
+   "reps": 6,
    "title": "",
    "note": ""
   },
@@ -2084,7 +2084,7 @@
    "col": "gray",
    "op": 20,
    "time": "",
-   "reps": 6,
+   "reps": 7,
    "title": "",
    "note": ""
   },
@@ -2099,8 +2099,32 @@
    "reps": 6,
    "title": "",
    "note": ""
+  },
+  {
+   "id": "muy22o4e1cwqn",
+   "date": "2026-09-29",
+   "end": "",
+   "icon": "ball",
+   "col": "gray",
+   "op": 20,
+   "time": "",
+   "reps": 5,
+   "title": "",
+   "note": ""
+  },
+  {
+   "id": "muy23bl97cdnr",
+   "date": "2026-10-08",
+   "end": "",
+   "icon": "ball",
+   "col": "gray",
+   "op": 20,
+   "time": "",
+   "reps": 8,
+   "title": "",
+   "note": ""
   }
  ],
- "savedAt": "2026-10-07T11:59:36.913Z",
+ "savedAt": "2026-10-07T12:00:45.014Z",
  "by": "성연제"
 }
