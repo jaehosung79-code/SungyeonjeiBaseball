@@ -2207,8 +2207,20 @@
    "reps": 14,
    "title": "",
    "note": ""
+  },
+  {
+   "id": "muy25znz1ei1u",
+   "date": "2026-10-28",
+   "end": "",
+   "icon": "gym",
+   "col": "gray",
+   "op": 20,
+   "time": "",
+   "reps": 9,
+   "title": "",
+   "note": ""
   }
  ],
- "savedAt": "2026-10-07T12:02:45.009Z",
+ "savedAt": "2026-10-07T12:02:57.620Z",
  "by": "성연제"
 }
