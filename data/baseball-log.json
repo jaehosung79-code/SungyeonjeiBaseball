@@ -1534,7 +1534,19 @@
     }
    ],
    "def": [],
-   "videos": [],
+   "videos": [
+    {
+     "id": "mu8afg40kmxj2",
+     "kind": "link",
+     "url": "https://drive.google.com/file/d/1ckShZidEIFxF1VV79lgkcd7NsMivfkqX/view?usp=drivesdk",
+     "title": "2번째 타석 · 2회 안타",
+     "folder": "",
+     "paId": "mu8aceqaamt68",
+     "defId": null,
+     "note": "",
+     "createdAt": 1789816326480
+    }
+   ],
    "pdec": "",
    "date": "2026-09-19",
    "opponent": "상인천",
@@ -1614,6 +1626,78 @@
      "inn": 6
     }
    ],
+   "note": ""
+  },
+  {
+   "id": "mukgecrqdapiw",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-10-03",
+   "opponent": "학동초",
+   "venue": "구의구장",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "myScore": "4",
+   "oppScore": "3",
+   "inn": 6,
+   "dinn": [],
+   "note": ""
+  },
+  {
+   "id": "mukgexc7bbs3m",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-10-06",
+   "opponent": "영일초",
+   "venue": "구의구장",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [],
+   "note": ""
+  },
+  {
+   "id": "mukgfaukp5fdg",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-10-09",
+   "opponent": "백운초",
+   "venue": "구의구장",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [],
+   "note": ""
+  },
+  {
+   "id": "mukggf5rmaeu0",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-10-11",
+   "opponent": "이수초",
+   "venue": "구의구장",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [],
    "note": ""
   }
  ],
@@ -1829,7 +1913,7 @@
    "icon": "run",
    "col": "gray",
    "op": 20,
-   "time": "15:00",
+   "time": "14:00",
    "reps": 4,
    "title": "",
    "note": ""
@@ -1883,10 +1967,10 @@
    "note": ""
   },
   {
-   "id": "muhzro3lfz9c1",
+   "id": "mukflzd7v0bpw",
    "date": "2026-10-03",
    "end": "",
-   "icon": "ball",
+   "icon": "run",
    "col": "gray",
    "op": 20,
    "time": "17:00",
@@ -1895,30 +1979,18 @@
    "note": ""
   },
   {
-   "id": "musecq0hsvpuw",
-   "date": "2026-09-29",
-   "end": "",
-   "icon": "ball",
-   "col": "gray",
+   "id": "mukgdd6qq1lca",
+   "date": "2026-10-03",
+   "end": "2026-10-11",
+   "icon": "run",
+   "col": "blue",
    "op": 20,
    "time": "",
-   "reps": 5,
-   "title": "",
-   "note": ""
-  },
-  {
-   "id": "museda19euqjc",
-   "date": "2026-10-04",
-   "end": "",
-   "icon": "ball",
-   "col": "gray",
-   "op": 20,
-   "time": "17:00",
-   "reps": 7,
-   "title": "",
+   "reps": 0,
+   "title": "딜라이브",
    "note": ""
   }
  ],
- "savedAt": "2026-10-05T16:46:33.167Z",
+ "savedAt": "2026-10-07T11:47:11.752Z",
  "by": "성연제"
 }
