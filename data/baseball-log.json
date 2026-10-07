@@ -1712,7 +1712,19 @@
     }
    ],
    "def": [],
-   "videos": [],
+   "videos": [
+    {
+     "id": "muy1r8ruurv0h",
+     "kind": "link",
+     "url": "https://drive.google.com/file/d/1E0CxWuzD-QIpsfRUk7jtUg7uQ6FymvNt/view?usp=drivesdk",
+     "title": "2026_10_07 20_47",
+     "folder": "",
+     "paId": "muy1oeb5i373t",
+     "defId": null,
+     "note": "",
+     "createdAt": 1791373880874
+    }
+   ],
    "pdec": "",
    "date": "2026-10-06",
    "opponent": "영일초",
@@ -2053,6 +2065,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-07T11:49:58.553Z",
+ "savedAt": "2026-10-07T11:54:04.230Z",
  "by": "성연제"
 }
