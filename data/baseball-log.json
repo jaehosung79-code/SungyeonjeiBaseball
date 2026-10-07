@@ -2063,8 +2063,20 @@
    "reps": 0,
    "title": "딜라이브",
    "note": ""
+  },
+  {
+   "id": "muy1zdsabogp3",
+   "date": "2026-10-07",
+   "end": "",
+   "icon": "gym",
+   "col": "gray",
+   "op": 20,
+   "time": "",
+   "reps": 9,
+   "title": "",
+   "note": ""
   }
  ],
- "savedAt": "2026-10-07T11:57:36.489Z",
+ "savedAt": "2026-10-07T11:57:44.877Z",
  "by": "성연제"
 }
