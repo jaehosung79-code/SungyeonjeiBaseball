@@ -2135,8 +2135,20 @@
    "reps": 8,
    "title": "",
    "note": ""
+  },
+  {
+   "id": "muy24jlpbqio1",
+   "date": "2026-10-11",
+   "end": "",
+   "icon": "ball",
+   "col": "gray",
+   "op": 20,
+   "time": "17:00",
+   "reps": 9,
+   "title": "",
+   "note": ""
   }
  ],
- "savedAt": "2026-10-07T12:01:39.196Z",
+ "savedAt": "2026-10-07T12:01:45.029Z",
  "by": "성연제"
 }
