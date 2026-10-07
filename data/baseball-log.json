@@ -2044,11 +2044,11 @@
    "id": "mukflzd7v0bpw",
    "date": "2026-10-03",
    "end": "",
-   "icon": "run",
+   "icon": "ball",
    "col": "gray",
    "op": 20,
    "time": "17:00",
-   "reps": 6,
+   "reps": 5,
    "title": "",
    "note": ""
   },
@@ -2077,6 +2077,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-07T11:57:44.877Z",
+ "savedAt": "2026-10-07T11:59:03.638Z",
  "by": "성연제"
 }
