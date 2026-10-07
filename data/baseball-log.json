@@ -2096,7 +2096,7 @@
    "col": "gray",
    "op": 20,
    "time": "",
-   "reps": 6,
+   "reps": 7,
    "title": "",
    "note": ""
   },
@@ -2123,8 +2123,20 @@
    "reps": 8,
    "title": "",
    "note": ""
+  },
+  {
+   "id": "muy24890vnjr0",
+   "date": "2026-10-09",
+   "end": "",
+   "icon": "run",
+   "col": "gray",
+   "op": 20,
+   "time": "",
+   "reps": 8,
+   "title": "",
+   "note": ""
   }
  ],
- "savedAt": "2026-10-07T12:00:45.014Z",
+ "savedAt": "2026-10-07T12:01:39.196Z",
  "by": "성연제"
 }
