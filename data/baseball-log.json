@@ -1685,8 +1685,8 @@
    "homeAway": "홈",
    "level": "",
    "type": "official",
-   "myScore": "",
-   "oppScore": "",
+   "myScore": "0",
+   "oppScore": "4",
    "inn": 6,
    "dinn": [],
    "note": ""
@@ -2018,6 +2018,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-07T11:48:12.987Z",
+ "savedAt": "2026-10-07T11:48:53.526Z",
  "by": "성연제"
 }
