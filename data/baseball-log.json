@@ -2219,8 +2219,32 @@
    "reps": 9,
    "title": "",
    "note": ""
+  },
+  {
+   "id": "muy26gi96varz",
+   "date": "2026-10-18",
+   "end": "",
+   "icon": "ball",
+   "col": "gray",
+   "op": 20,
+   "time": "",
+   "reps": 10,
+   "title": "",
+   "note": ""
+  },
+  {
+   "id": "muy26m0l41mfs",
+   "date": "2026-10-25",
+   "end": "",
+   "icon": "ball",
+   "col": "gray",
+   "op": 20,
+   "time": "",
+   "reps": 11,
+   "title": "",
+   "note": ""
   }
  ],
- "savedAt": "2026-10-07T12:02:57.620Z",
+ "savedAt": "2026-10-07T12:03:26.593Z",
  "by": "성연제"
 }
