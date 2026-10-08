@@ -1724,7 +1724,20 @@
      "note": ""
     }
    ],
-   "def": [],
+   "def": [
+    {
+     "id": "muz75kq9s9m6f",
+     "pos": "2B",
+     "inning": 3,
+     "result": "DP",
+     "innings": "",
+     "note": "",
+     "po": 1,
+     "a": 1,
+     "e": 0,
+     "dp": 1
+    }
+   ],
    "videos": [
     {
      "id": "muy1r8ruurv0h",
@@ -2504,6 +2517,6 @@
    "rg": "muz6x0hqzd843"
   }
  ],
- "savedAt": "2026-10-08T07:10:07.401Z",
+ "savedAt": "2026-10-08T07:10:22.340Z",
  "by": "성연제"
 }
