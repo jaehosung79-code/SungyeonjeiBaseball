@@ -1736,6 +1736,30 @@
      "a": 1,
      "e": 0,
      "dp": 1
+    },
+    {
+     "id": "muz75t8yracv8",
+     "pos": "2B",
+     "inning": 5,
+     "result": "PO",
+     "innings": "",
+     "note": "",
+     "po": 1,
+     "a": 0,
+     "e": 0,
+     "dp": 0
+    },
+    {
+     "id": "muz75xn1rp4wu",
+     "pos": "2B",
+     "inning": 6,
+     "result": "INN",
+     "innings": "",
+     "note": "",
+     "po": 0,
+     "a": 0,
+     "e": 0,
+     "dp": 0
     }
    ],
    "videos": [
@@ -2517,6 +2541,6 @@
    "rg": "muz6x0hqzd843"
   }
  ],
- "savedAt": "2026-10-08T07:10:22.340Z",
+ "savedAt": "2026-10-08T07:10:39.089Z",
  "by": "성연제"
 }
