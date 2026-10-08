@@ -2433,8 +2433,64 @@
    "note": "",
    "id": "muz6w8vfpap4k",
    "rg": "muz6w8vfroi0k"
+  },
+  {
+   "date": "2026-11-01",
+   "end": "",
+   "icon": "ball",
+   "col": "gray",
+   "op": 80,
+   "time": "17:00",
+   "reps": 12,
+   "ar": true,
+   "title": "",
+   "note": "",
+   "id": "muz6x0hqd6s1s",
+   "rg": "muz6x0hqzd843"
+  },
+  {
+   "date": "2026-11-08",
+   "end": "",
+   "icon": "ball",
+   "col": "gray",
+   "op": 80,
+   "time": "17:00",
+   "reps": 13,
+   "ar": true,
+   "title": "",
+   "note": "",
+   "id": "muz6x0hqq76wr",
+   "rg": "muz6x0hqzd843"
+  },
+  {
+   "date": "2026-11-15",
+   "end": "",
+   "icon": "ball",
+   "col": "gray",
+   "op": 80,
+   "time": "17:00",
+   "reps": 14,
+   "ar": true,
+   "title": "",
+   "note": "",
+   "id": "muz6x0hqyx89p",
+   "rg": "muz6x0hqzd843"
+  },
+  {
+   "date": "2026-11-22",
+   "end": "",
+   "icon": "ball",
+   "col": "gray",
+   "op": 80,
+   "time": "17:00",
+   "reps": 15,
+   "ar": true,
+   "title": "",
+   "note": "",
+   "id": "muz6x0hq1x1o5",
+   "rg": "muz6x0hqzd843"
   }
  ],
- "savedAt": "2026-10-08T07:03:13.701Z",
+ "savedAt": "2026-10-08T07:04:01.531Z",
  "by": "성연제"
 }
