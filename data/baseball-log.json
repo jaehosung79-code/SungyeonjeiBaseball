@@ -1679,8 +1679,8 @@
     {
      "id": "muy1oeb5i373t",
      "inning": 3,
-     "pitcherNo": "",
-     "pitcher": "",
+     "pitcherNo": "17",
+     "pitcher": "이서원",
      "result": "1B",
      "zone": {
       "x": 152,
@@ -2245,6 +2245,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-07T12:03:26.593Z",
+ "savedAt": "2026-10-08T06:54:47.302Z",
  "by": "성연제"
 }
