@@ -1696,8 +1696,8 @@
     {
      "id": "muy1p7fgx9zav",
      "inning": 5,
-     "pitcherNo": "",
-     "pitcher": "",
+     "pitcherNo": "27",
+     "pitcher": "박준서",
      "result": "GO",
      "zone": {
       "x": 170.1,
@@ -2245,6 +2245,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-08T06:54:47.302Z",
+ "savedAt": "2026-10-08T06:55:04.005Z",
  "by": "성연제"
 }
