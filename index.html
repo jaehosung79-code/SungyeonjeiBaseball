@@ -692,6 +692,21 @@ a.vtitle{text-decoration:none}
 /* 16:9 비율을 지키면서, 화면 높이의 62%(최대 520px)를 넘지 않게 폭을 제한합니다 */
 .hint{font-size:12px;color:var(--text-3);line-height:1.45}
 .note{background:var(--surface-2);border-radius:var(--r-sm);padding:10px 12px;font-size:12.5px;color:var(--text-2);line-height:1.5}
+/* 자동 분석 — 카드 아래 짧은 해설 */
+.ins{margin-top:10px;background:var(--surface-2);border-radius:var(--r-sm);padding:9px 11px 9px 12px}
+.ins .ih{font-size:11px;font-weight:700;color:var(--accent-ink);letter-spacing:.02em;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.ins ul{margin:0;padding:0;list-style:none}
+.ins li{position:relative;padding-left:14px;font-size:12.5px;line-height:1.5;color:var(--text-2)}
+.ins li+li{margin-top:2px}
+.ins li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;border-radius:999px;background:var(--text-3)}
+.ins li.good::before{background:var(--good)}
+.ins li.warn::before{background:var(--warn)}
+.ins li.bad::before{background:var(--crit)}
+.ins li.few{color:var(--text-3);font-size:11.5px}
+.ins b{color:var(--text-1);font-weight:650}
+.inscols{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:620px){ .inscols{grid-template-columns:1fr 1fr} }
+.inscols .ins{margin-top:0}
 .pickbox{
   margin:-4px 0 12px;padding:9px 11px;max-height:200px;overflow:auto;
   background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);
@@ -2537,12 +2552,13 @@ function zoneHeat(pitches){
 
 /* 표 보기 토글이 붙은 차트 카드 */
 let cardSeq=0;
-function chartCard(title, cap, chartHTML, tableHTML){
+function chartCard(title, cap, chartHTML, tableHTML, insHTML){
   const id="tv"+(++cardSeq);
   return `<div class="card">
     <div class="hd"><div style="flex:1"><h3>${esc(title)}</h3>${cap?`<div class="cap">${cap}</div>`:""}</div>
     ${tableHTML?`<button class="iconbtn sm" data-toggle="${id}" aria-expanded="false" title="표로 보기" aria-label="표로 보기">${IC_TABLE}</button>`:""}</div>
     ${chartHTML}
+    ${insHTML||""}
     ${tableHTML?`<div class="tv" id="${id}" hidden>${tableHTML}</div>`:""}
   </div>`;
 }
@@ -3019,6 +3035,348 @@ function viewPlans(){
     </div>`;
 }
 
+
+/* ----------------------------- 자동 분석 -----------------------------
+   기록에서 바로 계산한 값을 정해 둔 기준과 비교해 짧은 해설을 붙입니다 (인터넷·AI 없이 기기 안에서 계산).
+   기준값은 학생야구 일반 수준의 대략적인 값이라, 리그·학년에 따라 느낌이 다를 수 있습니다.
+   항목: {k:"good"|"warn"|"bad"|"info"|"few", s:"설명 HTML"} */
+function insOn(){ return !(S.ui && S.ui.ins === false); }
+function insBox(items, title){
+  const list = (items||[]).filter(Boolean);
+  if(!insOn() || !list.length) return "";
+  return `<div class="ins"><div class="ih">${esc(title||"자동 분석")}</div><ul>`
+    + list.map(x=>`<li class="${x.k||"info"}">${x.s}</li>`).join("") + `</ul></div>`;
+}
+const insI = (k, s)=> ({k, s});
+const fewNote = (n, min, unit)=> n < min? insI("few", `${unit} ${n}개 — 표본이 적어 참고용 (${min}개 이상부터 의미가 커집니다)`) : null;
+const pctS = v => (v==null||!isFinite(v))? "-" : Math.round(v*100)+"%";
+/* 우타는 좌측, 좌타는 우측이 당겨친 방향 */
+function pullSide(){ const b = (curProfile()||{}).bats; return b==="좌타"? "우" : b==="우타"? "좌" : ""; }
+
+function insBatting(b, gs){
+  const out = [];
+  if(!b.PA) return out;
+  if(b.AVG!=null){
+    if(b.AVG >= .350) out.push(insI("good", `타율 <b>${avg3(b.AVG)}</b> — 매우 높은 수준`));
+    else if(b.AVG >= .300) out.push(insI("good", `타율 <b>${avg3(b.AVG)}</b> — 3할 이상, 좋은 타격감`));
+    else if(b.AVG >= .250) out.push(insI("info", `타율 <b>${avg3(b.AVG)}</b> — 무난한 수준`));
+    else out.push(insI("warn", `타율 <b>${avg3(b.AVG)}</b> — 낮은 편, 콘택트 보완 여지`));
+  }
+  if(b.OBP!=null && b.AVG!=null && b.AB >= 10){
+    const gap = b.OBP - b.AVG;
+    if(gap >= .090) out.push(insI("good", `출루율이 타율보다 <b>${avg3(gap)}</b> 높음 — 볼넷·사구로도 잘 나가는 타자`));
+    else if(gap <= .040) out.push(insI("warn", `출루율 ${avg3(b.OBP)} · 타율 ${avg3(b.AVG)} — 차이가 작아 출루를 안타에 많이 의존 (볼넷 적음)`));
+  }
+  if(b.ISO!=null && b.AB >= 10){
+    if(b.ISO >= .200) out.push(insI("good", `순장타율 ISO <b>${avg3(b.ISO)}</b> — 장타력 뛰어남`));
+    else if(b.ISO < .080) out.push(insI("info", `ISO ${avg3(b.ISO)} — 단타 위주, 장타 비중 낮음`));
+  }
+  if(b.KP!=null && b.PA >= 15){
+    if(b.KP >= .25) out.push(insI("warn", `삼진율 <b>${pct1(b.KP)}</b> — 높은 편, 2스트라이크 이후 대처 점검`));
+    else if(b.KP <= .12) out.push(insI("good", `삼진율 <b>${pct1(b.KP)}</b> — 삼진이 적은 콘택트형`));
+  }
+  if(b.BB > 0 && b.BB >= b.SO && b.PA >= 15) out.push(insI("good", `볼넷 ${b.BB} ≥ 삼진 ${b.SO} — 선구안 우수`));
+  if(b.BABIP!=null && (b.AB - b.SO) >= 20){
+    if(b.BABIP >= .400) out.push(insI("info", `BABIP ${avg3(b.BABIP)} — 높은 편, 운이 따랐을 수 있어 타율이 조금 내려올 수 있음`));
+    else if(b.BABIP <= .240) out.push(insI("info", `BABIP ${avg3(b.BABIP)} — 낮은 편, 잘 맞은 타구가 잡혔을 수 있어 반등 여지`));
+  }
+  if(gs && gs.length) out.push(insI("info", `경기당 ${fx2(b.H/gs.length)}안타 · ${fx2(b.RBI/gs.length)}타점`));
+  const f = fewNote(b.PA, 30, "타석"); if(f) out.push(f);
+  return out;
+}
+function insSteal(b, gs){
+  const n = b.SB + b.CS, out = [];
+  if(!n) return out;
+  if(n >= 3){
+    if(b.SBP >= .75) out.push(insI("good", `성공률 <b>${pct1(b.SBP)}</b> — 높음, 적극적으로 뛰어도 이득`));
+    else if(b.SBP < .67) out.push(insI("warn", `성공률 <b>${pct1(b.SBP)}</b> — 손익분기(약 70%)보다 낮아 시도 대비 손해일 수 있음`));
+    else out.push(insI("info", `성공률 ${pct1(b.SBP)} — 손익분기(약 70%) 근처`));
+  }
+  if(gs.length) out.push(insI("info", `경기당 ${fx2(n/gs.length)}회 시도`));
+  const f = fewNote(n, 5, "도루 시도"); if(f) out.push(f);
+  return out;
+}
+function insSpray(bip){
+  const out = [];
+  if(!bip.length) return out;
+  const zs = bip.map(p=>({p, z:zoneOf(p.zone, gameLevel(p._g))}));
+  const of = zs.filter(x=>x.z.depth==="외야");
+  const far = zs.slice().sort((a,c)=>c.z.m-a.z.m)[0];
+  if(far) out.push(insI("info", `가장 멀리 간 타구 약 <b>${Math.round(far.z.m)}m</b> (${esc(far.z.label)} · ${esc(RMAP[far.p.result].ko)} · ${fmtDate(far.p._g.date)})`));
+  const hitsZ = zs.filter(x=>RMAP[x.p.result] && RMAP[x.p.result].h);
+  if(hitsZ.length >= 3){
+    const avgM = hitsZ.reduce((a,x)=>a+x.z.m,0)/hitsZ.length;
+    out.push(insI("info", `안타 타구 평균 거리 약 ${Math.round(avgM)}m`));
+  }
+  if(of.length >= 3){
+    const ofH = of.filter(x=>RMAP[x.p.result].h).length;
+    out.push(insI(ofH/of.length >= .4? "good":"info", `외야로 간 타구 ${of.length}개 중 안타 ${ofH}개 (${pctS(ofH/of.length)})`));
+  }
+  const f = fewNote(bip.length, 15, "타구"); if(f) out.push(f);
+  return out;
+}
+function insDirs(dirs, bip){
+  const out = [], tot = bip.length;
+  if(tot < 1) return out;
+  const pull = pullSide(), opp = pull==="좌"? "우" : pull==="우"? "좌" : "";
+  const key = {"좌측":"좌","중앙":"중","우측":"우"};
+  const top = dirs.slice().sort((a,c)=>c.value-a.value)[0];
+  const share = top.value/tot;
+  if(share >= .5){
+    const k = key[top.label];
+    const tag = k===pull? " — <b>당겨치기</b> 성향" : k===opp? " — <b>밀어치기</b> 성향" : k==="중"? " — 센터 방향 위주" : "";
+    out.push(insI("info", `${top.label} 방향이 <b>${pctS(share)}</b>${tag}`));
+    if(k===pull && share >= .6) out.push(insI("warn", `한쪽으로 몰려 수비 시프트에 걸리기 쉬움 — 반대 방향 타구 연습 권장`));
+  } else out.push(insI("good", `좌·중·우로 고르게 분포 — 방향을 가리지 않는 타격`));
+  const cand = dirs.filter(d=>d.value >= 3).map(d=>Object.assign({r:d._h/d.value}, d)).sort((a,c)=>c.r-a.r);
+  if(cand.length >= 2) out.push(insI("info", `안타 확률 최고 <b>${cand[0].label}</b> (${cand[0]._h}/${cand[0].value}) · 최저 ${cand[cand.length-1].label} (${cand[cand.length-1]._h}/${cand[cand.length-1].value})`));
+  if(!pull) out.push(insI("few", `선수 정보에 우타·좌타를 넣으면 당겨치기·밀어치기로 풀이`));
+  const f = fewNote(tot, 15, "타구"); if(f) out.push(f);
+  return out;
+}
+function insDepth(depth, b){
+  const out = [], inf = depth[0].value, of = depth[1].value, tot = inf+of;
+  if(!tot) return out;
+  if(inf/tot >= .6) out.push(insI("warn", `내야 타구 <b>${pctS(inf/tot)}</b> — 약한 타구·땅볼 비중 높음, 타구 질 점검`));
+  else if(of/tot >= .6) out.push(insI("good", `외야 타구 <b>${pctS(of/tot)}</b> — 멀리 보내는 타구가 많음`));
+  else out.push(insI("info", `내야 ${pctS(inf/tot)} · 외야 ${pctS(of/tot)} — 균형`));
+  const gb = b.GO + b.DP, fb = b.FO;
+  if(gb + fb >= 6){
+    const r = fb? gb/fb : null;
+    if(r==null || r >= 1.5) out.push(insI("info", `땅볼 아웃 ${gb} : 뜬공 아웃 ${fb} — <b>땅볼 성향</b>`));
+    else if(r <= .7) out.push(insI("info", `땅볼 아웃 ${gb} : 뜬공 아웃 ${fb} — <b>뜬공 성향</b>`));
+  }
+  return out;
+}
+function insResults(dist, b, pasN){
+  const out = [];
+  if(!pasN) return out;
+  const top = dist[0];
+  if(top) out.push(insI("info", `가장 많은 결과 <b>${esc(top.label)}</b> ${top.value}회 (${pctS(top.value/pasN)})`));
+  if(b.H >= 5){
+    const xbh = b.s2 + b.s3 + b.HR;
+    if(xbh/b.H >= .35) out.push(insI("good", `안타 ${b.H}개 중 장타 ${xbh}개 (${pctS(xbh/b.H)}) — 장타 비중 높음`));
+    else if(xbh === 0) out.push(insI("info", `안타 ${b.H}개 모두 단타`));
+    else out.push(insI("info", `안타 ${b.H}개 중 장타 ${xbh}개 (${pctS(xbh/b.H)})`));
+  }
+  if(b.DP >= 2) out.push(insI("warn", `병살타 ${b.DP}회 — 주자 있을 때 땅볼 주의`));
+  const ob = b.H + b.BB + b.HBP + b.ROE;
+  out.push(insI("info", `출루로 이어진 타석 ${ob}회 (${pctS(ob/pasN)}) · 아웃 ${pasN - ob}회`));
+  return out;
+}
+function insInnings(innings){
+  const out = [];
+  const ok = innings.filter(d=>d._t.AB >= 3);
+  if(ok.length >= 2){
+    const s = ok.slice().sort((a,c)=>c._t.AVG-a._t.AVG);
+    out.push(insI(s[0]._t.AVG >= .300? "good":"info", `가장 강한 이닝 <b>${s[0].label}</b> (${avg3(s[0]._t.AVG)}, ${s[0]._t.H}/${s[0]._t.AB})`));
+    out.push(insI(s[s.length-1]._t.AVG < .250? "warn":"info", `가장 약한 이닝 <b>${s[s.length-1].label}</b> (${avg3(s[s.length-1]._t.AVG)}, ${s[s.length-1]._t.H}/${s[s.length-1]._t.AB})`));
+  }
+  const sumT = list=>{ let ab=0,h=0; list.forEach(d=>{ab+=d._t.AB; h+=d._t.H;}); return {ab,h,avg:ab?h/ab:null}; };
+  const early = sumT(innings.filter(d=>parseInt(d.label)<=3)), late = sumT(innings.filter(d=>parseInt(d.label)>=4));
+  if(early.ab >= 5 && late.ab >= 5){
+    const df = late.avg - early.avg;
+    if(df >= .080) out.push(insI("info", `1~3회 ${avg3(early.avg)} → 4회 이후 ${avg3(late.avg)} — 두 번째 타석부터 적응이 빠름`));
+    else if(df <= -.080) out.push(insI("info", `1~3회 ${avg3(early.avg)} → 4회 이후 ${avg3(late.avg)} — 경기 후반 투수 교체·피로에 약해짐`));
+    else out.push(insI("info", `초반(1~3회) ${avg3(early.avg)} · 후반(4회~) ${avg3(late.avg)} — 큰 차이 없음`));
+  }
+  if(!ok.length) out.push(insI("few", `이닝별 타수가 3개 미만이라 비교는 참고용`));
+  return out;
+}
+function insMonths(months, b){
+  const out = [];
+  const ok = months.filter(d=>d._t.AB >= 5);
+  if(ok.length >= 2){
+    const best = ok.slice().sort((a,c)=>c._t.AVG-a._t.AVG)[0];
+    out.push(insI(best._t.AVG >= .300? "good":"info", `최고의 달 <b>${best.label}</b> — 타율 ${avg3(best._t.AVG)} · OPS ${avg3(best._t.OPS)}`));
+    const last = months[months.length-1];
+    if(last._t.AB >= 5 && b.AVG!=null){
+      const df = last._t.AVG - b.AVG;
+      if(df >= .050) out.push(insI("good", `최근(${last.label}) ${avg3(last._t.AVG)} — 시즌 평균보다 높아 <b>상승세</b>`));
+      else if(df <= -.050) out.push(insI("warn", `최근(${last.label}) ${avg3(last._t.AVG)} — 시즌 평균보다 낮아 <b>주춤</b>`));
+      else out.push(insI("info", `최근(${last.label}) ${avg3(last._t.AVG)} — 시즌 평균과 비슷하게 유지`));
+    }
+  }
+  return out;
+}
+function insVsPitchers(pTeams){
+  const out = [];
+  const teams = pTeams.filter(t=>t.t.PA >= 5 && t.t.OPS!=null);
+  if(teams.length >= 2){
+    const s = teams.slice().sort((a,c)=>c.t.OPS-a.t.OPS);
+    out.push(insI(s[0].t.OPS >= .800? "good":"info", `가장 강했던 상대 <b>${esc(s[0].name)}</b> (${s[0].year}) — 타율 ${avg3(s[0].t.AVG)} · OPS ${avg3(s[0].t.OPS)}`));
+    out.push(insI(s[s.length-1].t.OPS < .650? "warn":"info", `${s[s.length-1].t.OPS < .650? "고전한" : "상대적으로 약했던"} 상대 <b>${esc(s[s.length-1].name)}</b> (${s[s.length-1].year}) — 타율 ${avg3(s[s.length-1].t.AVG)} · OPS ${avg3(s[s.length-1].t.OPS)}`));
+  }
+  const ps = [];
+  pTeams.forEach(t=> t.pitchers.forEach(p=> ps.push(Object.assign({team:t.name}, p))));
+  const tough = ps.filter(p=>p.t.AB >= 4 && p.t.H === 0);
+  if(tough.length) out.push(insI("warn", `4타수 이상 무안타 투수 — ${tough.slice(0,3).map(p=>`${esc(p.name)}(${esc(p.team)}, 0/${p.t.AB})`).join(", ")}${tough.length>3? ` 외 ${tough.length-3}명`:""}`));
+  const good = ps.filter(p=>p.t.AB >= 4 && p.t.AVG >= .5).sort((a,c)=>c.t.AVG-a.t.AVG);
+  if(good.length) out.push(insI("good", `강했던 투수 — ${good.slice(0,3).map(p=>`${esc(p.name)}(${p.t.H}/${p.t.AB})`).join(", ")}`));
+  if(!out.length) out.push(insI("few", `팀·투수별 타석이 적어 비교는 기록이 더 쌓이면 표시`));
+  return out;
+}
+function insPitching(pt){
+  const out = [];
+  if(!pt.outs) return out;
+  if(pt.ERA!=null){
+    if(pt.ERA <= 2) out.push(insI("good", `ERA <b>${fx2(pt.ERA)}</b> — 매우 좋음`));
+    else if(pt.ERA <= 3.5) out.push(insI("good", `ERA <b>${fx2(pt.ERA)}</b> — 좋은 편`));
+    else if(pt.ERA <= 5) out.push(insI("info", `ERA <b>${fx2(pt.ERA)}</b> — 보통`));
+    else out.push(insI("warn", `ERA <b>${fx2(pt.ERA)}</b> — 높은 편`));
+  }
+  if(pt.WHIP!=null){
+    if(pt.WHIP <= 1.10) out.push(insI("good", `WHIP ${fx2(pt.WHIP)} — 주자를 거의 내보내지 않음`));
+    else if(pt.WHIP >= 1.60) out.push(insI("warn", `WHIP ${fx2(pt.WHIP)} — 이닝마다 주자 허용이 많음`));
+  }
+  if(pt.BB9!=null && pt.outs >= 9){
+    if(pt.BB9 >= 5) out.push(insI("warn", `9이닝당 볼넷 <b>${fx2(pt.BB9)}</b> — 제구 보완 필요`));
+    else if(pt.BB9 <= 2.5) out.push(insI("good", `9이닝당 볼넷 ${fx2(pt.BB9)} — 제구 안정적`));
+  }
+  if(pt.K9!=null && pt.outs >= 9 && pt.K9 >= 9) out.push(insI("good", `9이닝당 탈삼진 <b>${fx2(pt.K9)}</b> — 구위로 잡는 투수`));
+  if(pt.KBB!=null && pt.BB >= 2){
+    if(pt.KBB >= 3) out.push(insI("good", `삼진/볼넷 ${fx2(pt.KBB)} — 제구와 구위의 균형 좋음`));
+    else if(pt.KBB < 1) out.push(insI("warn", `삼진보다 볼넷이 많음 (K/BB ${fx2(pt.KBB)})`));
+  }
+  if(pt.EMF!=null && pt.outs >= 15){
+    if(pt.EMF >= 1) out.push(insI("info", `ERA가 FIP(${fx2(pt.FIP)})보다 ${fx2(pt.EMF)} 높음 — 수비·운이 덜 따라 줌, ERA가 내려갈 여지`));
+    else if(pt.EMF <= -1) out.push(insI("info", `ERA가 FIP(${fx2(pt.FIP)})보다 ${fx2(-pt.EMF)} 낮음 — 수비·운 도움, ERA가 조금 오를 수 있음`));
+  }
+  if(pt.PIP!=null && pt.NP && pt.outs >= 6){
+    if(pt.PIP >= 20) out.push(insI("warn", `이닝당 투구수 ${fx2(pt.PIP)}개 — 승부가 길어 긴 이닝 소화가 어려움`));
+    else if(pt.PIP <= 15) out.push(insI("good", `이닝당 투구수 ${fx2(pt.PIP)}개 — 효율적인 투구`));
+  }
+  const f = fewNote(Math.floor(pt.outs/3), 10, "이닝"); if(f) out.push(f);
+  return out;
+}
+function insTrend(games, key){
+  const out = [];
+  if(games.length < 2) return out;
+  const agg = list=>{ let o=0,er=0,h=0,bb=0; list.forEach(e=>{o+=e.outs; er+=e.ER; h+=e.H; bb+=e.BB;}); return {o, era:o? er*27/o:null, whip:o? (h+bb)*3/o:null}; };
+  const all = agg(games), n = Math.min(3, games.length - 1), rec = agg(games.slice(-n));
+  const v = key==="era"? [all.era, rec.era] : [all.whip, rec.whip], lb = key==="era"? "ERA" : "WHIP", th = key==="era"? 1 : .25;
+  if(v[0]!=null && v[1]!=null && rec.o >= 3){
+    if(v[1] <= v[0] - th) out.push(insI("good", `최근 ${n}경기 ${lb} <b>${fx2(v[1])}</b> — 시즌(${fx2(v[0])})보다 좋아지는 흐름`));
+    else if(v[1] >= v[0] + th) out.push(insI("warn", `최근 ${n}경기 ${lb} <b>${fx2(v[1])}</b> — 시즌(${fx2(v[0])})보다 나빠지는 흐름`));
+    else out.push(insI("info", `최근 ${n}경기 ${lb} ${fx2(v[1])} — 시즌(${fx2(v[0])})과 비슷`));
+  }
+  if(key==="era"){
+    const zero = games.filter(e=>e.outs >= 3 && e.ER === 0).length;
+    if(zero) out.push(insI("good", `무자책 등판 ${zero}경기 / ${games.length}경기`));
+  }
+  return out;
+}
+function insZone(pitches, heat){
+  const out = [], tot = pitches.length;
+  if(!tot) return out;
+  const inZ = tot - heat.outside;
+  out.push(insI(inZ/tot >= .5? "good" : "warn", `존 안 투구 <b>${pctS(inZ/tot)}</b>${inZ/tot >= .5? " — 존 공략 적극적" : " — 존 밖 공이 많아 볼카운트가 불리해지기 쉬움"}`));
+  const vs = pitches.map(q=>num(q.v,0)).filter(x=>x>0);
+  if(vs.length >= 3) out.push(insI("info", `구속 평균 ${Math.round(vs.reduce((a,x)=>a+x,0)/vs.length)}km/h · 최고 ${Math.round(Math.max.apply(null, vs))}km/h`));
+  return out;
+}
+function insHeat(heat){
+  const out = [], c = heat.cells, inZ = c.reduce((a,x)=>a+x,0);
+  if(inZ < 1) return out;
+  const hi = c[0]+c[1]+c[2], lo = c[6]+c[7]+c[8], mid = c[4];
+  if(lo/inZ >= .4) out.push(insI("good", `낮은 코스 <b>${pctS(lo/inZ)}</b> — 낮게 잘 깔리는 제구`));
+  else if(hi/inZ >= .4) out.push(insI("warn", `높은 코스 <b>${pctS(hi/inZ)}</b> — 공이 높게 뜨는 편, 장타 주의`));
+  if(mid/inZ >= .2) out.push(insI("warn", `한가운데 <b>${pctS(mid/inZ)}</b> — 실투가 많아 맞을 위험`));
+  const top = c.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v)[0];
+  out.push(insI("info", `가장 많이 던진 코스 <b>${ZCELL_KO[top.i]}</b> (${top.v}구)`));
+  const f = fewNote(inZ, 30, "존 안 투구"); if(f) out.push(f);
+  return out;
+}
+function insPitchTypes(ptypes, totN){
+  const out = [];
+  if(!ptypes.length) return out;
+  const tot = ptypes.reduce((a,x)=>a+x.value,0);
+  out.push(insI("info", `주무기 <b>${esc(ptypes[0].label)}</b> ${pctS(ptypes[0].value/tot)} · 구종 ${ptypes.length}가지`));
+  const fb = ptypes.filter(x=>x.label==="직구"||x.label==="투심").reduce((a,x)=>a+x.value,0);
+  if(tot >= 20 && fb/tot >= .75) out.push(insI("warn", `직구 계열 ${pctS(fb/tot)} — 변화구 비중을 늘리면 수 싸움에 유리`));
+  const sw = ptypes.filter(x=>x.value >= 8).sort((a,c)=>c._sw/c.value - a._sw/a.value)[0];
+  if(sw && sw._sw) out.push(insI("good", `헛스윙을 가장 잘 끌어낸 공 <b>${esc(sw.label)}</b> (${pct1(sw._sw/sw.value)})`));
+  const stw = ptypes.filter(x=>x.value >= 8).sort((a,c)=>a._st/a.value - c._st/c.value)[0];
+  if(stw && stw._st/stw.value < .5) out.push(insI("warn", `${esc(stw.label)} 스트라이크 ${pct1(stw._st/stw.value)} — 이 공의 제구 점검`));
+  return out;
+}
+function insPitchRes(pt){
+  const out = [];
+  if(!pt.NP) return out;
+  if(pt.STP!=null){
+    if(pt.STP >= .65) out.push(insI("good", `스트라이크 <b>${pct1(pt.STP)}</b> — 공격적인 승부`));
+    else if(pt.STP < .58) out.push(insI("warn", `스트라이크 <b>${pct1(pt.STP)}</b> — 볼이 많아 불리한 카운트가 잦음`));
+    else out.push(insI("info", `스트라이크 ${pct1(pt.STP)} — 보통 (목표 약 62~65%)`));
+  }
+  if(pt.SWP!=null && pt.pitches.length >= 20){
+    if(pt.SWP >= .12) out.push(insI("good", `헛스윙 ${pct1(pt.SWP)} — 타자를 압도하는 공`));
+    else if(pt.SWP < .06) out.push(insI("info", `헛스윙 ${pct1(pt.SWP)} — 맞혀 잡는 유형`));
+  }
+  if(pt.PPA!=null && pt.TBF >= 10) out.push(insI(pt.PPA >= 4.3? "warn":"info", `타자당 ${fx2(pt.PPA)}구${pt.PPA >= 4.3? " — 승부가 긴 편" : ""}`));
+  return out;
+}
+function insPitGames(games){
+  const out = [];
+  if(!games.length) return out;
+  const lng = games.slice().sort((a,c)=>c.outs-a.outs)[0];
+  if(lng && lng.outs) out.push(insI("info", `최다 이닝 ${fmtDate(lng.g? lng.g.date:"")} vs ${esc((lng.g&&lng.g.opponent)||"-")} — <b>${fmtInn(lng.outs)}이닝</b> ${lng.ER}자책`));
+  const best = games.filter(e=>e.outs >= 6).sort((a,c)=> (a.ERA-c.ERA) || (c.outs-a.outs))[0];
+  if(best) out.push(insI("good", `최고 투구 ${fmtDate(best.g? best.g.date:"")} vs ${esc((best.g&&best.g.opponent)||"-")} — ${fmtInn(best.outs)}이닝 ${best.ER}자책 ${best.SO}삼진`));
+  const npG = games.filter(e=>e.NP);
+  if(npG.length >= 2) out.push(insI("info", `경기당 평균 ${Math.round(npG.reduce((a,e)=>a+e.NP,0)/npG.length)}구`));
+  return out;
+}
+function insDefDist(defPlays, defs){
+  const out = [];
+  if(!defPlays.length) return out;
+  const f = fieldingOf(defs, []);
+  const ch = f.PO + f.A + f.E;
+  if(ch >= 5){
+    if(f.FPCT >= .970) out.push(insI("good", `수비율 <b>${avg3(f.FPCT)}</b> — 안정적인 수비`));
+    else if(f.FPCT < .930) out.push(insI("warn", `수비율 <b>${avg3(f.FPCT)}</b> — 실책 줄이기가 과제`));
+    else out.push(insI("info", `수비율 ${avg3(f.FPCT)} — 보통`));
+  }
+  const ef = defPlays.filter(d=>d.result==="EF").length, et = defPlays.filter(d=>d.result==="ET").length;
+  if(ef + et >= 2){
+    if(ef > et) out.push(insI("warn", `실책 ${ef+et}개 중 포구 실책 ${ef}개 — 포구(핸들링) 훈련 우선`));
+    else if(et > ef) out.push(insI("warn", `실책 ${ef+et}개 중 송구 실책 ${et}개 — 송구 정확도 훈련 우선`));
+    else out.push(insI("warn", `포구 실책 ${ef} · 송구 실책 ${et}`));
+  }
+  const np = defPlays.filter(d=>d.result==="NP").length;
+  if(np) out.push(insI("good", `호수비 ${np}회`));
+  if(f.DP) out.push(insI("good", `병살 처리 ${f.DP}회`));
+  return out;
+}
+function insPos(posRows){
+  const out = [];
+  if(!posRows.length) return out;
+  const main = posRows[0];
+  if(main.f.outs) out.push(insI("info", `주 포지션 <b>${esc(PMAP[main.pos]||main.pos)}</b> — ${fmtInn(main.f.outs)}이닝`));
+  const ok = posRows.filter(r=> (r.f.PO+r.f.A+r.f.E) >= 5 && r.f.FPCT!=null);
+  if(ok.length >= 2){
+    const s = ok.slice().sort((a,c)=>c.f.FPCT-a.f.FPCT);
+    out.push(insI(s[0].f.FPCT >= .950? "good":"info", `가장 안정적인 포지션 ${esc(PMAP[s[0].pos]||s[0].pos)} (수비율 ${avg3(s[0].f.FPCT)})`));
+    if(s[s.length-1].f.FPCT < s[0].f.FPCT) out.push(insI(s[s.length-1].f.FPCT < .930? "warn":"info", `보완할 포지션 ${esc(PMAP[s[s.length-1].pos]||s[s.length-1].pos)} (수비율 ${avg3(s[s.length-1].f.FPCT)})`));
+  }
+  const busy = posRows.filter(r=>r.f.outs >= 9).map(r=>({r, rate:(r.f.PO+r.f.A)/(r.f.outs/3)})).sort((a,c)=>c.rate-a.rate)[0];
+  if(busy) out.push(insI("info", `${esc(PMAP[busy.r.pos]||busy.r.pos)} 이닝당 ${fx2(busy.rate)}개 아웃 관여`));
+  return out;
+}
+/* 맨 위 요약 — 항목별 분석에서 강점(good) · 보완점(warn/bad)만 골라 모읍니다 */
+function insSummary(groups){
+  if(!insOn()) return "";
+  const good = [], warn = [];
+  groups.forEach(([lb, list])=> (list||[]).forEach(x=>{
+    if(x.k==="good" && good.length < 4) good.push(insI("good", `<span style="color:var(--text-3)">${lb}</span> · ${x.s}`));
+    if((x.k==="warn"||x.k==="bad") && warn.length < 4) warn.push(insI("warn", `<span style="color:var(--text-3)">${lb}</span> · ${x.s}`));
+  }));
+  if(!good.length && !warn.length) return "";
+  return `<div class="card"><div class="hd" style="align-items:center"><div style="flex:1"><h3>자동 분석 요약</h3>
+      <div class="cap">기록에서 계산한 강점 · 보완점 — 각 차트 아래에 항목별 해설</div></div>
+      <button class="btn sm" data-act="toggleIns" data-v="off">해설 끄기</button></div>
+    <div class="inscols">${insBox(good, "강점")}${insBox(warn, "보완점")}</div></div>`;
+}
+
 /* ------------------------------- 분석 ------------------------------- */
 function viewStats(){
   const gs = scopedGames(), pas = allPAs(gs), b = battingOf(pas), defs = allDef(gs);
@@ -3118,7 +3476,17 @@ function viewStats(){
      ["타수/홈런 AB/HR",fx2(b.ABHR),"도루 성공률 SB%",pct1(b.SBP)]], null, "kv");
 
   const bm = bMode();
+  /* 자동 분석 — 항목별 해설 */
+  const iBat = insBatting(b, gs), iSteal = insSteal(b, gs), iDir = insDirs(dirs, bip), iDepth = insDepth(depth, b),
+        iRes = insResults(dist, b, pas.length), iInn = insInnings(innings), iMon = months.length>1? insMonths(months, b) : [],
+        iVs = insVsPitchers(pTeams), iDef = insDefDist(defPlays, defs), iPos = insPos(posRows);
+  const ptS = pitchingOf(defs);
+  const iPit = ptS.APP? insPitching(ptS) : [];
   return filterRow()
+  + insSummary([["타격",iBat],["도루",iSteal],["방향",iDir],["타구",iDepth],["결과",iRes],["이닝",iInn],["월별",iMon],
+                ["상대",iVs],["투수",iPit],["수비",iDef],["포지션",iPos]])
+  + (insOn()? "" : `<div class="card" style="padding:10px 14px"><div class="hd" style="align-items:center;margin:0">
+      <div style="flex:1" class="hint">자동 분석 해설 꺼짐</div><button class="btn sm" data-act="toggleIns" data-v="on">해설 켜기</button></div></div>`)
   + `<div class="card">
       <div class="hd" style="align-items:center;margin-bottom:4px">
         <h3 style="flex:1">타격 지표</h3>
@@ -3126,46 +3494,48 @@ function viewStats(){
       </div>
       <div class="cap" style="margin:0 0 10px">${S.ui.year==="all"?"전체 기간":S.ui.year+"시즌"} · ${gtypeLabel()} · ${gs.length}경기 ${b.PA}타석
         · ${bm==="saber"? "출루·장타 가치로 다시 본 지표" : "기록지에 그대로 적히는 수치"}</div>
-      ${bm==="saber"? bSaber : bClassic}</div>`
+      ${bm==="saber"? bSaber : bClassic}${insBox(iBat)}</div>`
   + ((b.SB+b.CS)? `<div class="card"><div class="hd"><div style="flex:1"><h3>도루</h3>
       <div class="cap">도루 시도 ${b.SB+b.CS}회</div></div></div>
       <div class="tiles">${tile("시도", b.SB+b.CS)+tile("성공", b.SB)+tile("실패", b.CS)+tile("성공률", pct1(b.SBP))
-        +tile("경기당 시도", fx2(gs.length? (b.SB+b.CS)/gs.length : null))+tile("추가 진루", b.SB-b.CS)}</div></div>` : "")
+        +tile("경기당 시도", fx2(gs.length? (b.SB+b.CS)/gs.length : null))+tile("추가 진루", b.SB-b.CS)}</div>${insBox(iSteal)}</div>` : "")
   + chartCard("타구 방향 (스프레이 차트)", `타구 위치가 기록된 인플레이 타구 ${bip.length}개 · 그림은 ${esc(LEVELS[curLevel()].ko)} 규격 (${esc(LEVELS[curLevel()].note)}) · 모든 규격 같은 배율 · 거리 비교 가능`,
       sprayChart(pas, curLevel(), {ruler:true}),
       bip.length? tableHTML(["날짜","이닝","결과","위치","추정 거리"], bip.map(p=>{const z=zoneOf(p.zone, gameLevel(p._g));
-        return [fmtDate(p._g.date), (p.inning||"-")+"회", esc(RMAP[p.result].ko), esc(z.label), Math.round(z.m)+"m"];})) : "")
+        return [fmtDate(p._g.date), (p.inning||"-")+"회", esc(RMAP[p.result].ko), esc(z.label), Math.round(z.m)+"m"];})) : "",
+      insBox(insSpray(bip)))
   + `<div class="grid g2">`
   + chartCard("방향별 타구 수", "당겨치기·밀어치기 성향 확인",
       colChart(dirs, {aria:"방향별 타구 수", labelTop:true, fmt:v=>String(Math.round(v))}),
-      tableHTML(["방향","타구","안타"], dirs.map(d=>[d.label, d.value, d._h])))
+      tableHTML(["방향","타구","안타"], dirs.map(d=>[d.label, d.value, d._h])), insBox(iDir))
   + chartCard("타구 깊이", "내야 / 외야로 나눈 타구 분포",
       colChart(depth, {aria:"타구 깊이 분포", labelTop:true, fmt:v=>String(Math.round(v))}),
-      tableHTML(["깊이","타구"], depth.map(d=>[d.label, d.value])))
+      tableHTML(["깊이","타구"], depth.map(d=>[d.label, d.value])), insBox(iDepth))
   + `</div>`
   + chartCard("타석 결과 분포", `총 ${pas.length}타석의 결과별 횟수`,
       hbarChart(dist, {aria:"타석 결과 분포", left:78, total:pas.length, fmt:v=>String(Math.round(v))}),
-      tableHTML(["결과","횟수","비중"], dist.map(d=>[d.label, d.value, pct1(d.value/Math.max(pas.length,1))])))
+      tableHTML(["결과","횟수","비중"], dist.map(d=>[d.label, d.value, pct1(d.value/Math.max(pas.length,1))])), insBox(iRes))
   + (innings.length? chartCard("이닝별 타율", `타석이 있었던 이닝만 표시 · ${esc(LEVELS[curLevel()].ko)} 정규 ${regInnings(curLevel())}이닝`,
       colChart(innings, {aria:"이닝별 타율", fmt:avg3, ref:{v:b.AVG, label:"AVG "+avg3(b.AVG)}}),
-      tableHTML(["이닝","타수","안타","타율"], innings.map(d=>[d.label, d._t.AB, d._t.H, avg3(d._t.AVG)]))) : "")
+      tableHTML(["이닝","타수","안타","타율"], innings.map(d=>[d.label, d._t.AB, d._t.H, avg3(d._t.AVG)])), insBox(iInn)) : "")
   + (months.length>1? chartCard("월별 타율", "월 단위 시즌 흐름",
       colChart(months, {aria:"월별 타율", fmt:avg3, ref:{v:b.AVG, label:"AVG "+avg3(b.AVG)}}),
-      tableHTML(["월","타수","안타","타점","타율","OPS"], months.map(d=>[d.label, d._t.AB, d._t.H, d._t.RBI, avg3(d._t.AVG), avg3(d._t.OPS)]))) : "")
+      tableHTML(["월","타수","안타","타점","타율","OPS"], months.map(d=>[d.label, d._t.AB, d._t.H, d._t.RBI, avg3(d._t.AVG), avg3(d._t.OPS)])), insBox(iMon)) : "")
   + (pTeams.length? `<div class="card"><div class="hd"><div style="flex:1"><h3>상대 투수별 성적</h3>
       <div class="cap">${pYears}개 시즌 · ${pTeams.length}개 팀 · 투수 ${pitcherN}명</div></div></div>
-      ${vsPitcherTable(pTeams)}</div>` : "")
+      ${insBox(iVs)}${vsPitcherTable(pTeams)}</div>` : "")
   + pitchingSection(gs, defs)
   + (defDist.length? chartCard("수비 결과 분포", `결과를 입력한 수비 기록 ${defPlays.length}건`,
       hbarChart(defDist, {aria:"수비 결과 분포", left:82, total:defPlays.length, fmt:v=>String(Math.round(v))}),
-      tableHTML(["결과","횟수","비중"], defDist.map(d=>[d.label, d.value, pct1(d.value/Math.max(defPlays.length,1))]))) : "")
+      tableHTML(["결과","횟수","비중"], defDist.map(d=>[d.label, d.value, pct1(d.value/Math.max(defPlays.length,1))])), insBox(iDef)) : "")
   + (posRows.length? (()=>{ const ft = fieldingOf(defs, gs); return `<div class="card"><div class="hd"><div style="flex:1"><h3>포지션별 수비</h3>
       <div class="cap">이닝은 경기 정보에 적은 포지션별 수비 이닝 · 수비율 = (자살+보살) / (자살+보살+실책)</div></div></div>
       ${tableHTML(["포지션","이닝","자살","보살","실책","병살","수비율"],
         posRows.map(r=>[esc(PMAP[r.pos]||r.pos), fmtInn(r.f.outs), r.f.PO, r.f.A, r.f.E, r.f.DP, avg3(r.f.FPCT)]),
-        ["합계", fmtInn(ft.outs), ft.PO, ft.A, ft.E, ft.DP, avg3(ft.FPCT)])}</div>`; })() : "")
+        ["합계", fmtInn(ft.outs), ft.PO, ft.A, ft.E, ft.DP, avg3(ft.FPCT)])}${insBox(iPos)}</div>`; })() : "")
   + `<div class="note"><b>OPS</b> 출루율+장타율 · <b>ISO</b> 순수 장타력 · <b>wOBA</b> 종합 타격 ·
-      <b>BABIP</b> 인플레이 안타율 · <b>SecA</b> 안타 외 생산 · <b>RC</b> 추정 득점</div>`;
+      <b>BABIP</b> 인플레이 안타율 · <b>SecA</b> 안타 외 생산 · <b>RC</b> 추정 득점
+      ${insOn()? `<br><b>자동 분석</b> 기록을 기기 안에서 계산해 정해 둔 기준(학생야구 일반 수준의 대략값)과 비교한 해설 — 표본이 적으면 참고용` : ""}</div>`;
 }
 
 /* ---------------------------- 투수 분석 ---------------------------- */
@@ -3238,31 +3608,36 @@ function pitchingSection(gs, defs){
       <div class="cap" style="margin:0 0 10px">${pMode()==="saber"
         ? `운·수비 영향을 덜 받는 지표 (FIP 상수 ${FIP_C.toFixed(2)})`
         : "이닝은 5.2 = 5이닝 2아웃"}</div>
-      ${pMode()==="saber"? saber : classic}</div>`
+      ${pMode()==="saber"? saber : classic}${insBox(insPitching(pt))}</div>`
   /* ERA(0~10대)와 WHIP(0~3대)은 범위가 달라 한 축에 겹치면 WHIP이 바닥에 눌립니다 — 따로 그립니다 */
   + (eraPts.length? `<div class="grid g2">`
       + chartCard("누적 평균자책 (ERA)", "등판을 거치며 수렴하는 흐름 · 마지막 값이 현재 기록",
           lineChart([{pts:eraPts, color:"var(--chart)"}], {aria:"누적 ERA 추이", fmt:fx2, height:140}),
-          tableHTML(["경기","상대","이닝","타자","피안타","볼넷","삼진","실점","자책","투구수","승패","ERA"], gameRows))
+          tableHTML(["경기","상대","이닝","타자","피안타","볼넷","삼진","실점","자책","투구수","승패","ERA"], gameRows),
+          insBox(insTrend(pt.games, "era")))
       + chartCard("누적 WHIP", "이닝당 출루 허용 · 마지막 값이 현재 기록",
-          lineChart([{pts:whipPts, color:"var(--s1)"}], {aria:"누적 WHIP 추이", fmt:fx2, height:140}))
+          lineChart([{pts:whipPts, color:"var(--s1)"}], {aria:"누적 WHIP 추이", fmt:fx2, height:140}), "",
+          insBox(insTrend(pt.games, "whip")))
       + `</div>` : "")
   + (pt.pitches.length? chartCard("투구 코스 (스트라이크 존)", `기록된 ${pt.pitches.length}구 · 존 안 ${pt.pitches.length-heat.outside}구 / 존 밖 ${heat.outside}구 · 점을 누르면 상세 표시`,
       zoneScatter(pt.pitches),
       tableHTML(["날짜","구종","결과","코스","구속"], pt.pitches.map(q=>[
         q._g? fmtDate(q._g.date) : "-", esc(PTMAP[q.t]||"-"), esc(prKo(q.r)), esc(zoneCellKo(zoneCell(q))),
-        num(q.v,0)? Math.round(num(q.v,0))+"km/h" : "-"]))) : "")
+        num(q.v,0)? Math.round(num(q.v,0))+"km/h" : "-"])), insBox(insZone(pt.pitches, heat))) : "")
   + (pt.pitches.length? chartCard("코스별 투구 분포 (9분할)", `존 안쪽만 9칸으로 나눈 분포 · 존 밖 ${heat.outside}구 (${pct1(heat.outside/Math.max(heat.tot,1))})`,
       heat.svg,
-      tableHTML(["코스","투구","비중"], ZCELL_KO.map((k,i)=>[k, heat.cells[i], pct1(heat.cells[i]/Math.max(heat.tot,1))]).concat([["존 밖", heat.outside, pct1(heat.outside/Math.max(heat.tot,1))]]))) : "")
+      tableHTML(["코스","투구","비중"], ZCELL_KO.map((k,i)=>[k, heat.cells[i], pct1(heat.cells[i]/Math.max(heat.tot,1))]).concat([["존 밖", heat.outside, pct1(heat.outside/Math.max(heat.tot,1))]])),
+      insBox(insHeat(heat))) : "")
   + `<div class="grid g2">`
   + (ptypes.length? chartCard("구종별 투구", `구종을 입력한 투구 ${ptypes.reduce((a,x)=>a+x.value,0)}구`,
       hbarChart(ptypes, {aria:"구종별 투구 수", left:76, total:pt.pitches.length, fmt:v=>String(Math.round(v))}),
       tableHTML(["구종","투구","비중","스트라이크%","헛스윙%"], ptypes.map(x=>[x.label, x.value,
-        pct1(x.value/Math.max(pt.pitches.length,1)), pct1(x.value? x._st/x.value:null), pct1(x.value? x._sw/x.value:null)]))) : "")
+        pct1(x.value/Math.max(pt.pitches.length,1)), pct1(x.value? x._st/x.value:null), pct1(x.value? x._sw/x.value:null)])),
+      insBox(insPitchTypes(ptypes, pt.pitches.length))) : "")
   + (pres.length? chartCard("투구 결과 분포", `스트라이크 ${pt.ST}구 (${pct1(pt.STP)}) · 볼 ${pt.NP-pt.ST}구`,
       hbarChart(pres, {aria:"투구 결과 분포", left:76, total:pt.pitches.length, fmt:v=>String(Math.round(v))}),
-      tableHTML(["결과","투구","비중"], pres.map(x=>[x.label, x.value, pct1(x.value/Math.max(pt.pitches.length,1))]))) : "")
+      tableHTML(["결과","투구","비중"], pres.map(x=>[x.label, x.value, pct1(x.value/Math.max(pt.pitches.length,1))])),
+      insBox(insPitchRes(pt))) : "")
   + `</div>`
   + `<div class="card"><div class="hd"><div style="flex:1"><h3>경기별 투수 기록</h3>
       <div class="cap">이닝 기록을 경기 단위로 합산 · 승패는 자동 판정</div></div></div>
@@ -3270,7 +3645,7 @@ function pitchingSection(gs, defs){
         pt.games.map(e=>[fmtDate(e.g? e.g.date:""), esc((e.g&&e.g.opponent)||"-"), fmtInn(e.outs),
           e.inns.length? (e.inns[0]===e.inns[e.inns.length-1]? e.inns[0]+"회" : e.inns[0]+"~"+e.inns[e.inns.length-1]+"회") : "-",
           e.TBF||"-", e.H, e.BB, e.SO, e.R, e.ER, e.NP||"-", esc(e.dec? decKo(e.dec):"-"), fx2(e.ERA)]),
-        ["합계","",fmtInn(pt.outs),"",pt.TBF||"-",pt.H,pt.BB,pt.SO,pt.R,pt.ER,pt.NP||"-",`${pt.W}승 ${pt.L}패`,fx2(pt.ERA)])}</div>`
+        ["합계","",fmtInn(pt.outs),"",pt.TBF||"-",pt.H,pt.BB,pt.SO,pt.R,pt.ER,pt.NP||"-",`${pt.W}승 ${pt.L}패`,fx2(pt.ERA)])}${insBox(insPitGames(pt.games))}</div>`
   + `<div class="note">투수 지표 — <b>ERA</b> 9이닝당 자책점 · <b>WHIP</b> 이닝당 출루 허용(피안타+볼넷) ·
       <b>FIP</b> 홈런·볼넷·삼진만으로 계산해 수비·운의 영향을 뺀 방어율 (13·HR + 3·(BB+HBP) − 2·K) ÷ 이닝 + ${FIP_C.toFixed(2)} ·
       <b>ERA−FIP</b> 값이 크면 수비 도움이나 운이 좋았다는 뜻 · <b>K−BB%</b> 삼진율에서 볼넷율을 뺀 제어력 지표 ·
@@ -5199,6 +5574,7 @@ document.addEventListener("click", ev=>{
     case "metric": S.ui.metric=v; save(); render(); break;
     case "bmode": S.ui.bmode=v; save(); render(); break;
     case "pmode": S.ui.pmode=v; save(); render(); break;
+    case "toggleIns": S.ui.ins = (v==="on"); save(); render(); break;
     case "level": S.settings.level=v; saveNow(); render(); toast(LEVELS[v].ko+" 규격으로 변경"); break;
     case "saveInn": {
       const n = clamp(num($("#set_inn").value, LEVELS[curLevel()].inn), 1, 15);
