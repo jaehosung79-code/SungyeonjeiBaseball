@@ -1785,6 +1785,8 @@
    "op": 100,
    "time": "20:00",
    "reps": 39,
+   "ar": false,
+   "rg": "",
    "title": "BTAC",
    "note": ""
   },
@@ -1797,6 +1799,8 @@
    "op": 100,
    "time": "20:00",
    "reps": 20,
+   "ar": false,
+   "rg": "",
    "title": "브릿지",
    "note": ""
   },
@@ -1809,6 +1813,8 @@
    "op": 100,
    "time": "18:00",
    "reps": 2,
+   "ar": false,
+   "rg": "",
    "title": "A트렉",
    "note": ""
   },
@@ -1821,6 +1827,8 @@
    "op": 100,
    "time": "20:00",
    "reps": 40,
+   "ar": false,
+   "rg": "",
    "title": "BTAC",
    "note": ""
   },
@@ -1833,6 +1841,8 @@
    "op": 100,
    "time": "",
    "reps": 1,
+   "ar": false,
+   "rg": "",
    "title": "A트렉",
    "note": ""
   },
@@ -1845,6 +1855,8 @@
    "op": 100,
    "time": "20:00",
    "reps": 38,
+   "ar": false,
+   "rg": "",
    "title": "BTAC",
    "note": ""
   },
@@ -1857,6 +1869,8 @@
    "op": 100,
    "time": "21:00",
    "reps": 1,
+   "ar": false,
+   "rg": "",
    "title": "운동짐(연)",
    "note": ""
   },
@@ -1869,6 +1883,8 @@
    "op": 100,
    "time": "21:00",
    "reps": 2,
+   "ar": false,
+   "rg": "",
    "title": "운동짐(연)",
    "note": ""
   },
@@ -1881,6 +1897,8 @@
    "op": 20,
    "time": "",
    "reps": 0,
+   "ar": false,
+   "rg": "",
    "title": "밀양 회장기",
    "note": ""
   },
@@ -1893,6 +1911,8 @@
    "op": 20,
    "time": "",
    "reps": 0,
+   "ar": false,
+   "rg": "",
    "title": "양구대회",
    "note": ""
   },
@@ -1905,6 +1925,8 @@
    "op": 100,
    "time": "21:00",
    "reps": 3,
+   "ar": false,
+   "rg": "",
    "title": "운동짐(재)",
    "note": ""
   },
@@ -1917,6 +1939,8 @@
    "op": 100,
    "time": "21:00",
    "reps": 4,
+   "ar": false,
+   "rg": "",
    "title": "운동짐(연)",
    "note": ""
   },
@@ -1929,6 +1953,8 @@
    "op": 100,
    "time": "21:00",
    "reps": 5,
+   "ar": false,
+   "rg": "",
    "title": "운동짐(재)",
    "note": ""
   },
@@ -1941,6 +1967,8 @@
    "op": 100,
    "time": "21:00",
    "reps": 6,
+   "ar": false,
+   "rg": "",
    "title": "운동짐(연)",
    "note": ""
   },
@@ -1953,6 +1981,8 @@
    "op": 100,
    "time": "21:00",
    "reps": 7,
+   "ar": false,
+   "rg": "",
    "title": "운동짐(재)",
    "note": ""
   },
@@ -1965,6 +1995,8 @@
    "op": 100,
    "time": "21:00",
    "reps": 8,
+   "ar": false,
+   "rg": "",
    "title": "운동짐(연)",
    "note": ""
   },
@@ -1977,6 +2009,8 @@
    "op": 20,
    "time": "20:30",
    "reps": 3,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -1989,6 +2023,8 @@
    "op": 20,
    "time": "14:00",
    "reps": 4,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2001,6 +2037,8 @@
    "op": 20,
    "time": "",
    "reps": 3,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2013,6 +2051,8 @@
    "op": 20,
    "time": "17:00",
    "reps": 2,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2025,6 +2065,8 @@
    "op": 20,
    "time": "13:30",
    "reps": 5,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2037,6 +2079,8 @@
    "op": 20,
    "time": "17:00",
    "reps": 4,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2049,6 +2093,8 @@
    "op": 20,
    "time": "17:00",
    "reps": 6,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2061,6 +2107,8 @@
    "op": 20,
    "time": "",
    "reps": 0,
+   "ar": false,
+   "rg": "",
    "title": "딜라이브",
    "note": ""
   },
@@ -2073,6 +2121,8 @@
    "op": 20,
    "time": "",
    "reps": 9,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2085,6 +2135,8 @@
    "op": 20,
    "time": "",
    "reps": 7,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2097,6 +2149,8 @@
    "op": 20,
    "time": "",
    "reps": 7,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2109,6 +2163,8 @@
    "op": 20,
    "time": "",
    "reps": 5,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2121,6 +2177,8 @@
    "op": 20,
    "time": "",
    "reps": 8,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2133,6 +2191,8 @@
    "op": 20,
    "time": "",
    "reps": 8,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2145,6 +2205,8 @@
    "op": 20,
    "time": "17:00",
    "reps": 9,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2157,6 +2219,8 @@
    "op": 20,
    "time": "",
    "reps": 10,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2169,6 +2233,8 @@
    "op": 20,
    "time": "",
    "reps": 11,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2181,6 +2247,8 @@
    "op": 20,
    "time": "",
    "reps": 12,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2193,6 +2261,8 @@
    "op": 20,
    "time": "",
    "reps": 13,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2205,6 +2275,8 @@
    "op": 20,
    "time": "",
    "reps": 14,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2217,6 +2289,8 @@
    "op": 20,
    "time": "",
    "reps": 9,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2229,6 +2303,8 @@
    "op": 20,
    "time": "",
    "reps": 10,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   },
@@ -2241,10 +2317,12 @@
    "op": 20,
    "time": "",
    "reps": 11,
+   "ar": false,
+   "rg": "",
    "title": "",
    "note": ""
   }
  ],
- "savedAt": "2026-10-08T06:55:04.005Z",
+ "savedAt": "2026-10-08T06:58:44.835Z",
  "by": "성연제"
 }
