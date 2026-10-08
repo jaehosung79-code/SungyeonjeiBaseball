@@ -1729,13 +1729,13 @@
      "id": "muz75kq9s9m6f",
      "pos": "2B",
      "inning": 3,
-     "result": "DP",
+     "result": "A",
      "innings": "",
      "note": "",
-     "po": 1,
+     "po": 0,
      "a": 1,
      "e": 0,
-     "dp": 1
+     "dp": 0
     },
     {
      "id": "muz75t8yracv8",
@@ -2541,6 +2541,6 @@
    "rg": "muz6x0hqzd843"
   }
  ],
- "savedAt": "2026-10-08T07:10:39.089Z",
+ "savedAt": "2026-10-08T07:11:04.219Z",
  "by": "성연제"
 }
