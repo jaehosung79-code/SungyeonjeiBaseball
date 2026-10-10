@@ -1824,8 +1824,8 @@
     {
      "id": "mv1spjd3aql09",
      "inning": 6,
-     "pitcherNo": "",
-     "pitcher": "",
+     "pitcherNo": "11",
+     "pitcher": "한지우",
      "result": "K",
      "zone": null,
      "rbi": 0,
@@ -2598,6 +2598,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-10T14:15:59.015Z",
+ "savedAt": "2026-10-10T14:16:46.835Z",
  "by": "성연제"
 }
