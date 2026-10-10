@@ -1807,8 +1807,8 @@
     {
      "id": "mv1sp4kortnke",
      "inning": 4,
-     "pitcherNo": "",
-     "pitcher": "",
+     "pitcherNo": "27",
+     "pitcher": "최정원",
      "result": "1B",
      "zone": {
       "x": 134.3,
@@ -2598,6 +2598,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-10T14:10:55.536Z",
+ "savedAt": "2026-10-10T14:15:59.015Z",
  "by": "성연제"
 }
