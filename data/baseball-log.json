@@ -1639,7 +1639,7 @@
      "result": "BB",
      "zone": null,
      "rbi": 0,
-     "runs": 0,
+     "runs": 1,
      "sb": 0,
      "cs": 0,
      "note": ""
@@ -1658,7 +1658,20 @@
      "note": ""
     }
    ],
-   "def": [],
+   "def": [
+    {
+     "id": "muz752a97atty",
+     "pos": "2B",
+     "inning": 6,
+     "result": "INN",
+     "innings": "",
+     "note": "",
+     "po": 0,
+     "a": 0,
+     "e": 0,
+     "dp": 0
+    }
+   ],
    "videos": [],
    "pdec": "",
    "date": "2026-10-03",
@@ -1679,8 +1692,8 @@
     {
      "id": "muy1oeb5i373t",
      "inning": 3,
-     "pitcherNo": "",
-     "pitcher": "",
+     "pitcherNo": "17",
+     "pitcher": "이서원",
      "result": "1B",
      "zone": {
       "x": 152,
@@ -1696,8 +1709,8 @@
     {
      "id": "muy1p7fgx9zav",
      "inning": 5,
-     "pitcherNo": "",
-     "pitcher": "",
+     "pitcherNo": "27",
+     "pitcher": "박준서",
      "result": "GO",
      "zone": {
       "x": 170.1,
@@ -1711,7 +1724,44 @@
      "note": ""
     }
    ],
-   "def": [],
+   "def": [
+    {
+     "id": "muz75kq9s9m6f",
+     "pos": "2B",
+     "inning": 3,
+     "result": "A",
+     "innings": "",
+     "note": "",
+     "po": 0,
+     "a": 1,
+     "e": 0,
+     "dp": 0
+    },
+    {
+     "id": "muz75t8yracv8",
+     "pos": "2B",
+     "inning": 5,
+     "result": "PO",
+     "innings": "",
+     "note": "",
+     "po": 1,
+     "a": 0,
+     "e": 0,
+     "dp": 0
+    },
+    {
+     "id": "muz75xn1rp4wu",
+     "pos": "2B",
+     "inning": 6,
+     "result": "INN",
+     "innings": "",
+     "note": "",
+     "po": 0,
+     "a": 0,
+     "e": 0,
+     "dp": 0
+    }
+   ],
    "videos": [
     {
      "id": "muy1r8ruurv0h",
@@ -1740,7 +1790,51 @@
   },
   {
    "id": "mukgfaukp5fdg",
-   "pas": [],
+   "pas": [
+    {
+     "id": "mv1soj18cjc5c",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "BB",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv1sp4kortnke",
+     "inning": 4,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "1B",
+     "zone": {
+      "x": 134.3,
+      "y": 176.5,
+      "z2": 1
+     },
+     "rbi": 0,
+     "runs": 1,
+     "sb": 1,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv1spjd3aql09",
+     "inning": 6,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "K",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
    "def": [],
    "videos": [],
    "pdec": "",
@@ -1750,8 +1844,8 @@
    "homeAway": "홈",
    "level": "",
    "type": "official",
-   "myScore": "",
-   "oppScore": "",
+   "myScore": "7",
+   "oppScore": "8",
    "inn": 6,
    "dinn": [],
    "note": ""
@@ -2288,8 +2382,8 @@
    "col": "gray",
    "op": 20,
    "time": "",
-   "reps": 9,
-   "ar": false,
+   "reps": 15,
+   "ar": true,
    "rg": "",
    "title": "",
    "note": ""
@@ -2321,8 +2415,176 @@
    "rg": "",
    "title": "",
    "note": ""
+  },
+  {
+   "id": "muz6w8vf6rpfs",
+   "date": "2026-11-02",
+   "end": "",
+   "icon": "gym",
+   "col": "gray",
+   "op": 20,
+   "time": "21:00",
+   "reps": 16,
+   "ar": true,
+   "rg": "muz6w8vfroi0k",
+   "title": "",
+   "note": ""
+  },
+  {
+   "id": "muz6w8vf5ubbo",
+   "date": "2026-11-04",
+   "end": "",
+   "icon": "gym",
+   "col": "gray",
+   "op": 20,
+   "time": "21:00",
+   "reps": 17,
+   "ar": true,
+   "rg": "muz6w8vfroi0k",
+   "title": "",
+   "note": ""
+  },
+  {
+   "id": "muz6w8vfwdvog",
+   "date": "2026-11-09",
+   "end": "",
+   "icon": "gym",
+   "col": "gray",
+   "op": 20,
+   "time": "21:00",
+   "reps": 18,
+   "ar": true,
+   "rg": "muz6w8vfroi0k",
+   "title": "",
+   "note": ""
+  },
+  {
+   "id": "muz6w8vf6om7x",
+   "date": "2026-11-11",
+   "end": "",
+   "icon": "gym",
+   "col": "gray",
+   "op": 20,
+   "time": "21:00",
+   "reps": 19,
+   "ar": true,
+   "rg": "muz6w8vfroi0k",
+   "title": "",
+   "note": ""
+  },
+  {
+   "id": "muz6w8vfn86hb",
+   "date": "2026-11-16",
+   "end": "",
+   "icon": "gym",
+   "col": "gray",
+   "op": 20,
+   "time": "21:00",
+   "reps": 20,
+   "ar": true,
+   "rg": "muz6w8vfroi0k",
+   "title": "",
+   "note": ""
+  },
+  {
+   "id": "muz6w8vfsjriy",
+   "date": "2026-11-18",
+   "end": "",
+   "icon": "gym",
+   "col": "gray",
+   "op": 20,
+   "time": "21:00",
+   "reps": 21,
+   "ar": true,
+   "rg": "muz6w8vfroi0k",
+   "title": "",
+   "note": ""
+  },
+  {
+   "id": "muz6w8vf924vt",
+   "date": "2026-11-23",
+   "end": "",
+   "icon": "gym",
+   "col": "gray",
+   "op": 20,
+   "time": "21:00",
+   "reps": 22,
+   "ar": true,
+   "rg": "muz6w8vfroi0k",
+   "title": "",
+   "note": ""
+  },
+  {
+   "id": "muz6w8vfpap4k",
+   "date": "2026-11-25",
+   "end": "",
+   "icon": "gym",
+   "col": "gray",
+   "op": 20,
+   "time": "21:00",
+   "reps": 23,
+   "ar": true,
+   "rg": "muz6w8vfroi0k",
+   "title": "",
+   "note": ""
+  },
+  {
+   "id": "muz6x0hqd6s1s",
+   "date": "2026-11-01",
+   "end": "",
+   "icon": "ball",
+   "col": "gray",
+   "op": 80,
+   "time": "17:00",
+   "reps": 12,
+   "ar": true,
+   "rg": "muz6x0hqzd843",
+   "title": "",
+   "note": ""
+  },
+  {
+   "id": "muz6x0hqq76wr",
+   "date": "2026-11-08",
+   "end": "",
+   "icon": "ball",
+   "col": "gray",
+   "op": 80,
+   "time": "17:00",
+   "reps": 13,
+   "ar": true,
+   "rg": "muz6x0hqzd843",
+   "title": "",
+   "note": ""
+  },
+  {
+   "id": "muz6x0hqyx89p",
+   "date": "2026-11-15",
+   "end": "",
+   "icon": "ball",
+   "col": "gray",
+   "op": 80,
+   "time": "17:00",
+   "reps": 14,
+   "ar": true,
+   "rg": "muz6x0hqzd843",
+   "title": "",
+   "note": ""
+  },
+  {
+   "id": "muz6x0hq1x1o5",
+   "date": "2026-11-22",
+   "end": "",
+   "icon": "ball",
+   "col": "gray",
+   "op": 80,
+   "time": "17:00",
+   "reps": 15,
+   "ar": true,
+   "rg": "muz6x0hqzd843",
+   "title": "",
+   "note": ""
   }
  ],
- "savedAt": "2026-10-10T13:39:13.987Z",
+ "savedAt": "2026-10-10T14:04:27.000Z",
  "by": "성연제"
 }
