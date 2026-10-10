@@ -1639,7 +1639,7 @@
      "result": "BB",
      "zone": null,
      "rbi": 0,
-     "runs": 1,
+     "runs": 0,
      "sb": 0,
      "cs": 0,
      "note": ""
@@ -1658,20 +1658,7 @@
      "note": ""
     }
    ],
-   "def": [
-    {
-     "id": "muz752a97atty",
-     "pos": "2B",
-     "inning": 6,
-     "result": "INN",
-     "innings": "",
-     "note": "",
-     "po": 0,
-     "a": 0,
-     "e": 0,
-     "dp": 0
-    }
-   ],
+   "def": [],
    "videos": [],
    "pdec": "",
    "date": "2026-10-03",
@@ -1692,8 +1679,8 @@
     {
      "id": "muy1oeb5i373t",
      "inning": 3,
-     "pitcherNo": "17",
-     "pitcher": "이서원",
+     "pitcherNo": "",
+     "pitcher": "",
      "result": "1B",
      "zone": {
       "x": 152,
@@ -1709,8 +1696,8 @@
     {
      "id": "muy1p7fgx9zav",
      "inning": 5,
-     "pitcherNo": "27",
-     "pitcher": "박준서",
+     "pitcherNo": "",
+     "pitcher": "",
      "result": "GO",
      "zone": {
       "x": 170.1,
@@ -1724,44 +1711,7 @@
      "note": ""
     }
    ],
-   "def": [
-    {
-     "id": "muz75kq9s9m6f",
-     "pos": "2B",
-     "inning": 3,
-     "result": "A",
-     "innings": "",
-     "note": "",
-     "po": 0,
-     "a": 1,
-     "e": 0,
-     "dp": 0
-    },
-    {
-     "id": "muz75t8yracv8",
-     "pos": "2B",
-     "inning": 5,
-     "result": "PO",
-     "innings": "",
-     "note": "",
-     "po": 1,
-     "a": 0,
-     "e": 0,
-     "dp": 0
-    },
-    {
-     "id": "muz75xn1rp4wu",
-     "pos": "2B",
-     "inning": 6,
-     "result": "INN",
-     "innings": "",
-     "note": "",
-     "po": 0,
-     "a": 0,
-     "e": 0,
-     "dp": 0
-    }
-   ],
+   "def": [],
    "videos": [
     {
      "id": "muy1r8ruurv0h",
@@ -2338,8 +2288,8 @@
    "col": "gray",
    "op": 20,
    "time": "",
-   "reps": 15,
-   "ar": true,
+   "reps": 9,
+   "ar": false,
    "rg": "",
    "title": "",
    "note": ""
@@ -2371,176 +2321,8 @@
    "rg": "",
    "title": "",
    "note": ""
-  },
-  {
-   "date": "2026-11-02",
-   "end": "",
-   "icon": "gym",
-   "col": "gray",
-   "op": 20,
-   "time": "21:00",
-   "reps": 16,
-   "ar": true,
-   "title": "",
-   "note": "",
-   "id": "muz6w8vf6rpfs",
-   "rg": "muz6w8vfroi0k"
-  },
-  {
-   "date": "2026-11-04",
-   "end": "",
-   "icon": "gym",
-   "col": "gray",
-   "op": 20,
-   "time": "21:00",
-   "reps": 17,
-   "ar": true,
-   "title": "",
-   "note": "",
-   "id": "muz6w8vf5ubbo",
-   "rg": "muz6w8vfroi0k"
-  },
-  {
-   "date": "2026-11-09",
-   "end": "",
-   "icon": "gym",
-   "col": "gray",
-   "op": 20,
-   "time": "21:00",
-   "reps": 18,
-   "ar": true,
-   "title": "",
-   "note": "",
-   "id": "muz6w8vfwdvog",
-   "rg": "muz6w8vfroi0k"
-  },
-  {
-   "date": "2026-11-11",
-   "end": "",
-   "icon": "gym",
-   "col": "gray",
-   "op": 20,
-   "time": "21:00",
-   "reps": 19,
-   "ar": true,
-   "title": "",
-   "note": "",
-   "id": "muz6w8vf6om7x",
-   "rg": "muz6w8vfroi0k"
-  },
-  {
-   "date": "2026-11-16",
-   "end": "",
-   "icon": "gym",
-   "col": "gray",
-   "op": 20,
-   "time": "21:00",
-   "reps": 20,
-   "ar": true,
-   "title": "",
-   "note": "",
-   "id": "muz6w8vfn86hb",
-   "rg": "muz6w8vfroi0k"
-  },
-  {
-   "date": "2026-11-18",
-   "end": "",
-   "icon": "gym",
-   "col": "gray",
-   "op": 20,
-   "time": "21:00",
-   "reps": 21,
-   "ar": true,
-   "title": "",
-   "note": "",
-   "id": "muz6w8vfsjriy",
-   "rg": "muz6w8vfroi0k"
-  },
-  {
-   "date": "2026-11-23",
-   "end": "",
-   "icon": "gym",
-   "col": "gray",
-   "op": 20,
-   "time": "21:00",
-   "reps": 22,
-   "ar": true,
-   "title": "",
-   "note": "",
-   "id": "muz6w8vf924vt",
-   "rg": "muz6w8vfroi0k"
-  },
-  {
-   "date": "2026-11-25",
-   "end": "",
-   "icon": "gym",
-   "col": "gray",
-   "op": 20,
-   "time": "21:00",
-   "reps": 23,
-   "ar": true,
-   "title": "",
-   "note": "",
-   "id": "muz6w8vfpap4k",
-   "rg": "muz6w8vfroi0k"
-  },
-  {
-   "date": "2026-11-01",
-   "end": "",
-   "icon": "ball",
-   "col": "gray",
-   "op": 80,
-   "time": "17:00",
-   "reps": 12,
-   "ar": true,
-   "title": "",
-   "note": "",
-   "id": "muz6x0hqd6s1s",
-   "rg": "muz6x0hqzd843"
-  },
-  {
-   "date": "2026-11-08",
-   "end": "",
-   "icon": "ball",
-   "col": "gray",
-   "op": 80,
-   "time": "17:00",
-   "reps": 13,
-   "ar": true,
-   "title": "",
-   "note": "",
-   "id": "muz6x0hqq76wr",
-   "rg": "muz6x0hqzd843"
-  },
-  {
-   "date": "2026-11-15",
-   "end": "",
-   "icon": "ball",
-   "col": "gray",
-   "op": 80,
-   "time": "17:00",
-   "reps": 14,
-   "ar": true,
-   "title": "",
-   "note": "",
-   "id": "muz6x0hqyx89p",
-   "rg": "muz6x0hqzd843"
-  },
-  {
-   "date": "2026-11-22",
-   "end": "",
-   "icon": "ball",
-   "col": "gray",
-   "op": 80,
-   "time": "17:00",
-   "reps": 15,
-   "ar": true,
-   "title": "",
-   "note": "",
-   "id": "muz6x0hq1x1o5",
-   "rg": "muz6x0hqzd843"
   }
  ],
- "savedAt": "2026-10-08T07:11:04.219Z",
+ "savedAt": "2026-10-10T13:39:13.987Z",
  "by": "성연제"
 }
