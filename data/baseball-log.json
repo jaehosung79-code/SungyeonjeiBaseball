@@ -1865,7 +1865,25 @@
   },
   {
    "id": "mukggf5rmaeu0",
-   "pas": [],
+   "pas": [
+    {
+     "id": "mv3fkguv9xvcd",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "GO",
+     "zone": {
+      "x": 169.8,
+      "y": 254.9,
+      "z2": 1
+     },
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
    "def": [],
    "videos": [],
    "pdec": "",
@@ -1875,9 +1893,9 @@
    "homeAway": "홈",
    "level": "",
    "type": "official",
-   "myScore": "",
-   "oppScore": "",
-   "inn": 6,
+   "myScore": "1",
+   "oppScore": "8",
+   "inn": 5,
    "dinn": [],
    "note": ""
   }
@@ -2598,6 +2616,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-10T14:18:48.827Z",
+ "savedAt": "2026-10-11T11:29:18.183Z",
  "by": "성연제"
 }
