@@ -3919,6 +3919,77 @@ function ghLoad(){
 function ghSaveState(){
   try{ localStorage.setItem(GH_STATE_KEY, JSON.stringify({sha:ghState.sha, push:ghState.push, pull:ghState.pull, hash:ghState.hash, canWrite:ghState.canWrite})); }catch(e){}
 }
+/* 마지막으로 저장소와 맞춘 기록(기준본) — 여러 기기가 동시에 고쳐도
+   "누가 무엇을 바꿨는지"를 알아내 서로의 변경을 잃지 않고 합치는 데 씁니다 (3-way 병합) */
+const GH_BASE_KEY = "bb_gh_base";
+let ghBaseMem = null;
+function ghBaseGet(){
+  if(ghBaseMem) return ghBaseMem;
+  try{ const t = localStorage.getItem(GH_BASE_KEY); if(t) ghBaseMem = JSON.parse(t); }catch(e){}
+  return ghBaseMem;
+}
+function ghBaseSet(o){
+  const t = o? JSON.stringify(o) : "";
+  ghBaseMem = o? JSON.parse(t) : null;              // 복사본 — 화면의 기록과 같은 배열을 함께 쓰면 안 됩니다
+  try{ o? localStorage.setItem(GH_BASE_KEY, t) : localStorage.removeItem(GH_BASE_KEY); }catch(e){}   // 저장 공간이 모자라면 메모리에만
+}
+/* 저장소와 맞춘 직후 상태를 기록합니다 — 해시 · 기준본 · 파일 버전(sha) */
+function ghMarkSynced(sha, payload, kind){
+  const P = payload || ghPayload();
+  ghState.sha = sha || ghState.sha; ghState.hash = ghHash(P);
+  ghState[kind || "pull"] = Date.now();
+  ghBaseSet(P); ghSaveState();
+}
+/* 저장소에서 받은 파일을 이 앱이 올리는 모양과 같게 맞춥니다 (비교 · 병합용) */
+function ghNorm(o){
+  o = o || {};
+  return {app:"bb-note", version:1, profile:o.profile||{}, profiles:o.profiles||{},
+    games:normalizeGames(JSON.parse(JSON.stringify(o.games||[]))).map(g=>Object.assign(g, {videos:(g.videos||[]).filter(v=>v.kind==="link")})),
+    plans:normalizePlans(o.plans)};
+}
+/* ---- 3-way 병합 ----
+   b = 기준본(마지막으로 맞춘 기록) · l = 이 기기 · r = 저장소(다른 기기가 올린 기록)
+   · 한쪽만 바뀐 곳은 바뀐 쪽을 씁니다
+   · id 가 있는 목록(경기 · 타석 · 수비 · 영상 · 일정)은 항목별로 합칩니다 — 추가 · 삭제 · 수정 모두 반영
+   · 같은 항목의 같은 칸을 양쪽에서 고쳤으면 이 기기(나중에 저장한 쪽) 값을 씁니다
+   · 한쪽에서 지우고 다른 쪽에서 고쳤으면 고친 내용을 살립니다 */
+function ghIsIdArr(a){ return Array.isArray(a) && a.every(x=> x && typeof x==="object" && !Array.isArray(x) && x.id!=null); }
+/* 비교용 문자열 — id 목록은 순서와 상관없이 같은 내용이면 같게 봅니다 (기기마다 정렬이 달라도 "수정"으로 오해하지 않게) */
+function ghKey(v){
+  if(v===null || typeof v!=="object") return JSON.stringify(v);
+  if(Array.isArray(v)){
+    const a = v.map(ghKey);
+    if(v.length && ghIsIdArr(v)) a.sort();
+    return "[" + a.join(",") + "]";
+  }
+  return "{" + Object.keys(v).sort().filter(k=> v[k]!==undefined).map(k=> JSON.stringify(k)+":"+ghKey(v[k])).join(",") + "}";
+}
+function ghM3(b, l, r, preferR){
+  const sl = ghKey(l), sr = ghKey(r);
+  if(sl === sr) return l;
+  const sb = ghKey(b);
+  if(sl === sb) return r;           // 이 기기는 그대로 → 저장소 변경을 받습니다
+  if(sr === sb) return l;           // 저장소는 그대로 → 이 기기 변경을 유지합니다
+  if(l === undefined) return r;     // 이 기기에서 지웠지만 저장소에서 고침 → 고친 내용 유지
+  if(r === undefined) return l;     // 저장소에서 지웠지만 이 기기에서 고침 → 고친 내용 유지
+  if(Array.isArray(l) && Array.isArray(r) && ghIsIdArr(l) && ghIsIdArr(r) && (l.length || r.length)){
+    const bm = new Map((ghIsIdArr(b)? b : []).map(x=>[String(x.id), x]));
+    const lm = new Map(l.map(x=>[String(x.id), x])), rm = new Map(r.map(x=>[String(x.id), x]));
+    const ids = Array.from(lm.keys()).concat(Array.from(rm.keys()).filter(k=> !lm.has(k)));
+    const out = [];
+    ids.forEach(k=>{ const v = ghM3(bm.get(k), lm.get(k), rm.get(k), preferR); if(v !== undefined) out.push(v); });
+    return out;
+  }
+  const isObj = v => v && typeof v==="object" && !Array.isArray(v);
+  if(isObj(l) && isObj(r)){
+    const bo = isObj(b)? b : {}, out = {};
+    Array.from(new Set(Object.keys(l).concat(Object.keys(r)))).forEach(k=>{
+      const v = ghM3(bo[k], l[k], r[k], preferR); if(v !== undefined) out[k] = v;
+    });
+    return out;
+  }
+  return preferR? r : l;
+}
 /* 키 순서와 상관없이 같은 내용이면 같은 값이 나오도록 */
 function stableStr(v){
   if(v===null || typeof v!=="object") return JSON.stringify(v);
@@ -3928,7 +3999,7 @@ function stableStr(v){
 function hashStr(t){ let h=5381; for(let i=0;i<t.length;i++){ h=((h<<5)+h) ^ t.charCodeAt(i); h|=0; } return (h>>>0).toString(36); }
 /* 올릴 내용 — 동영상 "파일"은 빼고 링크 영상만 남깁니다 */
 function ghPayload(){
-  const games = JSON.parse(JSON.stringify(S.games||[]));
+  const games = normalizeGames(JSON.parse(JSON.stringify(S.games||[])));   // 기기마다 같은 모양으로 (비교 · 병합용)
   /* 동영상 파일은 올리지 않습니다. 주소가 있는 영상은 다른 기기에서도 볼 수 있게 링크로 보냅니다. */
   games.forEach(g=>{
     g.videos = (g.videos||[]).filter(v=> v.url).map(v=> v.kind==="link"? v : {
@@ -4031,14 +4102,32 @@ async function ghDiag(){
 /* 저장소에서 기록 읽기
    · 토큰이 있으면 API (비공개 저장소도 가능)
    · 토큰이 없으면 API(공개 저장소) → raw 주소 순으로 시도합니다 */
-async function ghGet(){
+/* 파일 내용 꺼내기 — 1MB 가 넘는 파일은 내용 API 가 본문을 비워 보내므로 blob 으로 다시 받습니다 */
+async function ghContentOf(j){
+  let txt = "";
+  if(j && j.content && j.encoding !== "none") txt = b64dec(j.content);
+  else if(j && j.sha){
+    const r = await fetch("https://api.github.com/repos/"+ghCfg().repo+"/git/blobs/"+j.sha, {headers:ghHeaders(), cache:"no-store"});
+    if(!r.ok) throw new Error(await ghErrText(r));
+    const b = await r.json();
+    txt = b64dec(b.content);
+  }
+  try{ return JSON.parse(txt); }catch(e){ throw new Error("저장소의 기록 파일 읽기 실패"); }
+}
+let ghEtag = "";   // 바뀌지 않았으면 304 로 빠르게 끝냅니다 (조회 한도도 아낌)
+async function ghGet(opt){
   const c = ghCfg();
   if(ghToken){
-    const r = await fetch(ghApiUrl()+"?ref="+encodeURIComponent(c.branch)+"&t="+Date.now(), {headers:ghHeaders(), cache:"no-store"});
+    const h = ghHeaders();
+    const useTag = !!(opt && opt.ifChanged && ghEtag && ghState.sha);
+    if(useTag) h["If-None-Match"] = ghEtag;
+    const r = await fetch(ghApiUrl()+"?ref="+encodeURIComponent(c.branch), {headers:h, cache:"no-store"});
+    if(r.status===304 && useTag) return {same:true, sha:ghState.sha};
     if(r.status===404) return {missing:true};
     if(!r.ok) throw new Error(await ghErrText(r));
     const j = await r.json();
-    let data; try{ data = JSON.parse(b64dec(j.content)); }catch(e){ throw new Error("저장소의 기록 파일 읽기 실패"); }
+    const data = await ghContentOf(j);
+    ghEtag = r.headers.get("ETag") || "";
     return {sha:j.sha, data:data};
   }
   let api404 = false;
@@ -4046,7 +4135,7 @@ async function ghGet(){
     const r = await fetch(ghApiUrl()+"?ref="+encodeURIComponent(c.branch)+"&t="+Date.now(), {headers:ghHeaders(), cache:"no-store"});
     if(r.ok){
       const j = await r.json();
-      let data; try{ data = JSON.parse(b64dec(j.content)); }catch(e){ throw new Error("저장소의 기록 파일 읽기 실패"); }
+      const data = await ghContentOf(j);
       return {sha:j.sha, data:data};
     }
     if(r.status === 404) api404 = true;
@@ -4113,7 +4202,7 @@ function ghNetLabel(){
   return "온라인";
 }
 /* 받은 기록을 앱에 적용 — 이 기기의 동영상 "파일"은 그대로 지킵니다 */
-function ghApply(o, mode){
+function ghApply(o, mode, keepUi){
   if(!o || !Array.isArray(o.games)) return false;
   const inc = JSON.parse(JSON.stringify(o.games));
   normalizeGames(inc);
@@ -4145,56 +4234,91 @@ function ghApply(o, mode){
     if(o.profile) S.profile = Object.assign(blank().profile, o.profile);
     if(o.profiles && typeof o.profiles==="object") S.profiles = o.profiles;
     migrateProfiles(); syncProfile();
-    S.ui.gameId = null;
+    if(!keepUi || !S.games.some(g=> g.id===S.ui.gameId)) S.ui.gameId = null;   // 보던 경기가 그대로 있으면 화면 유지
   }
   S.games.forEach(g=>{ g.pas.sort((x,y)=>num(x.inning,0)-num(y.inning,0)); g.def.sort((x,y)=>num(x.inning,0)-num(y.inning,0)); });
   saveNow();
   return true;
 }
-/* 올리기 — 바뀐 게 없으면 아무 것도 하지 않습니다 */
-async function ghPush(manual){
+/* 맞추기(쓰기 가능한 기기) — 저장소를 먼저 확인해 다른 기기의 변경을 합친 뒤 올립니다.
+   예전에는 저장소의 최신 버전 위에 이 기기 기록을 그대로 덮어써, 두 명 이상이 고치면
+   먼저 올린 사람의 변경이 사라지고 서로의 최신 기록도 받아 오지 못했습니다.
+   poll=true 면 이 기기에 바뀐 게 없어도 저장소 변경을 받아 옵니다 (주기 확인). */
+async function ghPush(manual, poll){
   if(!ghCanPush()){ if(manual) toast("올리려면 토큰 필요"); return false; }
   if(ghBusy) return false;
   if(!navigator.onLine){ if(manual) toast("오프라인 — 연결되면 자동 저장"); return false; }
-  if(!manual && !ghNetOk()) return false;
-  if(!ghDirty()){ if(manual) toast("바뀐 기록 없음"); return false; }
+  const canPut = manual || (ghCfg().auto && ghNetOk());   // 자동 저장을 껐거나 와이파이 전용인데 모바일 데이터면 받기만
+  if(!manual && !poll && !ghDirty()) return false;
   ghBusy = true; ghState.err = "";
+  let changedHere = false;
   try{
-    let got = await ghGet();
-    let sha = got.missing? "" : got.sha;
-    /* 이 기기에서 아직 한 번도 맞춰 본 적이 없다면, 저장소 기록을 먼저 가져와 합칩니다.
-       (그러지 않으면 새 기기의 빈 기록이 저장소를 덮어써 버립니다) */
-    if(!ghState.hash && !got.missing && got.data && Array.isArray(got.data.games)){
-      const n = got.data.games.length;
-      ghApply(got.data, S.games.length? "merge" : "replace");
-      await relinkAll(); render();
-      if(n && manual) toast("저장소의 " + n + "경기 먼저 받음");
-      if(!ghDirty()){
-        ghState.sha = sha; ghState.hash = ghHash(); ghState.pull = Date.now(); ghSaveState();
+    for(let tries = 0; tries < 4; tries++){
+      const startHash = ghHash();                        // 받는 동안 이 기기에서 또 고치면 이번 차례는 건너뜁니다
+      const dirty = startHash !== ghState.hash;
+      const got = await ghGet({ifChanged: tries===0});
+      if(got.same){                                      // 저장소는 그대로
+        if(!dirty){ if(manual) toast("이미 최신"); return true; }
+        if(!canPut) return false;
+        const P = ghPayload();
+        const res = await ghPut(ghMk(P), ghState.sha, ghMsg());
+        if(res.conflict){ ghEtag = ""; continue; }
+        ghMarkSynced(res.sha, P, "push");
+        if(manual) toast("GitHub 저장 완료");
         return true;
       }
+      if(got.missing){
+        if(!canPut) return false;
+        const P = ghPayload();
+        const res = await ghPut(ghMk(P), "", ghMsg());
+        if(res.conflict) continue;
+        ghMarkSynced(res.sha, P, "push");
+        if(manual) toast("GitHub에 새 기록 파일 생성");
+        return true;
+      }
+      if(!got.data || !Array.isArray(got.data.games)) throw new Error("야구 기록 파일 아님");
+      const R = ghNorm(got.data), L = ghPayload();
+      let base = ghBaseGet();
+      if(!ghState.hash) base = null;                     // 처음 맞추는 기기 — 지운 항목은 판단하지 않고 양쪽을 모두 살립니다
+      else if(!base && got.sha === ghState.sha) base = R; // 기준본이 없어도 저장소가 그대로면 저장소가 곧 기준본
+      const M = ghM3(base || {}, L, R, !base);           // 처음 맞출 때 겹치는 칸은 저장소 값을 씁니다 (새 기기의 빈 값이 덮지 않게)
+      if(ghHash() !== startHash) return false;           // 그 사이 이 기기에서 저장 → 곧 다시 맞춥니다
+      if(ghHash(M) !== ghHash(L)){
+        ghApply(M, "replace", true);
+        changedHere = true;
+      }
+      const P = ghPayload();
+      if(ghKey(P) === ghKey(R)){                         // 저장소와 같아졌으면 올릴 필요 없음
+        ghMarkSynced(got.sha, P, "pull");
+      } else {
+        if(!canPut){ ghBaseSet(R); ghState.sha = got.sha; ghSaveState(); break; }
+        const res = await ghPut(ghMk(P), got.sha, ghMsg());
+        if(res.conflict){ ghEtag = ""; continue; }      // 그 사이 또 다른 기기가 올림 → 다시 받아 합칩니다
+        ghMarkSynced(res.sha, P, "push");
+      }
+      if(manual) toast(changedHere? "다른 기기 변경을 합쳐 저장 완료" : "GitHub 저장 완료");
+      else if(changedHere) toast("다른 기기에서 바뀐 기록 반영");
+      return true;
     }
-    const who = (S.profile && S.profile.name)? S.profile.name : "기록";
-    const mk = ()=> JSON.stringify(Object.assign(ghPayload(), {savedAt:new Date().toISOString(), by:who}), null, 1);
-    const msg = who + " · " + S.games.length + "경기 · " + new Date().toLocaleString("ko-KR");
-    let res = await ghPut(mk(), sha, msg);
-    if(res.conflict){
-      // 그 사이 다른 기기가 먼저 올린 경우 — 받아서 합친 뒤 다시 시도
-      const g2 = await ghGet();
-      if(!g2.missing){ ghApply(g2.data, "merge"); render(); }
-      res = await ghPut(mk(), g2.missing? "" : g2.sha, msg);
-      if(res.conflict) throw new Error("다른 기기와 동시 저장 — 잠시 후 재시도");
-    }
-    ghState.sha = res.sha; ghState.hash = ghHash(); ghState.push = Date.now(); ghSaveState();
-    if(manual) toast("GitHub 저장 완료");
-    if(S.ui.tab==="settings") render();
-    return true;
+    if(manual) toast("다른 기기와 동시 저장 중 — 잠시 후 다시 시도");
+    return false;
   }catch(e){
     ghState.err = e.message || String(e);
     if(manual) toast("저장 실패: " + ghState.err);
-    if(S.ui.tab==="settings") render();
     return false;
-  }finally{ ghBusy = false; }
+  }finally{
+    ghBusy = false;
+    if(changedHere){ relinkAll().then(()=> render()).catch(()=>{}); render(); }
+    else if(S.ui.tab==="settings") render();
+  }
+}
+function ghMk(P){
+  const who = (S.profile && S.profile.name)? S.profile.name : "기록";
+  return JSON.stringify(Object.assign({}, P, {savedAt:new Date().toISOString(), by:who}), null, 1);
+}
+function ghMsg(){
+  const who = (S.profile && S.profile.name)? S.profile.name : "기록";
+  return who + " · " + S.games.length + "경기 · " + new Date().toLocaleString("ko-KR");
 }
 /* 받기 — 자동일 때는 이 기기에서 고친 게 없을 때만 조용히 바꿉니다 */
 async function ghPull(manual){
@@ -4207,9 +4331,9 @@ async function ghPull(manual){
     if(got.missing){ if(manual) toast("저장소에 기록 파일 없음"); return false; }
     const o = got.data;
     if(!o || !Array.isArray(o.games)) throw new Error("야구 기록 파일 아님");
-    const same = ghHash({app:"bb-note", version:1, profile:o.profile||{}, profiles:o.profiles||{}, games:(o.games||[]).map(g=>Object.assign({}, g, {videos:(g.videos||[]).filter(v=>v.kind==="link")})), plans:normalizePlans(o.plans)}) === ghHash();
+    const same = ghHash(ghNorm(o)) === ghHash();
     if(same){
-      ghState.sha = got.sha; ghState.hash = ghHash(); ghState.pull = Date.now(); ghSaveState();
+      ghMarkSynced(got.sha, null, "pull");
       if(manual) toast("이미 최신");
       if(S.ui.tab==="settings") render();
       return false;
@@ -4224,10 +4348,12 @@ async function ghPull(manual){
         [{label:"저장소 기록으로 교체", style:"pri"},{label:"현재 기록에 합치기"},{label:"취소"}]);
       if(k===0) mode = "replace"; else if(k===1) mode = "merge"; else return false;
     }
-    ghApply(o, mode);
-    ghState.sha = got.sha; ghState.hash = ghHash(); ghState.pull = Date.now(); ghSaveState();
+    ghApply(o, mode, !manual);
+    if(mode==="merge"){ ghBaseSet(ghNorm(o)); ghState.sha = got.sha; ghState.pull = Date.now(); ghSaveState(); }  // 합친 결과는 다음 맞추기 때 올라갑니다
+    else ghMarkSynced(got.sha, null, "pull");
     await relinkAll(); render();
     if(manual) toast("GitHub에서 " + o.games.length + "경기 받음");
+    else toast("최신 기록 받음");
     return true;
   }catch(e){
     ghState.err = e.message || String(e);
@@ -4242,9 +4368,11 @@ function ghSchedule(){
   clearTimeout(ghTimer);
   ghTimer = setTimeout(()=>{ if(ghDirty()) ghPush(false); }, 8000);
 }
+/* 수정 중(입력 창이 열려 있음)에는 받아 온 기록으로 화면을 바꾸지 않고 다음 차례로 미룹니다 */
+function ghEditing(){ const m = $("#modal"); return !!(m && m.innerHTML); }
 function ghTry(){
-  if(!ghOn() || !navigator.onLine) return;
-  if(ghCanPush()){ if(ghCfg().auto && ghDirty()) ghPush(false); }
+  if(!ghOn() || !navigator.onLine || ghEditing()) return;
+  if(ghCanPush()){ if(ghCfg().auto || ghCfg().autoPull) ghPush(false, ghCfg().autoPull); }
   else if(ghCfg().autoPull) ghPull(false);
 }
 function ghInit(){
@@ -4253,7 +4381,14 @@ function ghInit(){
   // 앱을 켤 때 한 번, 인터넷이 연결될 때마다, 그리고 1분마다 (실패했거나 오프라인이었던 경우 대비)
   setTimeout(ghTry, 1500);
   window.addEventListener("online", ()=> setTimeout(ghTry, 1200));
-  setInterval(()=>{ if(ghCanPush() && ghCfg().auto && ghDirty()) ghTry(); }, 60000);
+  /* 주기 확인 — 다른 기기에서 고친 기록을 받아 옵니다. 바뀐 게 없으면 304 응답으로 바로 끝납니다.
+     토큰이 없는 기기는 조회 한도(시간당 60회)가 작아 3분마다 확인합니다 */
+  let tick = 0;
+  setInterval(()=>{
+    tick++;
+    if(document.visibilityState !== "visible") return;
+    if(ghCanPush() || tick % 4 === 0) ghTry();
+  }, 45000);
 }
 /* ------------------------------ 설정 화면 ------------------------------ */
 function ghSheet(){
@@ -4288,7 +4423,7 @@ async function ghSaveCfg(){
   S.settings.gh = Object.assign(ghCfg(), {repo:repo, branch:branch, path:path, off:false});
   ghToken = token;
   try{ token? localStorage.setItem(GH_TOKEN_KEY, token) : localStorage.removeItem(GH_TOKEN_KEY); }catch(e){}
-  ghState.sha = ""; ghState.hash = ""; ghState.err = ""; ghSaveState();
+  ghState.sha = ""; ghState.hash = ""; ghState.err = ""; ghSaveState(); ghBaseSet(null); ghEtag = "";
   saveNow(); closeSheet(); render();
   busy("저장소 확인 중");
   try{
@@ -4308,7 +4443,7 @@ async function ghSaveCfg(){
 }
 function ghForget(){
   S.settings.gh = {repo:"", branch:"main", path:"data/baseball-log.json", auto:true, wifi:true, autoPull:true, off:true};
-  ghToken = ""; ghState = {sha:"", push:0, pull:0, hash:"", err:""};
+  ghToken = ""; ghState = {sha:"", push:0, pull:0, hash:"", err:""}; ghBaseSet(null); ghEtag = "";
   try{ localStorage.removeItem(GH_TOKEN_KEY); localStorage.removeItem(GH_STATE_KEY); }catch(e){}
   saveNow(); render(); toast("GitHub 연결 해제 (저장소 파일은 유지)");
 }
@@ -6187,8 +6322,7 @@ function setTheme(v){
     // 다른 앱에 갔다 돌아와도 보던 화면을 그대로 둡니다.
     if($("#modal").innerHTML) return;
     armFullscreen();
-    if(ghCanPush()){ if(ghCfg().auto && ghDirty()) ghSchedule(); }
-    else if(ghOn() && ghCfg().autoPull) ghPull(false);
+    ghTry();                                   // 돌아오면 바로 최신 기록 확인
   });
   document.addEventListener("keydown", e=>{ if(e.key==="Escape" && $("#modal").innerHTML) closeSheet(); });
   // 개발용 훅 (자동 검증에 사용)
