@@ -2279,6 +2279,44 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mv606ork82p02",
+   "pas": [
+    {
+     "id": "mv606tw8jjhjb",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "1B",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-02-21",
+   "opponent": "방배초",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "practice",
+   "tour": "",
+   "myScore": "1",
+   "oppScore": "5",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -2997,6 +3035,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:28:51.316Z",
+ "savedAt": "2026-10-13T01:29:46.791Z",
  "by": "성연제"
 }
