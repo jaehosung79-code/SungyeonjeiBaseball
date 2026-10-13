@@ -1933,6 +1933,71 @@
      "sb": 0,
      "cs": 0,
      "note": ""
+    },
+    {
+     "id": "mv601nhteums1",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "1B",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv601pzr13nbk",
+     "inning": 3,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "1B",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv601t7zrydh2",
+     "inning": 4,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "1B",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv601wv1txh4t",
+     "inning": 5,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "2B",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv601yzx4luwc",
+     "inning": 6,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "2B",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
     }
    ],
    "def": [],
@@ -2673,6 +2738,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:25:33.395Z",
+ "savedAt": "2026-10-13T01:26:00.078Z",
  "by": "성연제"
 }
