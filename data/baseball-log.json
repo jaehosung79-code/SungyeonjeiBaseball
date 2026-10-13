@@ -2961,7 +2961,7 @@
    "homeAway": "홈",
    "level": "",
    "type": "official",
-   "tour": "2026 인제친선",
+   "tour": "26 인제친선",
    "myScore": "0",
    "oppScore": "1",
    "inn": 6,
@@ -3012,7 +3012,7 @@
    "homeAway": "홈",
    "level": "",
    "type": "official",
-   "tour": "2026 인제친선",
+   "tour": "26 인제친선",
    "myScore": "0",
    "oppScore": "1",
    "inn": 6,
@@ -3281,7 +3281,7 @@
    "homeAway": "홈",
    "level": "",
    "type": "official",
-   "tour": "2026 양구(봄)",
+   "tour": "26 양구(봄)",
    "myScore": "",
    "oppScore": "",
    "inn": 6,
@@ -3345,7 +3345,7 @@
    "homeAway": "홈",
    "level": "",
    "type": "official",
-   "tour": "2026 양구(봄)",
+   "tour": "26 양구(봄)",
    "myScore": "",
    "oppScore": "",
    "inn": 6,
@@ -4583,6 +4583,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T02:37:09.889Z",
+ "savedAt": "2026-10-13T02:37:55.387Z",
  "by": "성연제"
 }
