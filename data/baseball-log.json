@@ -2714,6 +2714,30 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mv60lj76jf8u0",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-03-28",
+   "opponent": "가동초",
+   "venue": "구의구장",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "2026 병원장기",
+   "myScore": "1",
+   "oppScore": "-3",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -3432,6 +3456,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:40:12.001Z",
+ "savedAt": "2026-10-13T01:41:12.744Z",
  "by": "성연제"
 }
