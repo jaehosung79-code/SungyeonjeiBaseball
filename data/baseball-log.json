@@ -2653,7 +2653,47 @@
   },
   {
    "id": "mv60ikh06ulja",
-   "pas": [],
+   "pas": [
+    {
+     "id": "mv60isc87kwjp",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "GO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv60iu9p712w4",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "FO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv60iw6qtkkm7",
+     "inning": 3,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "LO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
    "def": [],
    "videos": [],
    "pdec": "",
@@ -3392,6 +3432,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:38:54.611Z",
+ "savedAt": "2026-10-13T01:39:03.375Z",
  "by": "성연제"
 }
