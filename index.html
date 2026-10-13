@@ -33,7 +33,12 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('./sw.js')
-        .then(function (reg) { console.log('SW 등록 완료', reg.scope); })
+        .then(function (reg) {
+          console.log('SW 등록 완료', reg.scope);
+          /* 새 버전 확인 — 기기마다 예전 앱이 남아 있으면 서로 기록이 어긋나므로 열 때 · 돌아올 때마다 확인합니다 */
+          try{ reg.update(); }catch(e){}
+          document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='visible'){ try{ reg.update(); }catch(e){} } });
+        })
         .catch(function (err) { console.warn('SW 등록 실패', err); });
     });
   }
@@ -1078,6 +1083,9 @@ function normalizePlans(list){
         time: /^\d{2}:\d{2}$/.test(String(x.time||""))? String(x.time) : "",
         reps: clamp(Math.round(num(x.reps,0)), 0, 999),
         ar: x.ar === true,                            // 자동 횟수로 매긴 일정 (앞 일정이 바뀌면 따라 바뀜)
+        mt: Math.max(0, num(x.mt, 0)),                // 마지막 수정 시각 (기기 간 맞추기)
+        ...(x.ct != null? {ct: num(x.ct,0)} : {}),     // 만든 시각
+        ...((x.fm && typeof x.fm==="object")? {fm: Object.assign({}, x.fm)} : {}),   // 칸별 수정 시각
         rg: String(x.rg||""),                         // 매주 반복으로 함께 만든 일정 묶음
         title: String(x.title||""), note: String(x.note||"") };
     });
@@ -1207,6 +1215,10 @@ function load(){
     // 삼진·볼넷 등 타구가 없는 결과에 남아 있던 타구 위치는 정리
     g.pas.forEach(p=>{ if(p.zone && !(RMAP[p.result] && RMAP[p.result].bip)) p.zone = null; });
   });
+  if(!S.tomb || typeof S.tomb!=="object") S.tomb = {};
+  S.profMt = num(S.profMt, 0);
+  trkReset();                                  // 불러온 상태를 기준으로 이후 수정 · 삭제를 기록합니다
+  try{ localStorage.removeItem("bb_gh_base"); }catch(e){}   // 예전 기준본 — 저장 공간을 두 배로 써서 지웁니다
 }
 /* ------------------------ 연도별 선수 정보 ------------------------
    배번·소속 팀·포지션은 해마다 달라질 수 있어 연도별로 따로 보관합니다.
@@ -1252,9 +1264,66 @@ function migrateProfiles(){
   S.profiles[ys.length? ys[ys.length-1] : thisYear()] = Object.assign({}, p);
 }
 
+/* ---------------------- 변경 기록 (기기 간 맞추기용) ----------------------
+   저장할 때마다 직전 저장 상태와 항목별로 비교해,
+   · 바뀌었거나 새로 생긴 항목(경기 · 타석 · 수비 · 영상 · 일정)에는 수정 시각(mt)을,
+   · 사라진 항목에는 삭제 시각(S.tomb)을 남깁니다.
+   여러 기기의 기록을 합칠 때 항목마다 "가장 나중에 입력 · 수정 · 삭제한 쪽"을 따릅니다. */
+let trkSnap = null;
+const TOMB_KEEP = 400*86400000;          // 삭제 표시는 400일 뒤 정리
+function trkWalk(fn){
+  (S.games||[]).forEach(g=>{ fn("g", g);
+    (g.pas||[]).forEach(x=>fn("p", x)); (g.def||[]).forEach(x=>fn("d", x)); (g.videos||[]).forEach(x=>fn("v", x)); });
+  (S.plans||[]).forEach(x=>fn("pl", x));
+}
+/* 비교할 칸 — 수정 시각(mt · fm)과 경기 안 목록은 빼고, 영상은 기기마다 다른 파일 정보도 뺍니다 */
+function trkFieldOk(kind, k){
+  if(k==="mt" || k==="fm" || k==="ct" || k.charAt(0)==="_") return false;
+  if(kind==="g" && (k==="pas" || k==="def" || k==="videos")) return false;
+  if(kind==="v" && !(k in VID_SYNC_KEYS)) return false;
+  return true;
+}
+/* 항목의 칸별 비교값 { 칸: 값 문자열 } */
+function trkKey(kind, x){
+  const o = {};
+  Object.keys(x).forEach(k=>{ if(trkFieldOk(kind,k) && x[k]!==undefined) o[k] = ghKey(x[k]); });
+  return o;
+}
+const VID_SYNC_KEYS = {id:1, url:1, title:1, folder:1, paId:1, defId:1, note:1, createdAt:1};
+function trkProfKey(){ return ghKey({p:S.profile||{}, ps:S.profiles||{}}); }
+function trkReset(){
+  trkSnap = new Map();
+  trkWalk((k,x)=>{ if(x && x.id!=null) trkSnap.set(k+":"+x.id, trkKey(k,x)); });
+  trkSnap.set("#prof", trkProfKey());
+}
+function trkStamp(){
+  if(!trkSnap){ trkReset(); return; }
+  const now = Date.now(), seen = new Set();
+  S.tomb = (S.tomb && typeof S.tomb==="object")? S.tomb : {};
+  trkWalk((k,x)=>{
+    if(!x || x.id==null) return;
+    const id = k+":"+x.id, key = trkKey(k,x), old = trkSnap.get(id);
+    seen.add(id);
+    if(!old){ x.mt = now; if(x.ct == null) x.ct = now; trkSnap.set(id, key); if(S.tomb[id]) delete S.tomb[id]; return; }   // 새 항목 (만든 시각 ct)
+    let ch = false;
+    new Set(Object.keys(key).concat(Object.keys(old))).forEach(f=>{
+      if(key[f] !== old[f]){ ch = true; x.fm = x.fm || {}; x.fm[f] = now; }   // 칸마다 고친 시각
+    });
+    if(ch){ x.mt = now; trkSnap.set(id, key); if(S.tomb[id]) delete S.tomb[id]; }
+  });
+  trkSnap.forEach((v,id)=>{
+    if(id==="#prof" || seen.has(id)) return;
+    S.tomb[id] = now; trkSnap.delete(id);
+  });
+  const pk = trkProfKey();
+  if(trkSnap.get("#prof") !== pk){ S.profMt = now; trkSnap.set("#prof", pk); }
+  Object.keys(S.tomb).forEach(id=>{ if(now - num(S.tomb[id],0) > TOMB_KEEP) delete S.tomb[id]; });
+}
+
 function save(){
   clearTimeout(saveTimer);
   saveTimer = setTimeout(()=>{
+    trkStamp();
     try{ localStorage.setItem(KEY, JSON.stringify(S)); saveFailed=false; }
     catch(e){ saveFailed=true; toast("⚠ 저장 실패 — 저장 공간 확인"); console.error(e); }
     ghSchedule();
@@ -1262,6 +1331,7 @@ function save(){
 }
 function saveNow(){
   clearTimeout(saveTimer);
+  trkStamp();
   try{ localStorage.setItem(KEY, JSON.stringify(S)); saveFailed=false; ghSchedule(); return true; }
   catch(e){
     console.error(e);
@@ -3961,22 +4031,34 @@ function ghBaseGet(){
   try{ const t = localStorage.getItem(GH_BASE_KEY); if(t) ghBaseMem = JSON.parse(t); }catch(e){}
   return ghBaseMem;
 }
-function ghBaseSet(o){
-  const t = o? JSON.stringify(o) : "";
-  ghBaseMem = o? JSON.parse(t) : null;              // 복사본 — 화면의 기록과 같은 배열을 함께 쓰면 안 됩니다
-  try{ o? localStorage.setItem(GH_BASE_KEY, t) : localStorage.removeItem(GH_BASE_KEY); }catch(e){}   // 저장 공간이 모자라면 메모리에만
+/* 기준본은 이제 쓰지 않습니다 — 항목별 수정 시각으로 합칩니다 (저장 공간 절약) */
+function ghBaseSet(){
+  ghBaseMem = null;
+  try{ localStorage.removeItem(GH_BASE_KEY); }catch(e){}
+}
+/* 새 방식으로 올린 뒤에 예전 버전 앱이 저장소를 덮어썼으면 알려 줍니다 */
+let ghOldWarned = false;
+function ghOldWarn(d){
+  if(!d || d.sv === 2) { if(d) try{ localStorage.setItem("bb_gh_sv2","1"); }catch(e){} return; }
+  let seen = false; try{ seen = localStorage.getItem("bb_gh_sv2")==="1"; }catch(e){}
+  if(seen && !ghOldWarned){
+    ghOldWarned = true;
+    setTimeout(()=> toast("⚠ 예전 버전 앱에서 저장된 기록 — 모든 기기를 새 버전으로 바꿔 주세요"), 2600);
+  }
 }
 /* 저장소와 맞춘 직후 상태를 기록합니다 — 해시 · 기준본 · 파일 버전(sha) */
 function ghMarkSynced(sha, payload, kind){
   const P = payload || ghPayload();
   ghState.sha = sha || ghState.sha; ghState.hash = ghHash(P);
   ghState[kind || "pull"] = Date.now();
-  ghBaseSet(P); ghSaveState();
+  if(P.sv === 2) try{ localStorage.setItem("bb_gh_sv2","1"); }catch(e){}
+  ghSaveState();
 }
 /* 저장소에서 받은 파일을 이 앱이 올리는 모양과 같게 맞춥니다 (비교 · 병합용) */
 function ghNorm(o){
   o = o || {};
-  return {app:"bb-note", version:1, profile:o.profile||{}, profiles:o.profiles||{},
+  return {app:"bb-note", version:1, sv:2, profile:o.profile||{}, profiles:o.profiles||{}, profMt:num(o.profMt,0),
+    tomb:(o.tomb && typeof o.tomb==="object")? Object.assign({}, o.tomb) : {},
     games:normalizeGames(JSON.parse(JSON.stringify(o.games||[]))).map(g=>Object.assign(g, {videos:(g.videos||[]).filter(v=>v.kind==="link")})),
     plans:normalizePlans(o.plans)};
 }
@@ -3986,6 +4068,71 @@ function ghNorm(o){
    · id 가 있는 목록(경기 · 타석 · 수비 · 영상 · 일정)은 항목별로 합칩니다 — 추가 · 삭제 · 수정 모두 반영
    · 같은 항목의 같은 칸을 양쪽에서 고쳤으면 이 기기(나중에 저장한 쪽) 값을 씁니다
    · 한쪽에서 지우고 다른 쪽에서 고쳤으면 고친 내용을 살립니다 */
+/* ---- 최신 우선 병합 ----
+   항목마다 마지막 수정 시각(mt)을 비교해 더 나중에 입력 · 수정한 쪽을 씁니다.
+   삭제 시각(tomb)이 그 항목의 마지막 수정보다 나중이면 지운 것을 따릅니다.
+   경기는 경기 정보(상대 · 점수 · 대회명 …)만 시각으로 고르고, 안의 타석 · 수비 · 영상은 항목별로 따로 합칩니다.
+   시각이 같으면(예전 기록) 이 기기 값을 쓰되, 처음 맞추는 기기는 저장소 값을 씁니다. */
+function ghTs(x){ return num(x && x.mt, 0); }
+/* 칸의 마지막 수정 시각 — 칸별 기록이 없으면 항목 전체의 수정 시각 */
+function ghFt(x, f){
+  if(!x) return 0;
+  if(x.fm && x.fm[f]) return num(x.fm[f], 0);
+  if(x.ct != null) return num(x.ct, 0);       // 만든 뒤로 고치지 않은 칸
+  return x.fm? 0 : ghTs(x);                   // 예전 기록
+}
+function ghMergeRec(kind, l, r, preferR){
+  if(ghKey(l) === ghKey(r)) return l;
+  /* 칸마다 더 나중에 고친 쪽 값을 씁니다 — 한 경기의 구장은 A가, 메모는 B가 고쳐도 둘 다 남습니다 */
+  const win = {}, fm = {};
+  new Set(Object.keys(l).concat(Object.keys(r))).forEach(f=>{
+    if(f==="mt" || f==="fm" || f==="ct" || (kind==="g" && (f==="pas"||f==="def"||f==="videos"))) return;
+    const lt = ghFt(l,f), rt = ghFt(r,f);
+    const useR = rt > lt || (rt === lt && preferR);
+    const v = useR? r[f] : l[f];
+    if(v !== undefined) win[f] = v;
+    const t = Math.max(num(l.fm && l.fm[f],0), num(r.fm && r.fm[f],0));
+    if(t) fm[f] = t;
+  });
+  win.mt = Math.max(ghTs(l), ghTs(r));
+  if(l.ct != null || r.ct != null) win.ct = (l.ct != null)? l.ct : r.ct;
+  if(Object.keys(fm).length) win.fm = fm;
+  if(kind === "v" && (l.kind==="file" || r.kind==="file")) win.kind = l.kind || r.kind;
+  if(kind !== "g") return win;
+  return Object.assign(win, {
+    pas:    ghMergeList("p", l.pas||[],    r.pas||[],    preferR, ghMergeList.T),
+    def:    ghMergeList("d", l.def||[],    r.def||[],    preferR, ghMergeList.T),
+    videos: ghMergeList("v", l.videos||[], r.videos||[], preferR, ghMergeList.T)});
+}
+function ghMergeList(kind, L, R, preferR, T){
+  const lm = new Map(L.map(x=>[String(x.id), x])), rm = new Map(R.map(x=>[String(x.id), x]));
+  const ids = Array.from(lm.keys()).concat(Array.from(rm.keys()).filter(k=> !lm.has(k)));
+  const out = [];
+  ids.forEach(id=>{
+    const l = lm.get(id), r = rm.get(id), del = num(T[kind+":"+id], 0);
+    if(l && !r && ghMergeList.legacy && !ghTs(l)) return;   // 예전 방식 저장소에서 빠진 예전 항목 → 저장소를 따릅니다
+    const v = (l && r)? ghMergeRec(kind, l, r, preferR) : (l || r);
+    const deep = x=> !x? 0 : kind!=="g"? ghTs(x)       // 경기는 안의 타석 · 수비 · 영상을 고친 시각도 함께 봅니다
+      : Math.max(ghTs(x), ...[].concat(x.pas||[], x.def||[], x.videos||[]).map(ghTs));
+    const last = Math.max(deep(l), deep(r));
+    if(del && del >= last) return;                 // 마지막 수정보다 나중에 지움 → 삭제
+    out.push(v);
+  });
+  return out;
+}
+function ghMerge(L, R, preferR, legacy){
+  const T = Object.assign({}, R.tomb||{});
+  Object.keys(L.tomb||{}).forEach(k=>{ T[k] = Math.max(num(T[k],0), num(L.tomb[k],0)); });
+  ghMergeList.T = T; ghMergeList.legacy = !!legacy;
+  const lp = num(L.profMt,0), rp = num(R.profMt,0);
+  const lEmpty = !Object.keys(L.profiles||{}).length && !((L.profile||{}).name);
+  const useR = rp > lp || (rp === lp && (preferR || lEmpty));
+  return {app:"bb-note", version:1, sv:2,
+    profile: useR? R.profile : L.profile, profiles: useR? R.profiles : L.profiles, profMt: Math.max(lp, rp),
+    tomb: T,
+    games: ghMergeList("g", L.games||[], R.games||[], preferR, T),
+    plans: ghMergeList("pl", L.plans||[], R.plans||[], preferR, T)};
+}
 function ghIsIdArr(a){ return Array.isArray(a) && a.every(x=> x && typeof x==="object" && !Array.isArray(x) && x.id!=null); }
 /* 비교용 문자열 — id 목록은 순서와 상관없이 같은 내용이면 같게 봅니다 (기기마다 정렬이 달라도 "수정"으로 오해하지 않게) */
 function ghKey(v){
@@ -4037,10 +4184,11 @@ function ghPayload(){
   games.forEach(g=>{
     g.videos = (g.videos||[]).filter(v=> v.url).map(v=> v.kind==="link"? v : {
       id:v.id, kind:"link", url:v.url, title:v.title, folder:v.folder||"",
-      paId:v.paId, defId:v.defId, note:v.note||"", createdAt:v.createdAt
+      paId:v.paId, defId:v.defId, note:v.note||"", createdAt:v.createdAt, mt:v.mt||0
     });
   });
-  return {app:"bb-note", version:1, profile:S.profile, profiles:S.profiles||{}, games:games, plans:S.plans||[]};
+  return {app:"bb-note", version:1, sv:2, profile:S.profile, profiles:S.profiles||{}, profMt:num(S.profMt,0),
+          tomb:Object.assign({}, S.tomb||{}), games:games, plans:S.plans||[]};
 }
 function ghHash(o){ return hashStr(stableStr(o || ghPayload())); }
 function ghDirty(){ return ghHash() !== ghState.hash; }
@@ -4242,21 +4390,12 @@ function ghApply(o, mode, keepUi){
   const mine = new Map();
   (S.games||[]).forEach(g=> mine.set(g.id, (g.videos||[]).filter(v=> v.kind==="file")));
   if(mode==="merge"){
-    if(Array.isArray(o.plans)){                      // 일정도 같은 방식으로 합칩니다
-      const hp = new Set((S.plans||[]).map(x=>x.id));
-      normalizePlans(o.plans).forEach(x=>{ if(!hp.has(x.id)) S.plans.push(x); });
-    }
-    const have = new Set(S.games.map(g=>g.id));
-    inc.forEach(g=>{
-      if(!have.has(g.id)){ S.games.push(g); return; }
-      const cur = S.games.find(x=>x.id===g.id);
-      g.pas.forEach(x=>{ if(!cur.pas.some(y=>y.id===x.id)) cur.pas.push(x); });
-      g.def.forEach(x=>{ if(!cur.def.some(y=>y.id===x.id)) cur.def.push(x); });
-      g.videos.forEach(x=>{ if(!cur.videos.some(y=>y.id===x.id)) cur.videos.push(x); });
-    });
+    trkStamp();                                       // 이 기기의 마지막 수정까지 시각을 남긴 뒤 합칩니다
+    return ghApply(ghMerge(ghPayload(), ghNorm(o), false), "replace", keepUi);
   } else {
+    const tomb = (o.tomb && typeof o.tomb==="object")? o.tomb : {};
     inc.forEach(g=>{
-      const f = mine.get(g.id);
+      const f = (mine.get(g.id)||[]).filter(v=> !(num(tomb["v:"+v.id],0) >= num(v.mt,0) && tomb["v:"+v.id]));
       if(f && f.length){
         const ids = new Set(f.map(x=>x.id));            // 같은 영상이 두 번 들어가지 않게
         g.videos = (g.videos||[]).filter(v=> !ids.has(v.id)).concat(f);
@@ -4266,10 +4405,12 @@ function ghApply(o, mode, keepUi){
     if(Array.isArray(o.plans)) S.plans = normalizePlans(o.plans);
     if(o.profile) S.profile = Object.assign(blank().profile, o.profile);
     if(o.profiles && typeof o.profiles==="object") S.profiles = o.profiles;
+    S.tomb = Object.assign({}, tomb); S.profMt = num(o.profMt, 0);
     migrateProfiles(); syncProfile();
     if(!keepUi || !S.games.some(g=> g.id===S.ui.gameId)) S.ui.gameId = null;   // 보던 경기가 그대로 있으면 화면 유지
   }
   S.games.forEach(g=>{ g.pas.sort((x,y)=>num(x.inning,0)-num(y.inning,0)); g.def.sort((x,y)=>num(x.inning,0)-num(y.inning,0)); });
+  trkReset();                                         // 받아 온 기록은 이 기기의 수정으로 치지 않습니다
   saveNow();
   return true;
 }
@@ -4287,6 +4428,7 @@ async function ghPush(manual, poll){
   let changedHere = false;
   try{
     for(let tries = 0; tries < 4; tries++){
+      trkStamp();                                        // 아직 시각이 안 붙은 수정이 있으면 먼저 붙입니다
       const startHash = ghHash();                        // 받는 동안 이 기기에서 또 고치면 이번 차례는 건너뜁니다
       const dirty = startHash !== ghState.hash;
       const got = await ghGet({ifChanged: tries===0});
@@ -4311,10 +4453,10 @@ async function ghPush(manual, poll){
       }
       if(!got.data || !Array.isArray(got.data.games)) throw new Error("야구 기록 파일 아님");
       const R = ghNorm(got.data), L = ghPayload();
-      let base = ghBaseGet();
-      if(!ghState.hash) base = null;                     // 처음 맞추는 기기 — 지운 항목은 판단하지 않고 양쪽을 모두 살립니다
-      else if(!base && got.sha === ghState.sha) base = R; // 기준본이 없어도 저장소가 그대로면 저장소가 곧 기준본
-      const M = ghM3(base || {}, L, R, !base);           // 처음 맞출 때 겹치는 칸은 저장소 값을 씁니다 (새 기기의 빈 값이 덮지 않게)
+      ghOldWarn(got.data);
+      /* 저장소가 예전 방식(통째로 덮어쓰기)으로 저장돼 있으면, 시각이 없는 예전 항목은 저장소를 기준으로 봅니다 */
+      const legacy = got.data.sv !== 2;
+      const M = ghMerge(L, R, !ghState.hash || legacy, legacy && !!ghState.hash);   // 항목마다 가장 나중에 입력 · 수정 · 삭제한 쪽을 따릅니다
       if(ghHash() !== startHash) return false;           // 그 사이 이 기기에서 저장 → 곧 다시 맞춥니다
       if(ghHash(M) !== ghHash(L)){
         ghApply(M, "replace", true);
@@ -4324,7 +4466,7 @@ async function ghPush(manual, poll){
       if(ghKey(P) === ghKey(R)){                         // 저장소와 같아졌으면 올릴 필요 없음
         ghMarkSynced(got.sha, P, "pull");
       } else {
-        if(!canPut){ ghBaseSet(R); ghState.sha = got.sha; ghSaveState(); break; }
+        if(!canPut){ ghState.sha = got.sha; ghSaveState(); break; }
         const res = await ghPut(ghMk(P), got.sha, ghMsg());
         if(res.conflict){ ghEtag = ""; continue; }      // 그 사이 또 다른 기기가 올림 → 다시 받아 합칩니다
         ghMarkSynced(res.sha, P, "push");
@@ -4382,7 +4524,7 @@ async function ghPull(manual){
       if(k===0) mode = "replace"; else if(k===1) mode = "merge"; else return false;
     }
     ghApply(o, mode, !manual);
-    if(mode==="merge"){ ghBaseSet(ghNorm(o)); ghState.sha = got.sha; ghState.pull = Date.now(); ghSaveState(); }  // 합친 결과는 다음 맞추기 때 올라갑니다
+    if(mode==="merge"){ ghState.sha = got.sha; ghState.pull = Date.now(); ghSaveState(); }  // 합친 결과는 다음 맞추기 때 올라갑니다
     else ghMarkSynced(got.sha, null, "pull");
     await relinkAll(); render();
     if(manual) toast("GitHub에서 " + o.games.length + "경기 받음");
