@@ -3513,6 +3513,19 @@
      "sb": 0,
      "cs": 0,
      "note": ""
+    },
+    {
+     "id": "mv6161vzg6ftk",
+     "inning": 3,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "GO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
     }
    ],
    "def": [],
@@ -4253,6 +4266,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:56:59.934Z",
+ "savedAt": "2026-10-13T01:57:03.364Z",
  "by": "성연제"
 }
