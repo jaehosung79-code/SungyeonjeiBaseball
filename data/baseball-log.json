@@ -3487,12 +3487,39 @@
   },
   {
    "id": "mv6154ppa531b",
-   "pas": [],
+   "pas": [
+    {
+     "id": "mv615ryobtmbo",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "2B",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv615u1hmyap5",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "2B",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
    "def": [],
    "videos": [],
    "pdec": "",
    "date": "2026-10-13",
-   "opponent": "",
+   "opponent": "유천초",
    "venue": "",
    "homeAway": "홈",
    "level": "",
@@ -4226,6 +4253,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:56:27.080Z",
+ "savedAt": "2026-10-13T01:56:59.934Z",
  "by": "성연제"
 }
