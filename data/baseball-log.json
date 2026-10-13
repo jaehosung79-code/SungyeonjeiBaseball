@@ -2420,6 +2420,30 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mv60a32exoy7n",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-02-21",
+   "opponent": "효제초",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "2026 딜라이브",
+   "myScore": "2",
+   "oppScore": "4",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -3138,6 +3162,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:31:33.539Z",
+ "savedAt": "2026-10-13T01:32:18.768Z",
  "by": "성연제"
 }
