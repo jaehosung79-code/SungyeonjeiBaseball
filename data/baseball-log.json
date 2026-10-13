@@ -3090,7 +3090,60 @@
   },
   {
    "id": "mv60wvpze894l",
-   "pas": [],
+   "pas": [
+    {
+     "id": "mv60xhi14jpgb",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "K",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv60xjhnndyoe",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "GO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv60xlqcg6a8l",
+     "inning": 3,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "GO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv60xnmkfq0cu",
+     "inning": 4,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "LO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
    "def": [],
    "videos": [],
    "pdec": "",
@@ -3829,6 +3882,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:50:02.355Z",
+ "savedAt": "2026-10-13T01:50:40.013Z",
  "by": "성연제"
 }
