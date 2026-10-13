@@ -541,6 +541,7 @@ button.mhead:active{opacity:.6}
   white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums}
 .grow .l2 .gt{font-weight:700;letter-spacing:-.1px}
 .grow .l2 .gt.off{color:var(--accent-ink)} .grow .l2 .gt.prac{color:var(--s2)}
+.grow .l2 .tn{color:var(--text-2);font-weight:600;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto;max-width:55%}
 /* 경기 목록 전용 간결 행 — 달력 아이콘 없이 승패 글자부터 시작하고,
    날짜는 둘째 줄 글씨로 들어갑니다. 줄 높이를 좁혀 목록이 덜 길어지게 합니다. */
 .grow.cmp{padding-left:8px}
@@ -875,6 +876,8 @@ const PMAP = Object.fromEntries(POS.map(p=>[p.c,p.ko]));
 const GAME_TYPES = {official:{ko:"정식경기", short:"정식"}, practice:{ko:"연습경기", short:"연습"}};
 const GTYPE_KEYS = ["official","practice"];
 function gameType(g){ return (g && GAME_TYPES[g.type])? g.type : "official"; }
+/* 대회명 — 정식경기에만 씁니다 */
+function gameTour(g){ return (g && gameType(g)==="official")? String(g.tour||"").trim() : ""; }
 
 // 수비 결과 정의 (po: 자살, a: 보살, e: 실책, dp: 병살)
 const DEF_RESULTS = [
@@ -1164,6 +1167,7 @@ function normalizeGames(list){
     const lv = (g && LEVELS[g.level])? g.level : ((S.settings && LEVELS[S.settings.level])? S.settings.level : "high");
     g.pas.forEach(p=>{ migrateZone(p, lv); if(p.pitcherNo==null) p.pitcherNo=""; });
     if(!GAME_TYPES[g.type]) g.type = "official";
+    if(g.tour == null) g.tour = "";                     // 대회명 (정식경기 · 예전 기록에는 없던 항목)
     // 경기 이닝 · 포지션별 수비 이닝 (예전 기록에는 없던 항목)
     if(g.inn == null) g.inn = 0;
     g.dinn = Array.isArray(g.dinn)
@@ -2750,7 +2754,7 @@ function gameRow(g, compact){
   const sc = (g.myScore!==""&&g.myScore!=null&&g.oppScore!==""&&g.oppScore!=null)? `${g.myScore}:${g.oppScore}` : "";
   const prac = gameType(g)==="practice";
   const hot = hi400(t.AVG);
-  const aria = `${esc(fmtDate(g.date))} ${esc(g.opponent||"상대 미입력")} ${res||""} ${sc}`;
+  const aria = `${esc(fmtDate(g.date))} ${gameTour(g)? esc(gameTour(g))+" " : ""}${esc(g.opponent||"상대 미입력")} ${res||""} ${sc}`;
   return `<div class="grow${compact?" cmp":""}" data-act="openGame" data-id="${g.id}" role="button" tabindex="0" aria-label="${aria}">
     ${compact? "" : `<span class="dnum">${dateIcon(g.date)}</span>`}
     <div class="wl ${rc}">${res || "·"}</div>
@@ -2759,6 +2763,7 @@ function gameRow(g, compact){
         ${sc? `<span class="sc">${esc(sc)}</span>` : ""}</div>
       <div class="l2">
         <span class="gt ${prac?"prac":"off"}">${prac?"연습":"정식"}</span>
+        ${gameTour(g)? `<span class="tn">${esc(gameTour(g))}</span>` : ""}
         ${compact? `<span class="dt">${esc(mdDate(g.date))}</span>` : ""}
         ${gamePips(g)}
         ${g.videos.length? `<span class="gvid">${IC_PLAY_SM}${g.videos.length}</span>` : ""}
@@ -2848,7 +2853,7 @@ function viewGame(id){
     <div class="card">
       <div class="hd"><div style="flex:1">
         <h3>${typeBadge(g)} ${resTag(res)} ${esc(g.opponent||"상대 미입력")}</h3>
-        <div class="cap">${esc(GAME_TYPES[gameType(g)].ko)} · ${esc(fmtDateLong(g.date))}${g.venue?" · "+esc(g.venue):""}${g.homeAway?" · "+esc(g.homeAway):""}
+        <div class="cap">${esc(GAME_TYPES[gameType(g)].ko)}${gameTour(g)? ` · <b style="color:var(--text-2)">${esc(gameTour(g))}</b>` : ""} · ${esc(fmtDateLong(g.date))}${g.venue?" · "+esc(g.venue):""}${g.homeAway?" · "+esc(g.homeAway):""}
         ${(g.myScore!==""&&g.oppScore!=="")?` · ${esc(String(g.myScore))} : ${esc(String(g.oppScore))}`:""}
         · <span style="color:var(--text-2)">${esc(LEVELS[gameLevel(g)].ko)} 규격 · ${gameInnings(g)}회 경기</span></div>
       </div></div>
@@ -2990,7 +2995,7 @@ function viewPlans(){
         <span class="pic">${planIcon("field", 20)}</span>
         <div class="main one">
           <span class="t">${typeBadge(g)} ${esc(g.opponent||"상대 미입력")}</span>
-          <span class="mt">경기 기록${g.venue? " · "+esc(g.venue):""}</span></div>
+          <span class="mt">${gameTour(g)? esc(gameTour(g)) : "경기 기록"}${g.venue? " · "+esc(g.venue):""}</span></div>
         <div class="r ch">${IC_CHEV_R}</div>
       </div>`).join("")
     + list.map(x=>{
@@ -3197,6 +3202,18 @@ function insMonths(months, b){
       else out.push(insI("info", `최근(${last.label}) ${avg3(last._t.AVG)} — 시즌 평균과 비슷하게 유지`));
     }
   }
+  return out;
+}
+function insTours(rows){
+  const out = [];
+  const ok = rows.filter(r=> r.t.PA >= 8 && r.t.OPS!=null);
+  if(ok.length >= 2){
+    const s = ok.slice().sort((a,c)=>c.t.OPS-a.t.OPS);
+    out.push(insI(s[0].t.OPS >= .800? "good":"info", `가장 잘 친 대회 <b>${esc(s[0].name)}</b> — 타율 ${avg3(s[0].t.AVG)} · OPS ${avg3(s[0].t.OPS)}`));
+    out.push(insI(s[s.length-1].t.OPS < .650? "warn":"info", `가장 부진했던 대회 <b>${esc(s[s.length-1].name)}</b> — 타율 ${avg3(s[s.length-1].t.AVG)} · OPS ${avg3(s[s.length-1].t.OPS)}`));
+  }
+  const rec = rows[0];
+  if(rec && rec.t.PA) out.push(insI("info", `최근 대회 ${esc(rec.name)} — ${rec.G}경기 ${rec.W}승 ${rec.L}패 · 타율 ${avg3(rec.t.AVG)}`));
   return out;
 }
 function insVsPitchers(pTeams){
@@ -3439,6 +3456,17 @@ function viewStats(){
         .sort((a,c)=>c.t.PA-a.t.PA)};
   }).sort((a,c)=> a.year!==c.year? (a.year<c.year?1:-1) : c.t.PA-a.t.PA);
   const pitcherN = pTeams.reduce((n,x)=>n+x.pitchers.length, 0);
+
+  // 대회별 — 정식경기에 적은 대회명으로 묶습니다 (최근 대회부터)
+  const byTour = {};
+  gs.forEach(g=>{ const tn = gameTour(g); if(!tn) return;
+    const k = nkey(tn); (byTour[k] = byTour[k] || {name:tn, games:[], last:""}).games.push(g);
+    if((g.date||"") > byTour[k].last) byTour[k].last = g.date||""; });
+  const tourRows = Object.keys(byTour).map(k=>{ const T = byTour[k];
+    const tp = allPAs(T.games), t = battingOf(tp);
+    const w = T.games.filter(g=>gameResult(g)==="승").length, l = T.games.filter(g=>gameResult(g)==="패").length;
+    return {name:T.name, last:T.last, G:T.games.length, W:w, L:l, t};
+  }).sort((a,c)=> c.last.localeCompare(a.last));
   const pYears = new Set(pTeams.map(x=>x.year)).size;
 
   // 수비 결과 분포
@@ -3521,6 +3549,11 @@ function viewStats(){
   + (months.length>1? chartCard("월별 타율", "월 단위 시즌 흐름",
       colChart(months, {aria:"월별 타율", fmt:avg3, ref:{v:b.AVG, label:"AVG "+avg3(b.AVG)}}),
       tableHTML(["월","타수","안타","타점","타율","OPS"], months.map(d=>[d.label, d._t.AB, d._t.H, d._t.RBI, avg3(d._t.AVG), avg3(d._t.OPS)])), insBox(iMon)) : "")
+  + (tourRows.length? `<div class="card"><div class="hd"><div style="flex:1"><h3>대회별 성적</h3>
+      <div class="cap">정식경기에 적은 대회명 기준 · ${tourRows.length}개 대회 · 최근 대회부터</div></div></div>
+      ${tableHTML(["대회","경기","승패","타석","안타","홈런","타점","타율","OPS"],
+        tourRows.map(r=>[esc(r.name), r.G, `${r.W}승 ${r.L}패`, r.t.PA, r.t.H, r.t.HR, r.t.RBI, avg3(r.t.AVG), avg3(r.t.OPS)]))}
+      ${insBox(insTours(tourRows))}</div>` : "")
   + (pTeams.length? `<div class="card"><div class="hd"><div style="flex:1"><h3>상대 투수별 성적</h3>
       <div class="cap">${pYears}개 시즌 · ${pTeams.length}개 팀 · 투수 ${pitcherN}명</div></div></div>
       ${insBox(iVs)}${vsPitcherTable(pTeams)}</div>` : "")
@@ -3719,7 +3752,7 @@ function viewVideos(){
           <span class="dnum">${dateIcon(g.date, true)}</span>
           <div class="gt">
             <div class="t">${esc(g.opponent||"상대 미입력")}</div>
-            <div class="s">영상 ${g.videos.length}개${g.venue?" · "+esc(g.venue):""}</div>
+            <div class="s">영상 ${g.videos.length}개${gameTour(g)?" · "+esc(gameTour(g)):""}${g.venue?" · "+esc(g.venue):""}</div>
           </div>
           <span class="chev" aria-hidden="true">${IC_CHEV_D}</span>
         </button>
@@ -4665,7 +4698,11 @@ function syncDefInn(){
 /* preDate — 일정 달력에서 고른 날짜로 새 경기를 시작합니다 */
 function gameSheet(id, preDate){
   const g = id? S.games.find(x=>x.id===id) : null;
-  const d = g || {date: preDate || today(), opponent:"", venue:"", homeAway:"홈", myScore:"", oppScore:"", note:"", level:"", type:"official", pdec:"", inn:0, dinn:[]};
+  const d = g || {date: preDate || today(), opponent:"", venue:"", homeAway:"홈", myScore:"", oppScore:"", note:"", level:"", type:"official", tour:"", pdec:"", inn:0, dinn:[]};
+  /* 대회명 목록 — 최근에 쓴 대회부터 (새 경기면 가장 최근 대회를 미리 채웁니다) */
+  const tours = Array.from(new Set(S.games.filter(x=>gameTour(x)).slice()
+    .sort((a,b)=> (b.date||"").localeCompare(a.date||"")).map(gameTour)));
+  const tourVal = g? String(g.tour||"") : (tours[0] || "");
   const auto = g? autoDecision(g) : {dec:"", why:"", auto:true};
   const hasP = g? gamePitRecs(g).length>0 : false;
   const gt = gameType(d);
@@ -4686,6 +4723,12 @@ function gameSheet(id, preDate){
         ${GTYPE_KEYS.map(k=>`<button type="button" data-act="pickGType" data-v="${k}" aria-pressed="${gt===k}" style="flex:1">${GAME_TYPES[k].ko}</button>`).join("")}
       </div>
       <input id="g_type" type="hidden" value="${gt}">
+    </div>
+    <div id="g_tour_wrap" ${gt==="official"? "" : "hidden"}>
+      <label class="f"><span>대회명 <span style="color:var(--text-3);font-weight:400">— 정식경기</span></span>
+        <input id="g_tour" value="${esc(tourVal)}" list="dl_tour" placeholder="예: 2026 전국소년체전 · 주말리그">
+        <datalist id="dl_tour">${tours.map(o=>`<option value="${esc(o)}">`).join("")}</datalist></label>
+      ${!g && tourVal? `<div class="hint" style="margin:-6px 0 12px">최근 대회로 미리 채움 — 다른 대회면 고쳐 쓰기</div>` : ""}
     </div>
     <label class="f"><span>경기 날짜</span><input id="g_date" type="date" value="${esc(d.date)}"></label>
     <label class="f"><span>상대 팀</span><input id="g_opp" value="${esc(d.opponent)}" list="dl_opp" placeholder="상대 팀 이름">
@@ -5663,6 +5706,7 @@ function readGameSheet(){
   });
   return {date:$("#g_date").value||today(), opponent:$("#g_opp").value.trim(), venue:$("#g_venue").value.trim(),
     homeAway:$("#g_ha").value, level:$("#g_lv").value, type:($("#g_type").value||"official"),
+    tour: (($("#g_type").value||"official")==="official" && $("#g_tour"))? $("#g_tour").value.trim() : "",
     myScore:$("#g_ms").value, oppScore:$("#g_os").value, pdec: pd? pd.value : "",
     inn: gi? clamp(num(gi.value,0),1,30) : 0,
     dinn: Object.keys(dmap).map(k=>({pos:k, inn:Math.min(dmap[k],30)})),
@@ -5705,7 +5749,9 @@ document.addEventListener("click", ev=>{
     case "gtype": S.ui.gtype=v; save(); render(); break;
     case "pickGType": {
       $$("#modal [data-act='pickGType']").forEach(b=> b.setAttribute("aria-pressed", String(b.dataset.v===v)));
-      const h=$("#g_type"); if(h) h.value=v; break; }
+      const h=$("#g_type"); if(h) h.value=v;
+      const tw=$("#g_tour_wrap"); if(tw) tw.hidden = (v!=="official");   // 대회명은 정식경기에서만
+      break; }
     case "metric": S.ui.metric=v; save(); render(); break;
     case "bmode": S.ui.bmode=v; save(); render(); break;
     case "pmode": S.ui.pmode=v; save(); render(); break;
