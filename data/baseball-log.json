@@ -3484,6 +3484,30 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mv6154ppa531b",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-10-13",
+   "opponent": "",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "2026 양구(봄)",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -4202,6 +4226,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:56:07.250Z",
+ "savedAt": "2026-10-13T01:56:27.080Z",
  "by": "성연제"
 }
