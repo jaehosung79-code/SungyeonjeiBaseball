@@ -2076,6 +2076,110 @@
      "sb": 0,
      "cs": 0,
      "note": ""
+    },
+    {
+     "id": "mv60332d64a1f",
+     "inning": 13,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "BB",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv60356zt68lg",
+     "inning": 14,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "BB",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv6037nfwg8pd",
+     "inning": 15,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "BB",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv603a3njuzb8",
+     "inning": 16,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "BB",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv603cr70x1t8",
+     "inning": 17,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "BB",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv603f3mths5m",
+     "inning": 18,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "BB",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv603idxck3q5",
+     "inning": 19,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "HBP",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv603nkzirqip",
+     "inning": 20,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "SF",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
     }
    ],
    "def": [],
@@ -2816,6 +2920,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:26:39.990Z",
+ "savedAt": "2026-10-13T01:27:18.651Z",
  "by": "성연제"
 }
