@@ -3814,6 +3814,57 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mv61frpfqf4xp",
+   "pas": [
+    {
+     "id": "mv61futjqxfnn",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "1B",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv61fx9wzmips",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "GO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-06-14",
+   "opponent": "김해삼성",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "2026 U12-울진",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -4532,6 +4583,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T02:04:00.609Z",
+ "savedAt": "2026-10-13T02:04:55.375Z",
  "by": "성연제"
 }
