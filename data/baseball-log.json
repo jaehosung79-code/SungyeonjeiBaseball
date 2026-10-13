@@ -380,7 +380,7 @@
    "pdec": "",
    "inn": 6,
    "dinn": [],
-   "tour": "2026 아이리그"
+   "tour": ""
   },
   {
    "id": "mtgm0is8j7bna",
@@ -470,7 +470,7 @@
    "pdec": "",
    "inn": 6,
    "dinn": [],
-   "tour": "2026 아이리그"
+   "tour": ""
   },
   {
    "id": "mtgn5tioac16p",
@@ -609,7 +609,7 @@
    "pdec": "",
    "inn": 6,
    "dinn": [],
-   "tour": "2026 아이리그"
+   "tour": ""
   },
   {
    "id": "mtkwdv0pnhq1o",
@@ -707,7 +707,7 @@
    "note": "",
    "inn": 6,
    "dinn": [],
-   "tour": "2026 소체"
+   "tour": ""
   },
   {
    "id": "mtl71967i58lm",
@@ -812,7 +812,7 @@
    "note": "",
    "inn": 6,
    "dinn": [],
-   "tour": "2026 소체"
+   "tour": ""
   },
   {
    "id": "mtl7j9ce5ymlm",
@@ -917,7 +917,7 @@
    "note": "",
    "inn": 6,
    "dinn": [],
-   "tour": "2026 소체"
+   "tour": ""
   },
   {
    "id": "mtmiol8rajy2d",
@@ -1062,7 +1062,7 @@
    "note": "5회 타석에서 대타로 교체당함",
    "inn": 6,
    "dinn": [],
-   "tour": "2026 아이리그"
+   "tour": ""
   },
   {
    "id": "mtmphekl7jbmw",
@@ -1190,7 +1190,7 @@
    "note": "",
    "inn": 6,
    "dinn": [],
-   "tour": "2026 병원장기"
+   "tour": ""
   },
   {
    "id": "mtqhffh1msgtu",
@@ -1438,7 +1438,7 @@
     }
    ],
    "note": "",
-   "tour": "2026 양구사과배"
+   "tour": ""
   },
   {
    "id": "mu8aa71bsw5ua",
@@ -1510,7 +1510,7 @@
     }
    ],
    "note": "",
-   "tour": "2026 양구사과배"
+   "tour": ""
   },
   {
    "id": "mu8abujvcxwo0",
@@ -1577,7 +1577,7 @@
     }
    ],
    "note": "",
-   "tour": "2026 양구사과배"
+   "tour": ""
   },
   {
    "id": "muag6djroxdxf",
@@ -1641,7 +1641,7 @@
     }
    ],
    "note": "",
-   "tour": "2026 양구사과배"
+   "tour": ""
   },
   {
    "id": "mukgecrqdapiw",
@@ -1700,7 +1700,7 @@
    "inn": 6,
    "dinn": [],
    "note": "",
-   "tour": "2026 딜라이브"
+   "tour": ""
   },
   {
    "id": "mukgexc7bbs3m",
@@ -1803,7 +1803,7 @@
    "inn": 6,
    "dinn": [],
    "note": "",
-   "tour": "2026 딜라이브"
+   "tour": ""
   },
   {
    "id": "mukgfaukp5fdg",
@@ -1879,7 +1879,7 @@
    "inn": 6,
    "dinn": [],
    "note": "",
-   "tour": "2026 딜라이브"
+   "tour": ""
   },
   {
    "id": "mukggf5rmaeu0",
@@ -1916,7 +1916,7 @@
    "inn": 5,
    "dinn": [],
    "note": "",
-   "tour": "2026 딜라이브"
+   "tour": ""
   },
   {
    "id": "mv60130ybki92",
@@ -4583,6 +4583,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T02:04:55.375Z",
+ "savedAt": "2026-10-13T02:07:43.448Z",
  "by": "성연제"
 }
