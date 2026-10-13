@@ -2202,6 +2202,30 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mv604we3ndvev",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-02-21",
+   "opponent": "인헌초",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "practice",
+   "tour": "",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -2920,6 +2944,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:27:18.651Z",
+ "savedAt": "2026-10-13T01:28:16.672Z",
  "by": "성연제"
 }
