@@ -2472,8 +2472,8 @@
    "venue": "",
    "homeAway": "홈",
    "level": "",
-   "type": "official",
-   "tour": "2026 딜라이브",
+   "type": "practice",
+   "tour": "",
    "myScore": "2",
    "oppScore": "4",
    "inn": 6,
@@ -3202,6 +3202,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:34:10.229Z",
+ "savedAt": "2026-10-13T01:35:02.488Z",
  "by": "성연제"
 }
