@@ -3409,7 +3409,7 @@
    "homeAway": "홈",
    "level": "",
    "type": "official",
-   "tour": "2026 양구(봄)",
+   "tour": "26 양구(봄)",
    "myScore": "",
    "oppScore": "",
    "inn": 6,
@@ -3473,7 +3473,7 @@
    "homeAway": "홈",
    "level": "",
    "type": "official",
-   "tour": "2026 양구(봄)",
+   "tour": "26 양구(봄)",
    "myScore": "",
    "oppScore": "",
    "inn": 6,
@@ -3537,7 +3537,7 @@
    "homeAway": "홈",
    "level": "",
    "type": "official",
-   "tour": "2026 양구(봄)",
+   "tour": "26 양구(봄)",
    "myScore": "",
    "oppScore": "",
    "inn": 6,
@@ -4583,6 +4583,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T02:36:37.807Z",
+ "savedAt": "2026-10-13T02:37:09.889Z",
  "by": "성연제"
 }
