@@ -2857,6 +2857,30 @@
    "inn": 6,
    "dinn": [],
    "note": ""
+  },
+  {
+   "id": "mv60rl6wb6m2t",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-04-10",
+   "opponent": "남산초",
+   "venue": "인제",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "2026 인제친선",
+   "myScore": "0",
+   "oppScore": "1",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -3575,6 +3599,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:44:29.459Z",
+ "savedAt": "2026-10-13T01:45:48.317Z",
  "by": "성연제"
 }
