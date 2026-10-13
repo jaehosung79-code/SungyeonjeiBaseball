@@ -3717,6 +3717,52 @@
    "inn": 6,
    "dinn": [],
    "note": ""
+  },
+  {
+   "id": "mv61c8emndcpv",
+   "pas": [
+    {
+     "id": "mv61ccismhg8y",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "GO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv61cenkqex1y",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "FO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-06-01",
+   "opponent": "역삼",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "2026 서울컵",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [],
+   "note": ""
   }
  ],
  "plans": [
@@ -4435,6 +4481,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T02:01:30.862Z",
+ "savedAt": "2026-10-13T02:02:14.786Z",
  "by": "성연제"
 }
