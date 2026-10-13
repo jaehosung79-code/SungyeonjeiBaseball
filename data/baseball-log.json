@@ -3845,8 +3845,8 @@
    "level": "",
    "type": "official",
    "tour": "26 U12-울진",
-   "myScore": "",
-   "oppScore": "",
+   "myScore": "4",
+   "oppScore": "3",
    "inn": 6,
    "dinn": [
     {
@@ -3854,7 +3854,12 @@
      "inn": 6
     }
    ],
-   "note": ""
+   "note": "",
+   "fm": {
+    "myScore": 1791880243629,
+    "oppScore": 1791880243629
+   },
+   "mt": 1791880243629
   },
   {
    "id": "mv61frpfqf4xp",
@@ -4680,6 +4685,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T08:30:43.453Z",
+ "savedAt": "2026-10-13T08:30:53.766Z",
  "by": "성연제"
 }
