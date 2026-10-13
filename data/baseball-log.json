@@ -2860,7 +2860,34 @@
   },
   {
    "id": "mv60rl6wb6m2t",
-   "pas": [],
+   "pas": [
+    {
+     "id": "mv60rny3mtnha",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "GO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv60rppizcjae",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "FO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
    "def": [],
    "videos": [],
    "pdec": "",
@@ -3599,6 +3626,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:45:48.317Z",
+ "savedAt": "2026-10-13T01:46:06.412Z",
  "by": "성연제"
 }
