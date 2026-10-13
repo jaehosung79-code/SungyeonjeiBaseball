@@ -2343,6 +2343,30 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mv608re54dsb3",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-02-21",
+   "opponent": "상일초",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "practice",
+   "tour": "",
+   "myScore": "2",
+   "oppScore": "4",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -3061,6 +3085,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:30:03.356Z",
+ "savedAt": "2026-10-13T01:31:16.921Z",
  "by": "성연제"
 }
