@@ -2024,6 +2024,58 @@
      "sb": 0,
      "cs": 0,
      "note": ""
+    },
+    {
+     "id": "mv602lk1i1nw2",
+     "inning": 9,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "K",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv602o43hgijl",
+     "inning": 10,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "K",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv602qlgp9b2y",
+     "inning": 11,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "K",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv602ts3n3kkk",
+     "inning": 12,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "K",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
     }
    ],
    "def": [],
@@ -2764,6 +2816,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:26:18.533Z",
+ "savedAt": "2026-10-13T01:26:39.990Z",
  "by": "성연제"
 }
