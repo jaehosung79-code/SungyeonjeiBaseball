@@ -2959,6 +2959,57 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mv60tuskmf2q4",
+   "pas": [
+    {
+     "id": "mv60txuwyx7n3",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "BB",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv60u22ebqzrw",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "GO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-04-11",
+   "opponent": "고명초",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "2026 인제친선",
+   "myScore": "0",
+   "oppScore": "1",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -3677,6 +3728,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:47:06.332Z",
+ "savedAt": "2026-10-13T01:47:50.645Z",
  "by": "성연제"
 }
