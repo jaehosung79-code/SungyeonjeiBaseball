@@ -2811,6 +2811,25 @@
    "inn": 6,
    "dinn": [],
    "note": ""
+  },
+  {
+   "id": "mv60orum766yi",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-04-01",
+   "opponent": "",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "2026 병원장기",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [],
+   "note": ""
   }
  ],
  "plans": [
@@ -3529,6 +3548,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:43:16.880Z",
+ "savedAt": "2026-10-13T01:43:55.262Z",
  "by": "성연제"
 }
