@@ -2754,7 +2754,7 @@
    "homeAway": "홈",
    "level": "",
    "type": "official",
-   "tour": "2026 병원장기",
+   "tour": "26 병원장기",
    "myScore": "1",
    "oppScore": "-3",
    "inn": 6,
@@ -2851,7 +2851,7 @@
    "homeAway": "홈",
    "level": "",
    "type": "official",
-   "tour": "2026 병원장기",
+   "tour": "26 병원장기",
    "myScore": "0",
    "oppScore": "2",
    "inn": 6,
@@ -4583,6 +4583,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T02:34:26.819Z",
+ "savedAt": "2026-10-13T02:36:24.830Z",
  "by": "성연제"
 }
