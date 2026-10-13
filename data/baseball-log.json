@@ -378,9 +378,9 @@
    "oppScore": "7",
    "note": "",
    "pdec": "",
-   "inn": 0,
+   "inn": 6,
    "dinn": [],
-   "tour": ""
+   "tour": "2026 아이리그"
   },
   {
    "id": "mtgm0is8j7bna",
@@ -468,9 +468,9 @@
    "oppScore": "2",
    "note": "",
    "pdec": "",
-   "inn": 0,
+   "inn": 6,
    "dinn": [],
-   "tour": ""
+   "tour": "2026 아이리그"
   },
   {
    "id": "mtgn5tioac16p",
@@ -2635,6 +2635,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:17:14.542Z",
+ "savedAt": "2026-10-13T01:17:43.150Z",
  "by": "성연제"
 }
