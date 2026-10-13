@@ -3671,6 +3671,52 @@
    "inn": 6,
    "dinn": [],
    "note": ""
+  },
+  {
+   "id": "mv61bcm0u562q",
+   "pas": [
+    {
+     "id": "mv61bewskthty",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "FO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv61bgwu8edrc",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "GO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-05-30",
+   "opponent": "갈산초",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "practice",
+   "tour": "",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [],
+   "note": ""
   }
  ],
  "plans": [
@@ -4389,6 +4435,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T02:00:52.320Z",
+ "savedAt": "2026-10-13T02:01:30.862Z",
  "by": "성연제"
 }
