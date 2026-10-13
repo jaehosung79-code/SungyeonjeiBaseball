@@ -2295,6 +2295,32 @@
      "sb": 0,
      "cs": 0,
      "note": ""
+    },
+    {
+     "id": "mv6075rxc1sw1",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "BB",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv60781pte6af",
+     "inning": 3,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "K",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
     }
    ],
    "def": [],
@@ -3035,6 +3061,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:29:46.791Z",
+ "savedAt": "2026-10-13T01:30:03.356Z",
  "by": "성연제"
 }
