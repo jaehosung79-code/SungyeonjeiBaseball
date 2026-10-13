@@ -1917,6 +1917,30 @@
    "dinn": [],
    "note": "",
    "tour": "2026 딜라이브"
+  },
+  {
+   "id": "mv60130ybki92",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-02-12",
+   "opponent": "all",
+   "venue": "보은",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "2026 2월 보은친선",
+   "myScore": "0",
+   "oppScore": "0",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -2635,6 +2659,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:17:43.150Z",
+ "savedAt": "2026-10-13T01:25:18.635Z",
  "by": "성연제"
 }
