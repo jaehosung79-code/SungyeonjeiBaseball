@@ -3548,6 +3548,30 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mv617af77wx20",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-05-17",
+   "opponent": "백마초",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "2026 양구(봄)",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 2
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -4266,6 +4290,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:57:42.579Z",
+ "savedAt": "2026-10-13T01:58:07.982Z",
  "by": "성연제"
 }
