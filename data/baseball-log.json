@@ -141,7 +141,8 @@
    "note": "",
    "pdec": "",
    "inn": 0,
-   "dinn": []
+   "dinn": [],
+   "tour": ""
   },
   {
    "id": "mtgkjj8rdk1xb",
@@ -230,7 +231,8 @@
    "note": "",
    "pdec": "",
    "inn": 0,
-   "dinn": []
+   "dinn": [],
+   "tour": ""
   },
   {
    "id": "mtgksphkkshbr",
@@ -377,7 +379,8 @@
    "note": "",
    "pdec": "",
    "inn": 0,
-   "dinn": []
+   "dinn": [],
+   "tour": ""
   },
   {
    "id": "mtgm0is8j7bna",
@@ -466,7 +469,8 @@
    "note": "",
    "pdec": "",
    "inn": 0,
-   "dinn": []
+   "dinn": [],
+   "tour": ""
   },
   {
    "id": "mtgn5tioac16p",
@@ -604,7 +608,8 @@
    "note": "수비 : 포구. 그리고 조금더 빨리 다음 동작으로 이어질수 있게",
    "pdec": "",
    "inn": 0,
-   "dinn": []
+   "dinn": [],
+   "tour": ""
   },
   {
    "id": "mtkwdv0pnhq1o",
@@ -701,7 +706,8 @@
    "oppScore": "5",
    "note": "",
    "inn": 0,
-   "dinn": []
+   "dinn": [],
+   "tour": ""
   },
   {
    "id": "mtl71967i58lm",
@@ -805,7 +811,8 @@
    "oppScore": "1",
    "note": "",
    "inn": 0,
-   "dinn": []
+   "dinn": [],
+   "tour": ""
   },
   {
    "id": "mtl7j9ce5ymlm",
@@ -909,7 +916,8 @@
    "oppScore": "7",
    "note": "",
    "inn": 0,
-   "dinn": []
+   "dinn": [],
+   "tour": ""
   },
   {
    "id": "mtmiol8rajy2d",
@@ -1053,7 +1061,8 @@
    "oppScore": "7",
    "note": "5회 타석에서 대타로 교체당함",
    "inn": 0,
-   "dinn": []
+   "dinn": [],
+   "tour": ""
   },
   {
    "id": "mtmphekl7jbmw",
@@ -1180,7 +1189,8 @@
    "oppScore": "5",
    "note": "",
    "inn": 0,
-   "dinn": []
+   "dinn": [],
+   "tour": ""
   },
   {
    "id": "mtqhffh1msgtu",
@@ -1340,7 +1350,8 @@
    "oppScore": "9",
    "note": "",
    "inn": 0,
-   "dinn": []
+   "dinn": [],
+   "tour": ""
   },
   {
    "id": "mtyhjqai4ltzy",
@@ -1426,7 +1437,8 @@
      "inn": 4
     }
    ],
-   "note": ""
+   "note": "",
+   "tour": ""
   },
   {
    "id": "mu8aa71bsw5ua",
@@ -1497,7 +1509,8 @@
      "inn": 6
     }
    ],
-   "note": ""
+   "note": "",
+   "tour": ""
   },
   {
    "id": "mu8abujvcxwo0",
@@ -1563,7 +1576,8 @@
      "inn": 6
     }
    ],
-   "note": ""
+   "note": "",
+   "tour": ""
   },
   {
    "id": "muag6djroxdxf",
@@ -1626,7 +1640,8 @@
      "inn": 6
     }
    ],
-   "note": ""
+   "note": "",
+   "tour": ""
   },
   {
    "id": "mukgecrqdapiw",
@@ -1684,7 +1699,8 @@
    "oppScore": "3",
    "inn": 6,
    "dinn": [],
-   "note": ""
+   "note": "",
+   "tour": "2026 딜라이브"
   },
   {
    "id": "mukgexc7bbs3m",
@@ -1786,7 +1802,8 @@
    "oppScore": "4",
    "inn": 6,
    "dinn": [],
-   "note": ""
+   "note": "",
+   "tour": "2026 딜라이브"
   },
   {
    "id": "mukgfaukp5fdg",
@@ -1861,7 +1878,8 @@
    "oppScore": "8",
    "inn": 6,
    "dinn": [],
-   "note": ""
+   "note": "",
+   "tour": "2026 딜라이브"
   },
   {
    "id": "mukggf5rmaeu0",
@@ -1897,7 +1915,8 @@
    "oppScore": "8",
    "inn": 5,
    "dinn": [],
-   "note": ""
+   "note": "",
+   "tour": "2026 딜라이브"
   }
  ],
  "plans": [
@@ -2616,6 +2635,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-12T07:39:03.264Z",
+ "savedAt": "2026-10-13T01:13:33.334Z",
  "by": "성연제"
 }
