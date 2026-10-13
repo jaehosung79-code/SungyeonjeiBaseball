@@ -3087,6 +3087,30 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mv60wvpze894l",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-04-25",
+   "opponent": "역삼초",
+   "venue": "강남초",
+   "homeAway": "홈",
+   "level": "",
+   "type": "practice",
+   "tour": "",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -3805,6 +3829,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:49:15.446Z",
+ "savedAt": "2026-10-13T01:50:02.355Z",
  "by": "성연제"
 }
