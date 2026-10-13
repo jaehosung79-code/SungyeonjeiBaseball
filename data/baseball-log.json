@@ -3164,6 +3164,70 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mv60ynmdnbj7v",
+   "pas": [
+    {
+     "id": "mv60yqo2pri50",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "1B",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv60yur5in05w",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "BB",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv60yxfjkbgv6",
+     "inning": 3,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "GO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-05-09",
+   "opponent": "수유초",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "practice",
+   "tour": "",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -3882,6 +3946,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:50:40.013Z",
+ "savedAt": "2026-10-13T01:51:44.695Z",
  "by": "성연제"
 }
