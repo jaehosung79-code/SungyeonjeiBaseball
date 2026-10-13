@@ -810,9 +810,9 @@
    "myScore": "5",
    "oppScore": "1",
    "note": "",
-   "inn": 0,
+   "inn": 6,
    "dinn": [],
-   "tour": ""
+   "tour": "2026 소체"
   },
   {
    "id": "mtl7j9ce5ymlm",
@@ -915,9 +915,9 @@
    "myScore": "4",
    "oppScore": "7",
    "note": "",
-   "inn": 0,
+   "inn": 6,
    "dinn": [],
-   "tour": ""
+   "tour": "2026 소체"
   },
   {
    "id": "mtmiol8rajy2d",
@@ -1188,9 +1188,9 @@
    "myScore": "3",
    "oppScore": "5",
    "note": "",
-   "inn": 0,
+   "inn": 6,
    "dinn": [],
-   "tour": ""
+   "tour": "2026 소체"
   },
   {
    "id": "mtqhffh1msgtu",
@@ -3202,6 +3202,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:32:43.421Z",
+ "savedAt": "2026-10-13T01:33:48.346Z",
  "by": "성연제"
 }
