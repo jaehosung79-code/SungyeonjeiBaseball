@@ -331,6 +331,77 @@ tr.grp td .hi{color:var(--hi);font-weight:700}
 .tile .v{font-size:26px;font-weight:300;letter-spacing:-.025em;line-height:1.15;margin-top:2px}
 .tile .v small{font-size:12px;font-weight:400;color:var(--text-3);margin-left:2px}
 
+
+/* ======================= 모던 미니멀 디자인 (2026-10) =======================
+   흰 바탕 · 얇은 선 · 넓은 여백을 기본으로, 선수 카드 · 아이콘 타일 · 게이지 막대 · 야구장 선 그림을 더했습니다. */
+:root{ --r:18px; --r-sm:12px; }
+.card{padding:16px}
+.card h3{font-size:14.5px;letter-spacing:-.015em}
+.tile{position:relative;padding:11px 12px 10px;background:var(--surface-1)}
+.tile .ti{position:absolute;top:10px;right:10px;color:var(--text-3);opacity:.55;display:flex}
+.tile .ti svg{width:16px;height:16px;display:block}
+.tile .v{font-size:27px;margin-top:4px}
+/* 아래 탭 — 고른 탭은 아이콘 뒤에 옅은 알약 배경 */
+nav.tabs button .ic{width:52px;height:28px;border-radius:999px;transition:background .15s}
+nav.tabs button[aria-current="page"] .ic{background:color-mix(in srgb, var(--accent-ink) 14%, transparent)}
+/* 상단 — 선수 사진이 있으면 공 아이콘 자리에 사진 */
+.topbar .ball.ph{border:0;background-size:cover;background-position:center}
+.topbar .ball.ph::before,.topbar .ball.ph::after{display:none}
+
+/* 선수 카드 (홈) */
+.pcard{position:relative;overflow:hidden;background:var(--surface-1);border:1px solid var(--border);
+  border-radius:var(--r);padding:16px 16px 14px;margin-bottom:12px;box-shadow:var(--shadow)}
+.pcard .art{position:absolute;right:-46px;top:-30px;width:250px;height:250px;color:var(--accent-ink);opacity:.13;pointer-events:none}
+.pcard .who{position:relative;display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.avatar{flex:0 0 auto;width:56px;height:56px;border-radius:50%;overflow:hidden;display:grid;place-items:center;
+  background:var(--surface-2);color:var(--accent-ink);font-weight:800;font-size:19px;letter-spacing:-.02em;
+  box-shadow:0 0 0 3px var(--surface-1), 0 0 0 4px var(--border)}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.avatar.lg{width:84px;height:84px;font-size:26px}
+.pcard .nm{font-size:18px;font-weight:750;letter-spacing:-.02em;line-height:1.2}
+.pcard .nm .no{font-size:13px;font-weight:700;color:var(--accent-ink);margin-left:6px}
+.pcard .sb{font-size:12px;color:var(--text-3);margin-top:2px}
+.pcard .lb{position:relative;font-size:12px;color:var(--text-2)}
+.pcard .fig{position:relative;font-size:60px;font-weight:300;letter-spacing:-.04em;line-height:1;margin:2px 0 8px;color:var(--hi)}
+.pcard .meta{position:relative;font-size:12px;color:var(--text-3)}
+.slash{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:14px 0 2px;
+  border-top:1px solid var(--border);padding-top:12px}
+.slash div{text-align:center}
+.slash div+div{border-left:1px solid var(--border)}
+.slash .k{font-size:10.5px;color:var(--text-3);font-weight:650;letter-spacing:.04em}
+.slash .x{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:1px}
+
+/* 분석 — 구역 제목 */
+.sect{display:flex;align-items:center;gap:8px;margin:22px 4px 10px;color:var(--text-2);
+  font-size:12.5px;font-weight:750;letter-spacing:.02em}
+.sect .si{width:26px;height:26px;border-radius:9px;display:grid;place-items:center;
+  background:color-mix(in srgb, var(--accent-ink) 12%, transparent);color:var(--accent-ink)}
+.sect .si svg{width:16px;height:16px;display:block}
+.sect::after{content:"";flex:1;height:1px;background:var(--border);margin-left:4px}
+.sect:first-child{margin-top:4px}
+/* 분석 — 게이지 막대 */
+.gauges{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:620px){ .gauges{grid-template-columns:1fr 1fr;column-gap:22px} }
+.gg .gh{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.gg .gh .gi{color:var(--text-3);display:flex}
+.gg .gh .gi svg{width:15px;height:15px;display:block}
+.gg .gh .gk{font-size:12.5px;color:var(--text-2);font-weight:600;flex:1}
+.gg .gh .gv{font-size:16px;font-weight:650;font-variant-numeric:tabular-nums}
+.gg .gt{position:relative;height:8px;border-radius:999px;background:var(--surface-2)}
+.gg .gt i{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:var(--accent-ink)}
+.gg .gt i.hot{background:var(--chart)}
+.gg .gt b{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:2px;background:var(--text-3);opacity:.6}
+.gg .gs{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text-3);margin-top:4px}
+/* 빈 화면 그림 */
+.empty .eart{position:relative;width:150px;height:110px;margin:0 auto 10px;color:var(--axis)}
+.empty .eart svg.f{position:absolute;inset:0;width:100%;height:100%}
+.empty .eart .eb{position:absolute;left:50%;top:56%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;
+  display:grid;place-items:center;background:var(--surface-1);color:var(--accent-ink);box-shadow:0 0 0 1px var(--border)}
+.empty .eart .eb svg{width:24px;height:24px}
+/* 사진 고르기 (설정) */
+.phrow{display:flex;align-items:center;gap:14px;margin:0 0 14px}
+.phrow .pb{display:flex;gap:8px;flex-wrap:wrap}
+
 /* ---------- filter row ---------- */
 .filters{
   display:flex;gap:8px;align-items:center;flex-wrap:wrap;
@@ -861,6 +932,67 @@ const IC_EMPTY_LIST  = '<svg viewBox="0 0 24 24" width="34" height="34" fill="no
 const IC_EMPTY_CHART = '<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.8 19.6h16.4"/><path d="M7.6 19.6v-6.4M12 19.6V6.8M16.4 19.6v-4.2"/></svg>';
 const IC_EMPTY_PLAY  = '<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="3.2"/><path d="M10.4 9.6 15.6 12l-5.2 2.4z"/></svg>';
 
+/* ---- 디자인용 선 아이콘 (24 격자 · 같은 굵기) ---- */
+const ICN = (d)=> `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const IC = {
+  cal:  ICN('<rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/>'),
+  rbi:  ICN('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".6" fill="currentColor"/>'),
+  run:  ICN('<path d="M12 3.5 19.5 9v10.5h-15V9z"/><path d="M9.5 19.5v-5h5v5"/>'),
+  eye:  ICN('<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>'),
+  k:    ICN('<circle cx="12" cy="12" r="8.5"/><path d="M9.5 8v8M14.5 8l-5 4.2 5 3.8"/>'),
+  sb:   ICN('<path d="M4 17h4l3-4 3 2 3-6"/><path d="M14.5 9H17v2.5"/><circle cx="6" cy="7" r="1.6"/>'),
+  bat:  ICN('<path d="M20 4.2c-.9-.9-2.4-.8-3.3.1L7.4 13.6l2.9 2.9 9.3-9.3c1-.9 1.1-2.3.4-3z"/><path d="m7.4 13.6-3.2 3.2 2.9 2.9 3.2-3.2"/>'),
+  ball: ICN('<circle cx="12" cy="12" r="8.2"/><path d="M7.5 5.5C9.3 7.2 10.3 9.5 10.3 12s-1 4.8-2.8 6.5"/><path d="M16.5 5.5c-1.8 1.7-2.8 4-2.8 6.5s1 4.8 2.8 6.5"/>'),
+  field:ICN('<path d="M12 20.8 3.1 11.9"/><path d="M12 20.8 20.9 11.9"/><path d="M3.1 11.9a12.6 12.6 0 0 1 17.8 0"/><path d="M12 20.6 7.9 16.5 12 12.4l4.1 4.1z"/>'),
+  trophy:ICN('<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5v1.5A3 3 0 0 0 8 10.4M16 6h3v1.5a3 3 0 0 1-3 2.9"/><path d="M12 13v3.5M8.5 20h7M10 16.5h4"/>'),
+  glove:ICN('<path d="M7 20c-2.2-1.5-3-4-2.6-6.6L5.6 6a1.6 1.6 0 0 1 3.1.4l.3 4.1V4.6a1.6 1.6 0 0 1 3.2 0v5.6-6.7a1.6 1.6 0 0 1 3.2 0v7.3-4.9a1.5 1.5 0 0 1 3 .1v7.8c0 3.5-2.3 6.2-5.6 7z"/>'),
+  arm:  ICN('<circle cx="17.5" cy="5.5" r="2"/><path d="M4 19.5c2.6-.6 4.4-2.2 5.6-4.6l1.4-3 3.6 1.4 1.8 4.7"/><path d="m11 11.9 1.6-3.8 3.3-.6"/>'),
+  pct:  ICN('<path d="M18.5 5.5 5.5 18.5"/><circle cx="7" cy="7" r="2.3"/><circle cx="17" cy="17" r="2.3"/>'),
+  bolt: ICN('<path d="M13 3 5.5 13.5H12L11 21l7.5-10.5H12z"/>'),
+  vs:   ICN('<circle cx="8" cy="8.5" r="3"/><circle cx="16" cy="8.5" r="3"/><path d="M3 19c.6-3 2.6-4.6 5-4.6s4.4 1.6 5 4.6M11 19c.6-3 2.6-4.6 5-4.6s4.4 1.6 5 4.6"/>'),
+  camera:ICN('<path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.8L10 4h4l1.7 2h1.8A2.5 2.5 0 0 1 20 8.5v8A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5z"/><circle cx="12" cy="12.5" r="3.3"/>')
+};
+/* 야구장 선 그림 — 홈 카드 배경 · 빈 화면에 씁니다 (색은 currentColor) */
+function fieldArt(cls){
+  return `<svg class="${cls||""}" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M100 186 18 104" stroke-width="2"/><path d="M100 186 182 104" stroke-width="2"/>
+    <path d="M18 104C40 60 70 40 100 40s60 20 82 64" stroke-width="2"/>
+    <path d="M48 134c12-22 30-34 52-34s40 12 52 34" stroke-width="1.4" stroke-dasharray="3 5"/>
+    <path d="M100 168 72 140l28-28 28 28z" stroke-width="2"/>
+    <rect x="96" y="164" width="8" height="8" transform="rotate(45 100 168)" fill="currentColor" stroke="none"/>
+    <rect x="124" y="136" width="7" height="7" transform="rotate(45 127.5 139.5)" stroke-width="1.6"/>
+    <rect x="96.5" y="108.5" width="7" height="7" transform="rotate(45 100 112)" stroke-width="1.6"/>
+    <rect x="68.5" y="136.5" width="7" height="7" transform="rotate(45 72 140)" stroke-width="1.6"/>
+    <circle cx="100" cy="141" r="5" stroke-width="1.6"/>
+  </svg>`;
+}
+function emptyArt(icon){
+  return `<div class="eart" aria-hidden="true">${fieldArt("f")}<span class="eb">${icon}</span></div>`;
+}
+/* 선수 사진 또는 이니셜 */
+function avatarHTML(cls){
+  const p = curProfile();
+  if(S.photo) return `<div class="avatar ${cls||""}"><img src="${esc(S.photo)}" alt="선수 사진"></div>`;
+  const t = p.number? p.number : (p.name? p.name.slice(-2) : "");
+  return `<div class="avatar ${cls||""}" aria-hidden="true">${t? esc(t) : IC.ball}</div>`;
+}
+/* 사진 고르기 — 가운데를 정사각형으로 잘라 320px JPEG 로 줄여 저장합니다 (기록 파일 크기 절약) */
+window.__photoPick = function(inp){
+  const f = inp && inp.files && inp.files[0]; if(!f) return;
+  const url = URL.createObjectURL(f), im = new Image();
+  im.onload = ()=>{
+    const n = Math.min(im.naturalWidth, im.naturalHeight), sz = 320;
+    const c = document.createElement("canvas"); c.width = c.height = sz;
+    c.getContext("2d").drawImage(im, (im.naturalWidth-n)/2, (im.naturalHeight-n)/2, n, n, 0, 0, sz, sz);
+    URL.revokeObjectURL(url);
+    S.photo = c.toDataURL("image/jpeg", 0.82);
+    saveNow(); render(); toast("선수 사진 저장");
+  };
+  im.onerror = ()=>{ URL.revokeObjectURL(url); toast("사진을 읽지 못함"); };
+  im.src = url;
+  inp.value = "";
+};
+
 
 // 타석 결과 정의 (ab: 타수, h: 안타, tb: 총루타, bb: 볼넷, hbp: 사구, so: 삼진,
 //                 sf: 희생플라이, sh: 희생번트, bip: 인플레이 타구)
@@ -1306,7 +1438,7 @@ function trkKey(kind, x){
   return o;
 }
 const VID_SYNC_KEYS = {id:1, url:1, title:1, folder:1, paId:1, defId:1, note:1, createdAt:1};
-function trkProfKey(){ return ghKey({p:S.profile||{}, ps:S.profiles||{}}); }
+function trkProfKey(){ return ghKey({p:S.profile||{}, ps:S.profiles||{}, ph:S.photo||""}); }
 function trkReset(){
   trkSnap = new Map();
   trkWalk((k,x)=>{ if(x && x.id!=null) trkSnap.set(k+":"+x.id, trkKey(k,x)); });
@@ -2722,8 +2854,8 @@ function modeSeg(act, cur, items, label){
 function bMode(){ return (S.ui.bmode==="saber")? "saber" : "classic"; }
 function pMode(){ return (S.ui.pmode==="saber")? "saber" : "classic"; }
 
-function tile(lb, v, sub){
-  return `<div class="tile"><div class="lb">${esc(lb)}</div><div class="v">${v}${sub?`<small>${sub}</small>`:""}</div></div>`;
+function tile(lb, v, sub, ic){
+  return `<div class="tile">${ic? `<span class="ti">${ic}</span>` : ""}<div class="lb">${esc(lb)}</div><div class="v">${v}${sub?`<small>${sub}</small>`:""}</div></div>`;
 }
 /* 상대 투수 표기 — 배번과 이름을 함께 보여 줍니다 */
 function pitcherLabel(p){
@@ -2764,7 +2896,7 @@ function viewHome(){
   const m = S.ui.metric, mk = METRICS[m].k;
 
   if(!S.games.length){
-    return `<div class="empty"><span class="big" aria-hidden="true">${IC_EMPTY_BALL}</span>
+    return `<div class="empty">${emptyArt(IC_EMPTY_BALL)}
       아직 기록 없음<br>첫 경기를 추가해 타석 기록 시작
       <div style="margin-top:12px" class="hint">아래 <b>경기</b> 탭에서 첫 경기 추가</div></div>`;
   }
@@ -2786,16 +2918,24 @@ function viewHome(){
   });
 
   return filterRow()
-  + `<div class="hero">
-      <div class="lb">${METRICS[m].ko}</div>
+  + (()=>{ const pf = curProfile();
+      const sub = [pf.team, PMAP[pf.position]||"", (pf.throws||"")+(pf.bats||"")].filter(Boolean).join(" · ");
+      return `<div class="pcard">${fieldArt("art")}
+      <div class="who">${avatarHTML()}
+        <div style="min-width:0"><div class="nm">${esc(pf.name || "선수 이름")}${pf.number? `<span class="no">#${esc(pf.number)}</span>` : ""}</div>
+          <div class="sb">${esc(sub || "설정에서 선수 정보 · 사진 등록")}</div></div></div>
+      <div class="lb">${S.ui.year==="all"? "통산" : esc(S.ui.year)+" 시즌"} ${METRICS[m].ko}</div>
       <div class="fig">${avg3(b[mk])}</div>
       <div class="meta">${gtypeLabel()} ${gs.length}경기 · ${b.PA}타석 ${b.AB}타수 ${b.H}안타 ${b.HR}홈런 ${b.RBI}타점</div>
-      <div class="filters" style="margin:12px 0 0"><div class="seg" role="group" aria-label="지표 선택">`
+      <div class="filters" style="position:relative;margin:12px 0 0"><div class="seg" role="group" aria-label="지표 선택">`
       + Object.keys(METRICS).map(k=>`<button data-act="metric" data-v="${k}" aria-pressed="${m===k}">${METRICS[k].ko}</button>`).join("")
-      + `</div></div></div>`
+      + `</div></div>
+      <div class="slash"><div><div class="k">AVG</div><div class="x">${avg3(b.AVG)}</div></div><div><div class="k">OBP</div><div class="x">${avg3(b.OBP)}</div></div>
+        <div><div class="k">SLG</div><div class="x">${avg3(b.SLG)}</div></div><div><div class="k">OPS</div><div class="x">${avg3(b.OPS)}</div></div></div>
+      </div>`; })()
   + `<div class="tiles" style="margin-bottom:12px">`
-      + tile("경기", gs.length, "G") + tile("타점", b.RBI) + tile("득점", b.R)
-      + tile("볼넷", b.BB) + tile("삼진", b.SO) + tile("도루", b.SB, (b.SB+b.CS)? "/"+(b.SB+b.CS) : "")
+      + tile("경기", gs.length, "G", IC.cal) + tile("타점", b.RBI, "", IC.rbi) + tile("득점", b.R, "", IC.run)
+      + tile("볼넷", b.BB, "", IC.eye) + tile("삼진", b.SO, "", IC.k) + tile("도루", b.SB, (b.SB+b.CS)? "/"+(b.SB+b.CS) : "", IC.sb)
     + `</div>`
   + chartCard("누적 "+METRICS[m].ko+" 추이", "경기를 치를수록 지표가 수렴하는 흐름 · 마지막 값이 현재 시즌 기록",
       lineChart([{pts, color:"var(--chart)"}], {aria:"누적 "+METRICS[m].ko+" 추이", fmt:avg3,
@@ -2811,11 +2951,11 @@ function viewHome(){
       <div class="list">${gs.slice(-5).reverse().map(g=>gameRow(g)).join("")||`<div class="hint">경기 없음</div>`}</div></div>`
   + (f.INN>0? `<div class="card"><div class="hd"><div style="flex:1"><h3>수비</h3>
       <div class="cap">기록된 수비 이닝 ${fmtInn(f.outs)} · 수비율 ${avg3(f.FPCT)}</div></div></div>
-      <div class="tiles">${tile("이닝", fmtInn(f.outs))+tile("자살", f.PO)+tile("보살", f.A)+tile("실책", f.E)+tile("병살", f.DP)+tile("수비율", avg3(f.FPCT))}</div></div>`:"")
+      <div class="tiles">${tile("이닝", fmtInn(f.outs), "", IC.field)+tile("자살", f.PO, "", IC.glove)+tile("보살", f.A, "", IC.arm)+tile("실책", f.E, "", IC.k)+tile("병살", f.DP, "", IC.bolt)+tile("수비율", avg3(f.FPCT), "", IC.pct)}</div></div>`:"")
   + (hp.APP? `<div class="card"><div class="hd"><div style="flex:1"><h3>투수</h3>
       <div class="cap">${hp.G}경기 ${hp.APP}등판 · ${fmtInn(hp.outs)}이닝${hp.W||hp.L||hp.SV?` · ${hp.W}승 ${hp.L}패${hp.SV?" "+hp.SV+"세":""}`:""}</div></div>
       <button class="btn sm" data-act="nav" data-v="stats">분석</button></div>
-      <div class="tiles">${tile("ERA", fx2(hp.ERA))+tile("WHIP", fx2(hp.WHIP))+tile("삼진", hp.SO)+tile("볼넷", hp.BB)+tile("피안타", hp.H)+tile("K/9", fx2(hp.K9))}</div></div>`:"")
+      <div class="tiles">${tile("ERA", fx2(hp.ERA), "", IC.trophy)+tile("WHIP", fx2(hp.WHIP), "", IC.pct)+tile("삼진", hp.SO, "", IC.k)+tile("볼넷", hp.BB, "", IC.eye)+tile("피안타", hp.H, "", IC.bat)+tile("K/9", fx2(hp.K9), "", IC.bolt)}</div></div>`:"")
   ;
 }
 
@@ -2890,7 +3030,7 @@ function viewGames(){
   const head = `<button class="btn pri block nb" data-act="newGame" style="margin-bottom:12px">+ 새 경기 기록</button>`
     + filterRow();
   if(!gs.length)
-    return head + `<div class="empty"><span class="big" aria-hidden="true">${IC_EMPTY_LIST}</span>이 시즌에 기록된 경기 없음</div>`;
+    return head + `<div class="empty">${emptyArt(IC_EMPTY_LIST)}이 시즌에 기록된 경기 없음</div>`;
   return head + monthGroups(gs).map(gr=>{
     const t = battingOf(allPAs(gr.list));
     let w=0, l=0, d=0;
@@ -3480,11 +3620,20 @@ function insSummary(groups){
     <div class="inscols">${insBox(good, "강점")}${insBox(warn, "보완점")}</div></div>`;
 }
 
+/* 분석 — 시즌 타격 프로필 게이지 (막대 · 기준선) */
+function gaugeHTML(ic, k, v, fmt, max, ref, refLb, low){
+  const w = (v==null || !isFinite(v))? 0 : clamp(v/max, 0, 1)*100;
+  const good = v!=null && isFinite(v) && (low? v <= ref : v >= ref);
+  return `<div class="gg"><div class="gh"><span class="gi">${ic}</span><span class="gk">${k}</span><span class="gv">${fmt(v)}</span></div>
+    <div class="gt"><i class="${good? "hot":""}" style="width:${w.toFixed(1)}%"></i><b style="left:${(clamp(ref/max,0,1)*100).toFixed(1)}%"></b></div>
+    <div class="gs"><span>0</span><span>${refLb}</span><span>${fmt(max)}</span></div></div>`;
+}
+function sectHTML(ic, t){ return `<div class="sect"><span class="si">${ic}</span>${esc(t)}</div>`; }
 /* ------------------------------- 분석 ------------------------------- */
 function viewStats(){
   const gs = scopedGames(), pas = allPAs(gs), b = battingOf(pas), defs = allDef(gs);
   if(!pas.length && !defs.length)
-    return filterRow()+`<div class="empty"><span class="big" aria-hidden="true">${IC_EMPTY_CHART}</span>분석할 기록 없음<br><span class="hint">경기·타석을 기록하면 차트 자동 생성</span></div>`;
+    return filterRow()+`<div class="empty">${emptyArt(IC_EMPTY_CHART)}분석할 기록 없음<br><span class="hint">경기·타석을 기록하면 차트 자동 생성</span></div>`;
 
   // 결과 분포
   const dist = RESULTS.map(r=>({label:r.ko, value:pas.filter(p=>p.result===r.c).length,
@@ -3601,6 +3750,17 @@ function viewStats(){
                 ["상대",iVs],["투수",iPit],["수비",iDef],["포지션",iPos]])
   + (insOn()? "" : `<div class="card" style="padding:10px 14px"><div class="hd" style="align-items:center;margin:0">
       <div style="flex:1" class="hint">자동 분석 해설 꺼짐</div><button class="btn sm" data-act="toggleIns" data-v="on">해설 켜기</button></div></div>`)
+  + sectHTML(IC.bat, "타격")
+  + (b.PA? `<div class="card"><div class="hd"><div style="flex:1"><h3>타격 프로필</h3>
+      <div class="cap">막대 = 기록 · 세로선 = 좋은 기준(학생야구 대략값) · 기준을 넘으면 주황</div></div></div>
+      <div class="gauges">
+        ${gaugeHTML(IC.ball, "타율 AVG", b.AVG, avg3, .5, .3, "기준 .300")}
+        ${gaugeHTML(IC.eye, "출루율 OBP", b.OBP, avg3, .6, .38, "기준 .380")}
+        ${gaugeHTML(IC.bolt, "장타율 SLG", b.SLG, avg3, .8, .45, "기준 .450")}
+        ${gaugeHTML(IC.trophy, "OPS", b.OPS, avg3, 1.4, .8, "기준 .800")}
+        ${gaugeHTML(IC.k, "삼진율 K% (낮을수록 좋음)", b.KP, pct1, .4, .15, "기준 15%", true)}
+        ${gaugeHTML(IC.eye, "볼넷율 BB%", b.BBP, pct1, .25, .1, "기준 10%")}
+      </div></div>` : "")
   + `<div class="card">
       <div class="hd" style="align-items:center;margin-bottom:4px">
         <h3 style="flex:1">타격 지표</h3>
@@ -3613,6 +3773,7 @@ function viewStats(){
       <div class="cap">도루 시도 ${b.SB+b.CS}회</div></div></div>
       <div class="tiles">${tile("시도", b.SB+b.CS)+tile("성공", b.SB)+tile("실패", b.CS)+tile("성공률", pct1(b.SBP))
         +tile("경기당 시도", fx2(gs.length? (b.SB+b.CS)/gs.length : null))+tile("추가 진루", b.SB-b.CS)}</div>${insBox(iSteal)}</div>` : "")
+  + sectHTML(IC.field, "타구")
   + chartCard("타구 방향 (스프레이 차트)", `타구 위치가 기록된 인플레이 타구 ${bip.length}개 · 그림은 ${esc(LEVELS[curLevel()].ko)} 규격 (${esc(LEVELS[curLevel()].note)}) · 모든 규격 같은 배율 · 거리 비교 가능`,
       sprayChart(pas, curLevel(), {ruler:true}),
       bip.length? tableHTML(["날짜","이닝","결과","위치","추정 거리"], bip.map(p=>{const z=zoneOf(p.zone, gameLevel(p._g));
@@ -3635,6 +3796,7 @@ function viewStats(){
   + (months.length>1? chartCard("월별 타율", "월 단위 시즌 흐름",
       colChart(months, {aria:"월별 타율", fmt:avg3, ref:{v:b.AVG, label:"AVG "+avg3(b.AVG)}}),
       tableHTML(["월","타수","안타","타점","타율","OPS"], months.map(d=>[d.label, d._t.AB, d._t.H, d._t.RBI, avg3(d._t.AVG), avg3(d._t.OPS)])), insBox(iMon)) : "")
+  + ((tourRows.length || pTeams.length)? sectHTML(IC.vs, "대회 · 상대") : "")
   + (tourRows.length? `<div class="card"><div class="hd"><div style="flex:1"><h3>대회별 성적</h3>
       <div class="cap">정식경기에 적은 대회명 기준 · ${tourRows.length}개 대회 · 최근 대회부터</div></div></div>
       <div class="xscroll">${tableHTML(["대회","경기","승패","타석","안타","홈런","타점","타율","OPS"],
@@ -3644,7 +3806,9 @@ function viewStats(){
   + (pTeams.length? `<div class="card"><div class="hd"><div style="flex:1"><h3>상대 투수별 성적</h3>
       <div class="cap">${pYears}개 시즌 · ${pTeams.length}개 팀 · 투수 ${pitcherN}명</div></div></div>
       ${insBox(iVs)}${vsPitcherTable(pTeams)}</div>` : "")
+  + (pitchingOf(defs).APP? sectHTML(IC.arm, "투수") : "")
   + pitchingSection(gs, defs)
+  + ((defDist.length || posRows.length)? sectHTML(IC.glove, "수비") : "")
   + (defDist.length? chartCard("수비 결과 분포", `결과를 입력한 수비 기록 ${defPlays.length}건`,
       hbarChart(defDist, {aria:"수비 결과 분포", left:82, total:defPlays.length, fmt:v=>String(Math.round(v))}),
       tableHTML(["결과","횟수","비중"], defDist.map(d=>[d.label, d.value, pct1(d.value/Math.max(defPlays.length,1))])), insBox(iDef)) : "")
@@ -3853,7 +4017,7 @@ function viewVideos(){
       </div>`;
       }).join("") + `</div>`;
     }).join("")
-    : `<div class="empty"><span class="big" aria-hidden="true">${IC_EMPTY_PLAY}</span>등록된 영상 없음<br>
+    : `<div class="empty">${emptyArt(IC_EMPTY_PLAY)}등록된 영상 없음<br>
        <span class="hint">경기 상세 화면에서 영상 추가</span></div>`);
 }
 
@@ -3920,6 +4084,12 @@ function viewSettings(){
       </div>
       ${addBtn("pfAddYear", "", "연도 추가")}</div>
       <div class="hint" style="margin:-4px 0 10px"><b>${esc(pfY)}년</b>${pfSaved? "" : " · 이전 연도 정보 자동 채움"}</div>
+    <div class="phrow">${avatarHTML("lg")}
+      <div><div class="pb">
+        <label class="btn sm" style="cursor:pointer">${IC.camera.replace('<svg','<svg width="16" height="16"')} ${S.photo? "사진 바꾸기" : "선수 사진 등록"}
+          <input type="file" accept="image/*" hidden onchange="__photoPick(this)" ${readOnly()? "disabled" : ""}></label>
+        ${S.photo && !readOnly()? `<button class="btn sm" data-act="delPhoto">사진 삭제</button>` : ""}</div>
+        <div class="hint" style="margin-top:6px">홈 선수 카드 · 상단에 표시 · 가운데를 정사각형으로 잘라 저장 · 다른 기기와 함께 맞춰짐</div></div></div>
     <div class="f2">
       <label class="f"><span>이름</span><input id="pf_name" value="${esc(p.name)}" placeholder="홍길동"></label>
       <label class="f"><span>소속 팀</span><input id="pf_team" value="${esc(p.team)}" placeholder="○○ 베어스"></label>
@@ -4074,7 +4244,7 @@ function ghMarkSynced(sha, payload, kind){
 /* 저장소에서 받은 파일을 이 앱이 올리는 모양과 같게 맞춥니다 (비교 · 병합용) */
 function ghNorm(o){
   o = o || {};
-  return {app:"bb-note", version:1, sv:2, profile:o.profile||{}, profiles:o.profiles||{}, profMt:num(o.profMt,0),
+  return {app:"bb-note", version:1, sv:2, profile:o.profile||{}, profiles:o.profiles||{}, photo:o.photo||"", profMt:num(o.profMt,0),
     tomb:(o.tomb && typeof o.tomb==="object")? Object.assign({}, o.tomb) : {},
     games:normalizeGames(JSON.parse(JSON.stringify(o.games||[]))).map(g=>Object.assign(g, {videos:(g.videos||[]).filter(v=>v.kind==="link")})),
     plans:normalizePlans(o.plans)};
@@ -4145,7 +4315,7 @@ function ghMerge(L, R, preferR, legacy){
   const lEmpty = !Object.keys(L.profiles||{}).length && !((L.profile||{}).name);
   const useR = rp > lp || (rp === lp && (preferR || lEmpty));
   return {app:"bb-note", version:1, sv:2,
-    profile: useR? R.profile : L.profile, profiles: useR? R.profiles : L.profiles, profMt: Math.max(lp, rp),
+    profile: useR? R.profile : L.profile, profiles: useR? R.profiles : L.profiles, photo: useR? (R.photo||"") : (L.photo||""), profMt: Math.max(lp, rp),
     tomb: T,
     games: ghMergeList("g", L.games||[], R.games||[], preferR, T),
     plans: ghMergeList("pl", L.plans||[], R.plans||[], preferR, T)};
@@ -4204,7 +4374,7 @@ function ghPayload(){
       paId:v.paId, defId:v.defId, note:v.note||"", createdAt:v.createdAt, mt:v.mt||0
     });
   });
-  return {app:"bb-note", version:1, sv:2, profile:S.profile, profiles:S.profiles||{}, profMt:num(S.profMt,0),
+  return {app:"bb-note", version:1, sv:2, profile:S.profile, profiles:S.profiles||{}, photo:S.photo||"", profMt:num(S.profMt,0),
           tomb:Object.assign({}, S.tomb||{}), games:games, plans:S.plans||[]};
 }
 function ghHash(o){ return hashStr(stableStr(o || ghPayload())); }
@@ -4423,6 +4593,7 @@ function ghApply(o, mode, keepUi){
     if(o.profile) S.profile = Object.assign(blank().profile, o.profile);
     if(o.profiles && typeof o.profiles==="object") S.profiles = o.profiles;
     S.tomb = Object.assign({}, tomb); S.profMt = num(o.profMt, 0);
+    if(typeof o.photo === "string") S.photo = o.photo;
     migrateProfiles(); syncProfile();
     if(!keepUi || !S.games.some(g=> g.id===S.ui.gameId)) S.ui.gameId = null;   // 보던 경기가 그대로 있으면 화면 유지
   }
@@ -4745,7 +4916,7 @@ function roMsg(){
 /* 보기 모드에서 막는 동작 */
 const RO_BLOCK = new Set([
   "newGame","editGame","saveGame","delGame","addDefInn","delDefInn",
-  "newPlan","editPlan","savePlan","delPlan","pickPlanCol",
+  "newPlan","editPlan","savePlan","delPlan","pickPlanCol","delPhoto",
   "newPA","editPA","savePA","delPA",
   "newDef","editDef","saveDef","delDef",
   "newVideo","editVideo","saveVideo","updateVideo","delVideo",
@@ -6187,6 +6358,9 @@ document.addEventListener("click", ev=>{
         if(S.profiles) delete S.profiles[v];
         S.ui.pfYear = null; syncProfile(); saveNow(); render(); toast("삭제 완료");
       }); break;
+    case "delPhoto":
+      ask("선수 사진 삭제", "등록한 사진을 지웁니다", [{label:"삭제",style:"dan"},{label:"취소"}]).then(k=>{
+        if(k!==0) return; S.photo = ""; saveNow(); render(); toast("사진 삭제"); }); break;
     case "saveProfile": {
       const y = v || thisYear();
       const rec = {name:$("#pf_name").value.trim(), team:$("#pf_team").value.trim(), number:$("#pf_num").value.trim(),
@@ -6466,6 +6640,8 @@ function render(){
   if(sb){ sb.classList.toggle("on", t==="settings"); sb.setAttribute("aria-current", t==="settings"? "page":"false"); }
   const p = curProfile();
   $("#subttl").textContent = p.name? [p.name, p.number?"#"+p.number:"", p.team].filter(Boolean).join(" · ") : "기록 · 분석 · 영상";
+  const tb = $(".topbar .ball");
+  if(tb){ tb.classList.toggle("ph", !!S.photo); tb.style.backgroundImage = S.photo? `url("${S.photo}")` : ""; }
   syncTopbarH();
   if(lastTab!==t){ window.scrollTo(0,0); lastTab=t; }
   envBanner();
