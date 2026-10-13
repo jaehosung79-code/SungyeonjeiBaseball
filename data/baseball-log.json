@@ -3228,6 +3228,70 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mv60zv32nyeyp",
+   "pas": [
+    {
+     "id": "mv6100xpzh2o7",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "2B",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv61074dzci3y",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "K",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv610aenm4ofn",
+     "inning": 3,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "LO",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-05-15",
+   "opponent": "서당초",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "2026 양구(봄)",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -3946,6 +4010,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:51:44.695Z",
+ "savedAt": "2026-10-13T01:52:33.302Z",
  "by": "성연제"
 }
