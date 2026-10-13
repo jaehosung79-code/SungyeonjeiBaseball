@@ -1,6 +1,7 @@
 {
  "app": "bb-note",
  "version": 1,
+ "sv": 2,
  "profile": {
   "name": "성연제",
   "team": "강남초",
@@ -19,6 +20,8 @@
    "throws": "우투"
   }
  },
+ "profMt": 0,
+ "tomb": {},
  "games": [
   {
    "id": "mtgjq9yvi0lac",
@@ -236,6 +239,20 @@
   },
   {
    "id": "mtgksphkkshbr",
+   "date": "2026-08-24",
+   "opponent": "봉천초",
+   "venue": "구의구장",
+   "homeAway": "중립",
+   "level": "",
+   "type": "official",
+   "myScore": "7",
+   "oppScore": "7",
+   "note": "",
+   "pdec": "",
+   "inn": 6,
+   "dinn": [],
+   "tour": "26 i리그",
+   "mt": 0,
    "pas": [
     {
      "id": "mtgl0b4gsfmui",
@@ -367,23 +384,24 @@
      "note": "",
      "createdAt": 1788259596182
     }
-   ],
-   "date": "2026-08-24",
-   "opponent": "봉천초",
+   ]
+  },
+  {
+   "id": "mtgm0is8j7bna",
+   "date": "2026-08-29",
+   "opponent": "방배초",
    "venue": "구의구장",
    "homeAway": "중립",
    "level": "",
    "type": "official",
-   "myScore": "7",
-   "oppScore": "7",
+   "myScore": "0",
+   "oppScore": "2",
    "note": "",
    "pdec": "",
    "inn": 6,
    "dinn": [],
-   "tour": "26 i리그"
-  },
-  {
-   "id": "mtgm0is8j7bna",
+   "tour": "26 i리그",
+   "mt": 0,
    "pas": [
     {
      "id": "mtgm117nf7a0x",
@@ -457,23 +475,24 @@
      "note": "",
      "createdAt": 1788259493942
     }
-   ],
-   "date": "2026-08-29",
-   "opponent": "방배초",
+   ]
+  },
+  {
+   "id": "mtgn5tioac16p",
+   "date": "2026-08-30",
+   "opponent": "수유초",
    "venue": "구의구장",
    "homeAway": "중립",
    "level": "",
    "type": "official",
-   "myScore": "0",
-   "oppScore": "2",
-   "note": "",
+   "myScore": "3",
+   "oppScore": "3",
+   "note": "수비 : 포구. 그리고 조금더 빨리 다음 동작으로 이어질수 있게",
    "pdec": "",
    "inn": 6,
    "dinn": [],
-   "tour": "26 i리그"
-  },
-  {
-   "id": "mtgn5tioac16p",
+   "tour": "26 i리그",
+   "mt": 0,
    "pas": [
     {
      "id": "mtgnfk1j0s70i",
@@ -596,20 +615,7 @@
      "note": "",
      "createdAt": 1788259433270
     }
-   ],
-   "date": "2026-08-30",
-   "opponent": "수유초",
-   "venue": "구의구장",
-   "homeAway": "중립",
-   "level": "",
-   "type": "official",
-   "myScore": "3",
-   "oppScore": "3",
-   "note": "수비 : 포구. 그리고 조금더 빨리 다음 동작으로 이어질수 있게",
-   "pdec": "",
-   "inn": 6,
-   "dinn": [],
-   "tour": "26 i리그"
+   ]
   },
   {
    "id": "mtkwdv0pnhq1o",
@@ -921,6 +927,20 @@
   },
   {
    "id": "mtmiol8rajy2d",
+   "pdec": "",
+   "date": "2026-09-04",
+   "opponent": "상일초",
+   "venue": "구의구장",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "myScore": "6",
+   "oppScore": "7",
+   "note": "5회 타석에서 대타로 교체당함",
+   "inn": 6,
+   "dinn": [],
+   "tour": "26 i리그",
+   "mt": 0,
    "pas": [
     {
      "id": "mtmiplmgxy4xo",
@@ -1049,20 +1069,7 @@
      "note": "",
      "createdAt": 1788503554829
     }
-   ],
-   "pdec": "",
-   "date": "2026-09-04",
-   "opponent": "상일초",
-   "venue": "구의구장",
-   "homeAway": "홈",
-   "level": "",
-   "type": "official",
-   "myScore": "6",
-   "oppScore": "7",
-   "note": "5회 타석에서 대타로 교체당함",
-   "inn": 6,
-   "dinn": [],
-   "tour": "26 i리그"
+   ]
   },
   {
    "id": "mtmphekl7jbmw",
@@ -2717,6 +2724,25 @@
   },
   {
    "id": "mv60lj76jf8u0",
+   "pdec": "",
+   "date": "2026-03-28",
+   "opponent": "가동초",
+   "venue": "구의구장",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "26 병원장기",
+   "myScore": "1",
+   "oppScore": "-3",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": "",
+   "mt": 0,
    "pas": [
     {
      "id": "mv60lqx351b8s",
@@ -2746,28 +2772,24 @@
     }
    ],
    "def": [],
-   "videos": [],
+   "videos": []
+  },
+  {
+   "id": "mv60myw6slg6l",
    "pdec": "",
    "date": "2026-03-28",
-   "opponent": "가동초",
+   "opponent": "방배초",
    "venue": "구의구장",
    "homeAway": "홈",
    "level": "",
    "type": "official",
    "tour": "26 병원장기",
-   "myScore": "1",
-   "oppScore": "-3",
+   "myScore": "0",
+   "oppScore": "1",
    "inn": 6,
-   "dinn": [
-    {
-     "pos": "2B",
-     "inn": 6
-    }
-   ],
-   "note": ""
-  },
-  {
-   "id": "mv60myw6slg6l",
+   "dinn": [],
+   "note": "",
+   "mt": 0,
    "pas": [
     {
      "id": "mv60o3jdvypst",
@@ -2797,23 +2819,24 @@
     }
    ],
    "def": [],
-   "videos": [],
+   "videos": []
+  },
+  {
+   "id": "mv60orum766yi",
    "pdec": "",
-   "date": "2026-03-28",
-   "opponent": "방배초",
+   "date": "2026-04-01",
+   "opponent": "갈산초",
    "venue": "구의구장",
    "homeAway": "홈",
    "level": "",
    "type": "official",
    "tour": "26 병원장기",
    "myScore": "0",
-   "oppScore": "1",
+   "oppScore": "2",
    "inn": 6,
    "dinn": [],
-   "note": ""
-  },
-  {
-   "id": "mv60orum766yi",
+   "note": "",
+   "mt": 0,
    "pas": [
     {
      "id": "mv60pp6a5tfp2",
@@ -2843,23 +2866,29 @@
     }
    ],
    "def": [],
-   "videos": [],
-   "pdec": "",
-   "date": "2026-04-01",
-   "opponent": "갈산초",
-   "venue": "구의구장",
-   "homeAway": "홈",
-   "level": "",
-   "type": "official",
-   "tour": "26 병원장기",
-   "myScore": "0",
-   "oppScore": "2",
-   "inn": 6,
-   "dinn": [],
-   "note": ""
+   "videos": []
   },
   {
    "id": "mv60rl6wb6m2t",
+   "pdec": "",
+   "date": "2026-04-10",
+   "opponent": "남산초",
+   "venue": "인제",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "26 인제친선",
+   "myScore": "0",
+   "oppScore": "1",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": "",
+   "mt": 0,
    "pas": [
     {
      "id": "mv60rny3mtnha",
@@ -2889,10 +2918,13 @@
     }
    ],
    "def": [],
-   "videos": [],
+   "videos": []
+  },
+  {
+   "id": "mv60sg9mpdc4m",
    "pdec": "",
-   "date": "2026-04-10",
-   "opponent": "남산초",
+   "date": "2026-04-11",
+   "opponent": "영랑초",
    "venue": "인제",
    "homeAway": "홈",
    "level": "",
@@ -2907,10 +2939,8 @@
      "inn": 6
     }
    ],
-   "note": ""
-  },
-  {
-   "id": "mv60sg9mpdc4m",
+   "note": "",
+   "mt": 0,
    "pas": [
     {
      "id": "mv60sk39b04el",
@@ -2953,11 +2983,14 @@
     }
    ],
    "def": [],
-   "videos": [],
+   "videos": []
+  },
+  {
+   "id": "mv60tuskmf2q4",
    "pdec": "",
    "date": "2026-04-11",
-   "opponent": "영랑초",
-   "venue": "인제",
+   "opponent": "고명초",
+   "venue": "",
    "homeAway": "홈",
    "level": "",
    "type": "official",
@@ -2971,10 +3004,8 @@
      "inn": 6
     }
    ],
-   "note": ""
-  },
-  {
-   "id": "mv60tuskmf2q4",
+   "note": "",
+   "mt": 0,
    "pas": [
     {
      "id": "mv60txuwyx7n3",
@@ -3004,25 +3035,7 @@
     }
    ],
    "def": [],
-   "videos": [],
-   "pdec": "",
-   "date": "2026-04-11",
-   "opponent": "고명초",
-   "venue": "",
-   "homeAway": "홈",
-   "level": "",
-   "type": "official",
-   "tour": "26 인제친선",
-   "myScore": "0",
-   "oppScore": "1",
-   "inn": 6,
-   "dinn": [
-    {
-     "pos": "2B",
-     "inn": 6
-    }
-   ],
-   "note": ""
+   "videos": []
   },
   {
    "id": "mv60vj9axxmqu",
@@ -3231,6 +3244,25 @@
   },
   {
    "id": "mv60zv32nyeyp",
+   "pdec": "",
+   "date": "2026-05-15",
+   "opponent": "서당초",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "26 양구(봄)",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": "",
+   "mt": 0,
    "pas": [
     {
      "id": "mv6100xpzh2o7",
@@ -3273,10 +3305,13 @@
     }
    ],
    "def": [],
-   "videos": [],
+   "videos": []
+  },
+  {
+   "id": "mv6116y46gspo",
    "pdec": "",
    "date": "2026-05-15",
-   "opponent": "서당초",
+   "opponent": "신곡초",
    "venue": "",
    "homeAway": "홈",
    "level": "",
@@ -3291,10 +3326,8 @@
      "inn": 6
     }
    ],
-   "note": ""
-  },
-  {
-   "id": "mv6116y46gspo",
+   "note": "",
+   "mt": 0,
    "pas": [
     {
      "id": "mv6119jw4fsif",
@@ -3337,10 +3370,13 @@
     }
    ],
    "def": [],
-   "videos": [],
+   "videos": []
+  },
+  {
+   "id": "mv612tnh6c5d3",
    "pdec": "",
-   "date": "2026-05-15",
-   "opponent": "신곡초",
+   "date": "2026-05-16",
+   "opponent": "수진초",
    "venue": "",
    "homeAway": "홈",
    "level": "",
@@ -3355,10 +3391,8 @@
      "inn": 6
     }
    ],
-   "note": ""
-  },
-  {
-   "id": "mv612tnh6c5d3",
+   "note": "",
+   "mt": 0,
    "pas": [
     {
      "id": "mv612xp2x6dpu",
@@ -3401,10 +3435,13 @@
     }
    ],
    "def": [],
-   "videos": [],
+   "videos": []
+  },
+  {
+   "id": "mv6147amq5mab",
    "pdec": "",
    "date": "2026-05-16",
-   "opponent": "수진초",
+   "opponent": "파주BC",
    "venue": "",
    "homeAway": "홈",
    "level": "",
@@ -3419,10 +3456,8 @@
      "inn": 6
     }
    ],
-   "note": ""
-  },
-  {
-   "id": "mv6147amq5mab",
+   "note": "",
+   "mt": 0,
    "pas": [
     {
      "id": "mv614hsctaqou",
@@ -3465,10 +3500,13 @@
     }
    ],
    "def": [],
-   "videos": [],
+   "videos": []
+  },
+  {
+   "id": "mv6154ppa531b",
    "pdec": "",
-   "date": "2026-05-16",
-   "opponent": "파주BC",
+   "date": "2026-05-17",
+   "opponent": "유천초",
    "venue": "",
    "homeAway": "홈",
    "level": "",
@@ -3483,10 +3521,8 @@
      "inn": 6
     }
    ],
-   "note": ""
-  },
-  {
-   "id": "mv6154ppa531b",
+   "note": "",
+   "mt": 0,
    "pas": [
     {
      "id": "mv615ryobtmbo",
@@ -3529,10 +3565,13 @@
     }
    ],
    "def": [],
-   "videos": [],
+   "videos": []
+  },
+  {
+   "id": "mv617af77wx20",
    "pdec": "",
    "date": "2026-05-17",
-   "opponent": "유천초",
+   "opponent": "백마초",
    "venue": "",
    "homeAway": "홈",
    "level": "",
@@ -3544,13 +3583,11 @@
    "dinn": [
     {
      "pos": "2B",
-     "inn": 6
+     "inn": 2
     }
    ],
-   "note": ""
-  },
-  {
-   "id": "mv617af77wx20",
+   "note": "",
+   "mt": 0,
    "pas": [
     {
      "id": "mv617hwvrr3d7",
@@ -3580,25 +3617,7 @@
     }
    ],
    "def": [],
-   "videos": [],
-   "pdec": "",
-   "date": "2026-05-17",
-   "opponent": "백마초",
-   "venue": "",
-   "homeAway": "홈",
-   "level": "",
-   "type": "official",
-   "tour": "26 양구(봄)",
-   "myScore": "",
-   "oppScore": "",
-   "inn": 6,
-   "dinn": [
-    {
-     "pos": "2B",
-     "inn": 2
-    }
-   ],
-   "note": ""
+   "videos": []
   },
   {
    "id": "mv61a6rq508ai",
@@ -3878,6 +3897,7 @@
    "time": "20:00",
    "reps": 39,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "BTAC",
    "note": ""
@@ -3892,6 +3912,7 @@
    "time": "20:00",
    "reps": 20,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "브릿지",
    "note": ""
@@ -3906,6 +3927,7 @@
    "time": "18:00",
    "reps": 2,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "A트렉",
    "note": ""
@@ -3920,6 +3942,7 @@
    "time": "20:00",
    "reps": 40,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "BTAC",
    "note": ""
@@ -3934,6 +3957,7 @@
    "time": "",
    "reps": 1,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "A트렉",
    "note": ""
@@ -3948,6 +3972,7 @@
    "time": "20:00",
    "reps": 38,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "BTAC",
    "note": ""
@@ -3962,6 +3987,7 @@
    "time": "21:00",
    "reps": 1,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "운동짐(연)",
    "note": ""
@@ -3976,6 +4002,7 @@
    "time": "21:00",
    "reps": 2,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "운동짐(연)",
    "note": ""
@@ -3990,6 +4017,7 @@
    "time": "",
    "reps": 0,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "밀양 회장기",
    "note": ""
@@ -4004,6 +4032,7 @@
    "time": "",
    "reps": 0,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "양구대회",
    "note": ""
@@ -4018,6 +4047,7 @@
    "time": "21:00",
    "reps": 3,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "운동짐(재)",
    "note": ""
@@ -4032,6 +4062,7 @@
    "time": "21:00",
    "reps": 4,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "운동짐(연)",
    "note": ""
@@ -4046,6 +4077,7 @@
    "time": "21:00",
    "reps": 5,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "운동짐(재)",
    "note": ""
@@ -4060,6 +4092,7 @@
    "time": "21:00",
    "reps": 6,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "운동짐(연)",
    "note": ""
@@ -4074,6 +4107,7 @@
    "time": "21:00",
    "reps": 7,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "운동짐(재)",
    "note": ""
@@ -4088,6 +4122,7 @@
    "time": "21:00",
    "reps": 8,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "운동짐(연)",
    "note": ""
@@ -4102,6 +4137,7 @@
    "time": "20:30",
    "reps": 3,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4116,6 +4152,7 @@
    "time": "14:00",
    "reps": 4,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4130,6 +4167,7 @@
    "time": "",
    "reps": 3,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4144,6 +4182,7 @@
    "time": "17:00",
    "reps": 2,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4158,6 +4197,7 @@
    "time": "13:30",
    "reps": 5,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4172,6 +4212,7 @@
    "time": "17:00",
    "reps": 4,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4186,6 +4227,7 @@
    "time": "17:00",
    "reps": 6,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4200,6 +4242,7 @@
    "time": "",
    "reps": 0,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "딜라이브",
    "note": ""
@@ -4214,6 +4257,7 @@
    "time": "",
    "reps": 9,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4228,6 +4272,7 @@
    "time": "",
    "reps": 7,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4242,6 +4287,7 @@
    "time": "",
    "reps": 7,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4256,6 +4302,7 @@
    "time": "",
    "reps": 5,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4270,6 +4317,7 @@
    "time": "",
    "reps": 8,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4284,6 +4332,7 @@
    "time": "",
    "reps": 8,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4298,6 +4347,7 @@
    "time": "17:00",
    "reps": 9,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4312,6 +4362,7 @@
    "time": "",
    "reps": 10,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4326,6 +4377,7 @@
    "time": "",
    "reps": 11,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4340,6 +4392,7 @@
    "time": "",
    "reps": 12,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4354,6 +4407,7 @@
    "time": "",
    "reps": 13,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4368,6 +4422,7 @@
    "time": "",
    "reps": 14,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4382,6 +4437,7 @@
    "time": "",
    "reps": 15,
    "ar": true,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4396,6 +4452,7 @@
    "time": "",
    "reps": 10,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4410,6 +4467,7 @@
    "time": "",
    "reps": 11,
    "ar": false,
+   "mt": 0,
    "rg": "",
    "title": "",
    "note": ""
@@ -4424,6 +4482,7 @@
    "time": "21:00",
    "reps": 16,
    "ar": true,
+   "mt": 0,
    "rg": "muz6w8vfroi0k",
    "title": "",
    "note": ""
@@ -4438,6 +4497,7 @@
    "time": "21:00",
    "reps": 17,
    "ar": true,
+   "mt": 0,
    "rg": "muz6w8vfroi0k",
    "title": "",
    "note": ""
@@ -4452,6 +4512,7 @@
    "time": "21:00",
    "reps": 18,
    "ar": true,
+   "mt": 0,
    "rg": "muz6w8vfroi0k",
    "title": "",
    "note": ""
@@ -4466,6 +4527,7 @@
    "time": "21:00",
    "reps": 19,
    "ar": true,
+   "mt": 0,
    "rg": "muz6w8vfroi0k",
    "title": "",
    "note": ""
@@ -4480,6 +4542,7 @@
    "time": "21:00",
    "reps": 20,
    "ar": true,
+   "mt": 0,
    "rg": "muz6w8vfroi0k",
    "title": "",
    "note": ""
@@ -4494,6 +4557,7 @@
    "time": "21:00",
    "reps": 21,
    "ar": true,
+   "mt": 0,
    "rg": "muz6w8vfroi0k",
    "title": "",
    "note": ""
@@ -4508,6 +4572,7 @@
    "time": "21:00",
    "reps": 22,
    "ar": true,
+   "mt": 0,
    "rg": "muz6w8vfroi0k",
    "title": "",
    "note": ""
@@ -4522,6 +4587,7 @@
    "time": "21:00",
    "reps": 23,
    "ar": true,
+   "mt": 0,
    "rg": "muz6w8vfroi0k",
    "title": "",
    "note": ""
@@ -4536,6 +4602,7 @@
    "time": "17:00",
    "reps": 12,
    "ar": true,
+   "mt": 0,
    "rg": "muz6x0hqzd843",
    "title": "",
    "note": ""
@@ -4550,6 +4617,7 @@
    "time": "17:00",
    "reps": 13,
    "ar": true,
+   "mt": 0,
    "rg": "muz6x0hqzd843",
    "title": "",
    "note": ""
@@ -4564,6 +4632,7 @@
    "time": "17:00",
    "reps": 14,
    "ar": true,
+   "mt": 0,
    "rg": "muz6x0hqzd843",
    "title": "",
    "note": ""
@@ -4578,11 +4647,12 @@
    "time": "17:00",
    "reps": 15,
    "ar": true,
+   "mt": 0,
    "rg": "muz6x0hqzd843",
    "title": "",
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T02:40:22.139Z",
+ "savedAt": "2026-10-13T02:43:19.861Z",
  "by": "성연제"
 }
