@@ -3420,6 +3420,30 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mv6147amq5mab",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-05-16",
+   "opponent": "파주BC",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "2026 양구(봄)",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": ""
   }
  ],
  "plans": [
@@ -4138,6 +4162,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:54:48.418Z",
+ "savedAt": "2026-10-13T01:55:43.761Z",
  "by": "성연제"
 }
