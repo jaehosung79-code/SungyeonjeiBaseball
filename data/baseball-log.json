@@ -2768,19 +2768,46 @@
   },
   {
    "id": "mv60myw6slg6l",
-   "pas": [],
+   "pas": [
+    {
+     "id": "mv60o3jdvypst",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "K",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    },
+    {
+     "id": "mv60o5pdzp7pv",
+     "inning": 2,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "K",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
    "def": [],
    "videos": [],
    "pdec": "",
    "date": "2026-03-28",
-   "opponent": "",
-   "venue": "",
+   "opponent": "방배초",
+   "venue": "구의구장",
    "homeAway": "홈",
    "level": "",
    "type": "official",
    "tour": "2026 병원장기",
-   "myScore": "",
-   "oppScore": "",
+   "myScore": "0",
+   "oppScore": "1",
    "inn": 6,
    "dinn": [],
    "note": ""
@@ -3502,6 +3529,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:42:21.475Z",
+ "savedAt": "2026-10-13T01:43:16.880Z",
  "by": "성연제"
 }
