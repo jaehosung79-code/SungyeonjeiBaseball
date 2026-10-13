@@ -2765,6 +2765,25 @@
     }
    ],
    "note": ""
+  },
+  {
+   "id": "mv60myw6slg6l",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-03-28",
+   "opponent": "",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "2026 병원장기",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 6,
+   "dinn": [],
+   "note": ""
   }
  ],
  "plans": [
@@ -3483,6 +3502,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:41:26.623Z",
+ "savedAt": "2026-10-13T01:42:21.475Z",
  "by": "성연제"
 }
