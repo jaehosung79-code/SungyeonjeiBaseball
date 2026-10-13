@@ -1920,7 +1920,21 @@
   },
   {
    "id": "mv60130ybki92",
-   "pas": [],
+   "pas": [
+    {
+     "id": "mv601jbl12ggo",
+     "inning": 1,
+     "pitcherNo": "",
+     "pitcher": "",
+     "result": "1B",
+     "zone": null,
+     "rbi": 0,
+     "runs": 0,
+     "sb": 0,
+     "cs": 0,
+     "note": ""
+    }
+   ],
    "def": [],
    "videos": [],
    "pdec": "",
@@ -2659,6 +2673,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T01:25:18.635Z",
+ "savedAt": "2026-10-13T01:25:33.395Z",
  "by": "성연제"
 }
