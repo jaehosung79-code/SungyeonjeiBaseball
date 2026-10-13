@@ -3799,11 +3799,16 @@
    "level": "",
    "type": "official",
    "tour": "26 서울컵",
-   "myScore": "",
-   "oppScore": "",
+   "myScore": "3",
+   "oppScore": "4",
    "inn": 6,
    "dinn": [],
-   "note": ""
+   "note": "",
+   "fm": {
+    "myScore": 1791880277910,
+    "oppScore": 1791880277910
+   },
+   "mt": 1791880277910
   },
   {
    "id": "mv61el8571sqy",
@@ -4685,6 +4690,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-13T08:30:53.766Z",
+ "savedAt": "2026-10-13T08:31:35.217Z",
  "by": "성연제"
 }
