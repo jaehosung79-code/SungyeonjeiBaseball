@@ -1305,6 +1305,59 @@ thead th{background:var(--surface-2);color:var(--text-2)}
 .tchips .tc[aria-pressed="true"]{border-color:var(--red,#e4002b);color:var(--red,#e4002b);font-weight:700}
 
 .tchips .tc.reg{border-style:dashed;color:var(--text-2)}
+
+/* 홈 최근 경기 카드 — 2줄 배치 */
+.gcard{flex:0 0 230px;min-height:0;gap:10px;padding:13px 14px}
+.gcard .gr1,.gcard .gr2{display:flex;align-items:center;gap:8px;min-width:0}
+.gcard .gr1 .gop{flex:1;min-width:0;text-align:left}
+.gcard .gm{flex:0 0 auto;font-size:11px;color:var(--text-3);white-space:nowrap;display:inline-flex;align-items:center;gap:3px}
+.gcard .gm .ty.off{color:#e4002b} .gcard .gm .ty.prac{color:#1aa37a}
+.gcard .gm .rp{font-size:17px;margin-left:2px}
+.gcard .gr2 .gsc{flex:1;font-size:24px}
+.gcard .gr2 .gbt{margin:0;border:0;padding:0;display:flex;align-items:baseline;gap:6px;flex:0 0 auto}
+.gcard .gr2 .gbt .a{font-size:16px;font-weight:700}
+.gcard .gr2 .gbt .d{font-size:11.5px;color:var(--text-3)}
+
+/* 최근 경기 — 한 장에 3경기씩 세로로, 옆으로 넘겨 다음 3경기 */
+.gpages{gap:10px}
+.gpage{flex:0 0 calc(100% - 28px);scroll-snap-align:start;display:flex;flex-direction:column;gap:8px}
+@media(min-width:760px){ .gpage{flex-basis:calc(50% - 10px)} }
+@media(min-width:1040px){ .gpage{flex-basis:calc(33.333% - 10px)} }
+.gpage .gcard{flex:0 0 auto;width:100%;padding:10px 12px;gap:6px;border-radius:12px}
+.gpage .gcard .gop{font-size:13.5px}
+.gpage .gcard .gm{font-size:10.5px}
+.gpage .gcard .gm .rp{font-size:16px}
+.gpage .gcard .gr2 .gsc{font-size:19px}
+.gpage .gcard .gr2 .gbt .a{font-size:14px}
+.gpage .gcard .gr2 .gbt .d{font-size:11px}
+
+/* 최근 경기 — 폰에서 가로로 3장씩 (좁은 카드 · 작은 글씨) */
+.g3{gap:8px}
+.g3 .gcard{flex:0 0 calc((100% - 32px)/3);padding:9px 9px 8px;gap:4px;border-radius:12px;min-width:0}
+@media(min-width:760px){ .g3 .gcard{flex-basis:200px} }
+.g3 .gcard .gr1{flex-direction:column;align-items:stretch;gap:2px}
+.g3 .gcard .gr1 .gop{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g3 .gcard .gm{justify-content:flex-end;font-size:9.5px;gap:2px}
+.g3 .gcard .gm .rp{font-size:14px;margin-left:1px}
+.g3 .gcard .gr2{flex-direction:column;align-items:stretch;gap:1px}
+.g3 .gcard .gr2 .gsc{font-size:17px;line-height:1.1}
+.g3 .gcard .gr2 .gbt{justify-content:flex-end;gap:4px}
+.g3 .gcard .gr2 .gbt .a{font-size:12.5px}
+.g3 .gcard .gr2 .gbt .d{font-size:9.5px}
+
+/* 한 줄씩 — 학교명 | 날짜 O/P 승패 · 점수 | 타율 H for AB */
+.g3 .gcard{padding:9px 8px 8px;gap:5px}
+.g3 .gcard .gr1,.g3 .gcard .gr2{flex-direction:row;align-items:center;gap:4px}
+.g3 .gcard .gr1 .gop{flex:1;min-width:0;font-size:11.5px}
+.g3 .gcard .gm{font-size:9px;gap:2px;flex:0 0 auto}
+.g3 .gcard .gm .ty{font-weight:800}
+.g3 .gcard .gm .rp{font-size:13px}
+.g3 .gcard .gr2 .gsc{flex:1;min-width:0;font-size:15px;white-space:nowrap}
+.g3 .gcard .gr2 .gbt{flex:0 0 auto;gap:3px}
+.g3 .gcard .gr2 .gbt .a{font-size:11px}
+.g3 .gcard .gr2 .gbt .d{font-size:8.5px;white-space:nowrap}
+
+.g3 .gop.wrap{white-space:nowrap!important}
 </style>
 </head>
 <body>
@@ -3424,11 +3477,13 @@ function strip(items){
 function gameMini(g){
   const t = battingOf(g.pas), res = gameResult(g);
   const hasSc = g.myScore!=="" && g.myScore!=null && g.oppScore!=="" && g.oppScore!=null;
+  const prac = gameType(g)==="practice";
+  /* 1줄: 학교명(왼쪽) · 날짜 · 경기 종류 · 결과(오른쪽) / 2줄: 점수(왼쪽) · 타율 · H for AB(오른쪽) */
   return `<div class="gcard" data-act="openGame" data-id="${g.id}" role="button" tabindex="0">
-    <div class="gtop">${esc(mdDate(g.date))} · ${gameType(g)==="practice"? "Practice" : "Official"}${res? `<span class="rp ${res==="승"?"w":res==="패"?"l":""}">${resEn(res)}</span>` : ""}</div>
-    <div class="gop">${esc(g.opponent||"상대 미입력")}</div>
-    <div class="gsc">${hasSc? `${esc(String(g.myScore))} : <span class="osc">${esc(String(g.oppScore))}</span>` : "–"}</div>
-    <div class="gbt"><span class="a${hi400(t.AVG)?" hot":""}">${t.PA? avg3(t.AVG) : "-"}</span><span class="d">${t.PA? `${t.AB}타수 ${t.H}안타` : "타석 없음"}</span></div>
+    <div class="gr1"><span class="gop">${esc(g.opponent||"상대 미입력")}</span>
+      <span class="gm">${esc(mdDate(g.date))} <span class="ty ${prac?"prac":"off"}" title="${prac? "Practice" : "Official"}">${prac? "P" : "O"}</span>${res? ` <span class="rp ${res==="승"?"w":res==="패"?"l":""}">${resEn(res)}</span>` : ""}</span></div>
+    <div class="gr2"><span class="gsc">${hasSc? `${esc(String(g.myScore))} : <span class="osc">${esc(String(g.oppScore))}</span>` : "–"}</span>
+      <span class="gbt">${t.PA? `<span class="a${hi400(t.AVG)?" hot":""}">${avg3(t.AVG)}</span><span class="d">${t.H} for ${t.AB}</span>` : `<span class="d">타석 없음</span>`}</span></div>
   </div>`;
 }
 function tile(lb, v, sub, ic){
@@ -3514,7 +3569,7 @@ function viewHome(){
   + strip([[IC.cal,"경기",gs.length],[IC.rbi,"타점",b.RBI],[IC.run,"득점",b.R],[IC.eye,"볼넷",b.BB],[IC.k,"삼진",b.SO],
             [IC.sb,"도루",b.SB,(b.SB+b.CS)? "/"+(b.SB+b.CS) : ""]])
   + `<div class="hrow"><h3>최근 경기</h3><button data-act="nav" data-v="games">전체 보기</button></div>
-     <div class="hscroll">${gs.slice(-10).reverse().map(gameMini).join("")}</div>`
+     <div class="hscroll g3">${gs.slice(-12).reverse().map(gameMini).join("")}</div>`
   + `<div class="grid g2">`
   + chartCard("누적 "+METRICS[m].ko+" 추이", "마지막 값 = 현재 기록",
       lineChart([{pts, color:"var(--chart)"}], {aria:"누적 "+METRICS[m].ko+" 추이", fmt:avg3,
@@ -7331,7 +7386,7 @@ function xbarSync(box){
 }
 /* 설명 한 줄 맞추기 — 넘치면 글씨를 조금씩 줄여(최소 8.5px) 한 줄에 다 보이게 합니다 */
 function fitLines(){
-  $$(".card .cap, .ins li, .card > .hint").forEach(e=>{
+  $$(".card .cap, .ins li, .card > .hint, .g3 .gop").forEach(e=>{
     if(!e.offsetParent) return;
     e.style.fontSize = ""; e.classList.remove("wrap");
     if(e.querySelector("button,input,select,.btnrow")){ e.classList.add("wrap"); return; }   // 단추가 든 안내는 그대로
