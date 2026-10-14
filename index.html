@@ -1261,6 +1261,13 @@ thead th{background:var(--surface-2);color:var(--text-2)}
 .fitw th,.fitw td{padding:7px 3px;white-space:nowrap}
 .fitw th{font-size:10.5px}
 .fitw td:first-child,.fitw th:first-child{white-space:normal;word-break:keep-all;line-height:1.3;padding-left:6px;width:28%}
+
+/* 선수 카드 — 사진을 오른쪽에 투명하게 깔기 (왼쪽으로 갈수록 사라짐) */
+.pcard .pbg{position:absolute;top:0;right:0;bottom:0;width:min(62%,460px);background-size:cover;background-position:center 25%;
+  opacity:.38;pointer-events:none;
+  -webkit-mask-image:linear-gradient(to left, #000 35%, transparent 100%);mask-image:linear-gradient(to left, #000 35%, transparent 100%)}
+.pcard.hasph::before{display:none}
+.pcard > *:not(.pbg):not(.art){position:relative}
 </style>
 </head>
 <body>
@@ -1444,7 +1451,7 @@ window.__photoPick = function(inp){
   const f = inp && inp.files && inp.files[0]; if(!f) return;
   const url = URL.createObjectURL(f), im = new Image();
   im.onload = ()=>{
-    const n = Math.min(im.naturalWidth, im.naturalHeight), sz = 320;
+    const n = Math.min(im.naturalWidth, im.naturalHeight), sz = 560;   // 홈 카드 배경에도 쓰므로 조금 크게
     const c = document.createElement("canvas"); c.width = c.height = sz;
     c.getContext("2d").drawImage(im, (im.naturalWidth-n)/2, (im.naturalHeight-n)/2, n, n, 0, 0, sz, sz);
     URL.revokeObjectURL(url);
@@ -3403,7 +3410,8 @@ function viewHome(){
   return filterRow()
   + (()=>{ const pf = curProfile();
       const sub = [pf.team, PMAP[pf.position]||"", (pf.throws||"")+(pf.bats||"")].filter(Boolean).join(" · ");
-      return `<div class="pcard" data-no="${esc(pf.number||"")}">${fieldArt("art")}
+      return `<div class="pcard${S.photo? " hasph" : ""}" data-no="${esc(pf.number||"")}">${fieldArt("art")}
+      ${S.photo? `<div class="pbg" style="background-image:url('${S.photo}')" aria-hidden="true"></div>` : ""}
       <div class="who">${avatarHTML()}
         <div style="min-width:0"><div class="nm">${esc(pf.name || "선수 이름")}${pf.number? `<span class="no">#${esc(pf.number)}</span>` : ""}</div>
           <div class="sb">${esc(sub || "설정에서 선수 정보 · 사진 등록")}</div></div></div>
@@ -4286,10 +4294,6 @@ function viewStats(){
                 ["상대",iVs],["투수",iPit],["수비",iDef],["포지션",iPos]])
   + (insOn()? "" : `<div class="card" style="padding:10px 14px"><div class="hd" style="align-items:center;margin:0">
       <div style="flex:1" class="hint">자동 분석 해설 꺼짐</div><button class="btn sm" data-act="toggleIns" data-v="on">해설 켜기</button></div></div>`)
-  + snavHTML([["bat", IC.bat, "타격"], ["bip", IC.field, "타구"],
-      (tourRows.length || pTeams.length)? ["vs", IC.vs, "대회·상대"] : null,
-      pitchingOf(defs).APP? ["pit", IC.arm, "투수"] : null,
-      (defDist.length || posRows.length)? ["def", IC.glove, "수비"] : null])
   + sectHTML(IC.bat, "타격", "bat")
   + (b.PA? `<div class="card"><div class="hd"><div style="flex:1"><h3>타격 프로필</h3>
       <div class="cap">세로선 = 기준 · 넘으면 주황</div></div></div>
