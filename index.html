@@ -1278,6 +1278,33 @@ thead th{background:var(--surface-2);color:var(--text-2)}
   :root:where(:not([data-theme="light"])) .mcard .mh .tg b.ty.off,:root:where(:not([data-theme="light"])) .tag.off{color:#ff5a72!important}
   :root:where(:not([data-theme="light"])) .mcard .mh .tg b.ty.prac,:root:where(:not([data-theme="light"])) .tag.prac{color:#3fd29c!important}
 }
+
+/* 설정 — 상대팀 심벌 목록 */
+.olist{display:flex;flex-direction:column}
+.orow{display:flex;align-items:center;gap:10px;padding:8px 0}
+.orow+.orow{border-top:1px solid var(--border)}
+.orow .tlogo{width:28px;height:28px;margin:0;flex:0 0 auto}
+.orow .on{flex:1;min-width:0;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.orow .btn.sm{min-height:32px;padding:4px 12px}
+
+/* 설정 — 접기 · 펴기 */
+.card.fold > .hd{cursor:pointer;align-items:center}
+.card.fold > .hd::after{content:"";flex:0 0 auto;width:9px;height:9px;margin:0 6px 0 4px;border-right:2px solid var(--text-3);border-bottom:2px solid var(--text-3);
+  transform:rotate(45deg);transition:transform .18s}
+.card.fold.closed > .hd::after{transform:rotate(-45deg)}
+.card.fold.closed > *:not(.hd){display:none!important}
+.card.fold.closed > .hd{margin-bottom:0}
+/* 상대팀 등록 */
+.tadd{display:flex;gap:8px;margin:4px 0 6px}
+.tadd input{flex:1;min-width:0}
+.tchips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:-4px 0 12px}
+.tchips .tl{font-size:11px;color:var(--text-3);margin-right:2px}
+.tchips .tc{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);background:var(--surface-1);color:var(--text-1);
+  border-radius:999px;padding:5px 10px;font-size:12.5px;cursor:pointer}
+.tchips .tc img{width:18px;height:18px;object-fit:contain}
+.tchips .tc[aria-pressed="true"]{border-color:var(--red,#e4002b);color:var(--red,#e4002b);font-weight:700}
+
+.tchips .tc.reg{border-style:dashed;color:var(--text-2)}
 </style>
 </head>
 <body>
@@ -1455,6 +1482,42 @@ window.__schoolLogo = function(inp, y){
     S.profiles[y] = Object.assign({}, profileFor(y), S.profiles[y]||{}, {logo:d});
     syncProfile(); saveNow(); render(); toast(y+"년 학교 심벌 저장");
   });
+  inp.value = "";
+};
+/* ---- 상대팀 등록 (초등 · 중등 · 고등) ----
+   S.teams = { 팀이름: "elem" | "mid" | "high" } · 심벌은 S.logos[팀이름] */
+const TEAM_LV = [["elem","초등"],["mid","중등"],["high","고등"]];
+function teamLvOf(name){ return (S.teams||{})[String(name||"").trim()] || ""; }
+function teamsAt(lv){ return Object.keys(S.teams||{}).filter(n=> S.teams[n]===lv).sort((a,b)=> a.localeCompare(b,"ko")); }
+/* 경기장 규격 → 학년 (대학·성인은 고등 목록) */
+function lvToTeamLv(k){ return k==="elem"||k==="mid"? k : "high"; }
+function oppLogoCard(){
+  const ro = readOnly();
+  const lv = (TEAM_LV.some(x=>x[0]===S.ui.tlv))? S.ui.tlv : lvToTeamLv(curLevel());
+  const list = teamsAt(lv);
+  const unreg = Array.from(new Set(S.games.map(g=> String(g.opponent||"").trim()).filter(n=> n && !teamLvOf(n))))
+    .sort((a,b)=> a.localeCompare(b,"ko"));
+  const row = (n, reg)=>{ const src = teamLogo(n), own = !!(S.logos||{})[n];
+    return `<div class="orow">${src? `<img class="tlogo" src="${esc(src)}" alt="">` : `<span class="tlogo none"></span>`}
+      <span class="on">${esc(n)}</span>
+      ${reg? `<label class="btn sm" style="cursor:pointer">${src? "심벌 변경" : "심벌"}
+          <input type="file" accept="image/png,image/*" hidden data-team="${esc(n)}" onchange="__teamLogo(this)" ${ro? "disabled" : ""}></label>
+        ${ro? "" : delBtn("delTeam", `data-v="${esc(n)}"`, n+" 삭제")}`
+      : (ro? "" : `<button class="btn sm" data-act="regTeam" data-v="${esc(n)}">${TEAM_LV.find(x=>x[0]===lv)[1]}로 등록</button>`)}</div>`; };
+  return `<div class="card"><div class="hd"><div style="flex:1"><h3>상대팀</h3>
+      <div class="cap">등록 ${Object.keys(S.teams||{}).length}개 팀 · 경기 등록 때 골라 쓰기 · PNG 심벌</div></div></div>
+    <div class="filters" style="margin-bottom:8px"><div class="seg" role="group" aria-label="학년">
+      ${TEAM_LV.map(([k,ko])=>`<button data-act="tlv" data-v="${k}" aria-pressed="${lv===k}">${ko} (${teamsAt(k).length})</button>`).join("")}</div></div>
+    ${ro? "" : `<div class="tadd"><input id="team_new" placeholder="${TEAM_LV.find(x=>x[0]===lv)[1]} 팀 이름 (예: ○○초)">
+      <button class="btn sm pri" data-act="addTeam" data-v="${lv}">추가</button></div>`}
+    <div class="olist">${list.length? list.map(n=>row(n,true)).join("") : `<div class="hint" style="padding:8px 0">등록된 팀 없음</div>`}</div>
+    ${unreg.length? `<div class="hint" style="margin:12px 0 2px">경기에만 있고 등록 안 된 팀 ${unreg.length}개</div>
+      <div class="olist">${unreg.map(n=>row(n,false)).join("")}</div>` : ""}
+  </div>`;
+}
+window.__teamLogo = function(inp){
+  const f = inp && inp.files && inp.files[0], n = inp && inp.dataset.team; if(!f || !n) return;
+  logoFromFile(f, d=>{ S.logos = S.logos || {}; S.logos[n] = d; saveNow(); render(); toast(n+" 심벌 저장"); });
   inp.value = "";
 };
 window.__oppLogo = function(inp){
@@ -1858,6 +1921,7 @@ function load(){
   });
   if(!S.tomb || typeof S.tomb!=="object") S.tomb = {};
   if(!S.logos || typeof S.logos!=="object") S.logos = {};
+  if(!S.teams || typeof S.teams!=="object") S.teams = {};
   S.profMt = num(S.profMt, 0);
   trkReset();                                  // 불러온 상태를 기준으로 이후 수정 · 삭제를 기록합니다
   try{ localStorage.removeItem("bb_gh_base"); }catch(e){}   // 예전 기준본 — 저장 공간을 두 배로 써서 지웁니다
@@ -1932,7 +1996,7 @@ function trkKey(kind, x){
   return o;
 }
 const VID_SYNC_KEYS = {id:1, url:1, title:1, folder:1, paId:1, defId:1, note:1, createdAt:1};
-function trkProfKey(){ return ghKey({p:S.profile||{}, ps:S.profiles||{}, ph:S.photo||"", lg:S.logos||{}}); }
+function trkProfKey(){ return ghKey({p:S.profile||{}, ps:S.profiles||{}, ph:S.photo||"", lg:S.logos||{}, tm:S.teams||{}}); }
 function trkReset(){
   trkSnap = new Map();
   trkWalk((k,x)=>{ if(x && x.id!=null) trkSnap.set(k+":"+x.id, trkKey(k,x)); });
@@ -4691,6 +4755,7 @@ function viewSettings(){
         <span class="hint">${esc(pfY)}년 정보 삭제</span></div>` : ""}
     </div>
 
+    ${oppLogoCard()}
     <div class="card"><div class="hd"><div style="flex:1"><h3>경기장 규격</h3>
       <div class="cap">타구 위치 그림·추정 거리에 사용 · 경기별 지정 가능</div></div></div>
       <div class="filters" style="margin-bottom:8px"><div class="seg" role="group" aria-label="경기장 규격">
@@ -4829,7 +4894,7 @@ function ghMarkSynced(sha, payload, kind){
 /* 저장소에서 받은 파일을 이 앱이 올리는 모양과 같게 맞춥니다 (비교 · 병합용) */
 function ghNorm(o){
   o = o || {};
-  return {app:"bb-note", version:1, sv:2, profile:o.profile||{}, profiles:o.profiles||{}, photo:o.photo||"", logos:(o.logos && typeof o.logos==="object")? Object.assign({}, o.logos) : {}, profMt:num(o.profMt,0),
+  return {app:"bb-note", version:1, sv:2, profile:o.profile||{}, profiles:o.profiles||{}, photo:o.photo||"", logos:(o.logos && typeof o.logos==="object")? Object.assign({}, o.logos) : {}, teams:(o.teams && typeof o.teams==="object")? Object.assign({}, o.teams) : {}, profMt:num(o.profMt,0),
     tomb:(o.tomb && typeof o.tomb==="object")? Object.assign({}, o.tomb) : {},
     games:normalizeGames(JSON.parse(JSON.stringify(o.games||[]))).map(g=>Object.assign(g, {videos:(g.videos||[]).filter(v=>v.kind==="link")})),
     plans:normalizePlans(o.plans)};
@@ -4902,6 +4967,7 @@ function ghMerge(L, R, preferR, legacy){
   return {app:"bb-note", version:1, sv:2,
     profile: useR? R.profile : L.profile, profiles: useR? R.profiles : L.profiles, photo: useR? (R.photo||"") : (L.photo||""), profMt: Math.max(lp, rp),
     logos: useR? Object.assign({}, L.logos||{}, R.logos||{}) : Object.assign({}, R.logos||{}, L.logos||{}),
+    teams: useR? Object.assign({}, L.teams||{}, R.teams||{}) : Object.assign({}, R.teams||{}, L.teams||{}),
     tomb: T,
     games: ghMergeList("g", L.games||[], R.games||[], preferR, T),
     plans: ghMergeList("pl", L.plans||[], R.plans||[], preferR, T)};
@@ -4960,7 +5026,7 @@ function ghPayload(){
       paId:v.paId, defId:v.defId, note:v.note||"", createdAt:v.createdAt, mt:v.mt||0
     });
   });
-  return {app:"bb-note", version:1, sv:2, profile:S.profile, profiles:S.profiles||{}, photo:S.photo||"", logos:Object.assign({}, S.logos||{}), profMt:num(S.profMt,0),
+  return {app:"bb-note", version:1, sv:2, profile:S.profile, profiles:S.profiles||{}, photo:S.photo||"", logos:Object.assign({}, S.logos||{}), teams:Object.assign({}, S.teams||{}), profMt:num(S.profMt,0),
           tomb:Object.assign({}, S.tomb||{}), games:games, plans:S.plans||[]};
 }
 function ghHash(o){ return hashStr(stableStr(o || ghPayload())); }
@@ -5181,6 +5247,7 @@ function ghApply(o, mode, keepUi){
     S.tomb = Object.assign({}, tomb); S.profMt = num(o.profMt, 0);
     if(typeof o.photo === "string") S.photo = o.photo;
     if(o.logos && typeof o.logos==="object") S.logos = Object.assign({}, o.logos);
+    if(o.teams && typeof o.teams==="object") S.teams = Object.assign({}, o.teams);
     migrateProfiles(); syncProfile();
     if(!keepUi || !S.games.some(g=> g.id===S.ui.gameId)) S.ui.gameId = null;   // 보던 경기가 그대로 있으면 화면 유지
   }
@@ -5503,7 +5570,7 @@ function roMsg(){
 /* 보기 모드에서 막는 동작 */
 const RO_BLOCK = new Set([
   "newGame","editGame","saveGame","delGame","addDefInn","delDefInn",
-  "newPlan","editPlan","savePlan","delPlan","pickPlanCol","delPhoto","delSchoolLogo",
+  "newPlan","editPlan","savePlan","delPlan","pickPlanCol","delPhoto","delSchoolLogo","delTeamLogo","addTeam","regTeam","delTeam",
   "newPA","editPA","savePA","delPA",
   "newDef","editDef","saveDef","delDef",
   "newVideo","editVideo","saveVideo","updateVideo","delVideo",
@@ -5653,6 +5720,7 @@ function gameSheet(id, preDate){
     </div>
     <label class="f"><span>상대 팀</span><input id="g_opp" value="${esc(d.opponent)}" list="dl_opp" placeholder="상대 팀 이름">
       <datalist id="dl_opp">${opps.map(o=>`<option value="${esc(o)}">`).join("")}</datalist></label>
+    <div class="tchips" id="g_tchips"></div>
     <span style="display:block;font-size:12.5px;color:var(--text-2);margin-bottom:6px;font-weight:550">상대팀 심벌
       <span style="color:var(--text-3);font-weight:400">— 팀 이름별로 저장</span></span>
     <div class="lgpick" id="g_lgpick"></div>
@@ -5702,6 +5770,24 @@ function gameSheet(id, preDate){
       gdraft.logo = b.dataset.lg; gdraft.logoTouched = true; gdraft.paintLogo(); });
     oppInp.addEventListener("input", ()=>{ if(!gdraft.logoTouched){ gdraft.logo = teamLogo(oppInp.value); gdraft.paintLogo(); } });
     gdraft.paintLogo();
+    /* 등록한 상대팀 — 경기장 규격(초등·중등·고등)에 맞는 팀을 골라 쓰기 */
+    const tcBox = sheet.querySelector("#g_tchips"), lvSel0 = sheet.querySelector("#g_lv");
+    const paintTeams = ()=>{
+      const lv = lvToTeamLv((lvSel0 && lvSel0.value) || curLevel()), list = teamsAt(lv), lvKo = TEAM_LV.find(x=>x[0]===lv)[1];
+      const typed = oppInp.value.trim(), canReg = typed && teamLvOf(typed) !== lv && !readOnly();
+      tcBox.innerHTML = `<span class="tl">${lvKo} 상대팀</span>`
+        + (list.length? list.map(n=>`<button type="button" class="tc" data-team="${esc(n)}" aria-pressed="${typed===n}">${teamLogo(n)? `<img src="${esc(teamLogo(n))}" alt="">` : ""}${esc(n)}</button>`).join("")
+                      : `<span class="hint">등록된 팀 없음</span>`)
+        + (canReg? `<button type="button" class="tc reg" data-reg="${esc(typed)}" data-lv="${lv}">＋ ${esc(typed)} ${lvKo} 팀으로 등록</button>` : "");
+    };
+    tcBox.addEventListener("click", e=>{
+      const r = e.target.closest("button[data-reg]");
+      if(r){ S.teams = S.teams || {}; S.teams[r.dataset.reg] = r.dataset.lv; saveNow(); paintTeams(); toast(r.dataset.reg+" 등록"); return; }
+      const b = e.target.closest("button[data-team]"); if(!b) return;
+      oppInp.value = b.dataset.team; oppInp.dispatchEvent(new Event("input", {bubbles:true})); paintTeams(); });
+    oppInp.addEventListener("input", paintTeams);
+    if(lvSel0) lvSel0.addEventListener("change", paintTeams);
+    paintTeams();
     const innInp = sheet.querySelector("#g_inn");
     const lvSel  = sheet.querySelector("#g_lv");
     const wrap   = sheet.querySelector("#g_dinn");
@@ -6974,6 +7060,23 @@ document.addEventListener("click", ev=>{
     case "delPhoto":
       ask("선수 사진 삭제", "등록한 사진을 지웁니다", [{label:"삭제",style:"dan"},{label:"취소"}]).then(k=>{
         if(k!==0) return; S.photo = ""; saveNow(); render(); toast("사진 삭제"); }); break;
+    case "delTeamLogo":
+      if(S.logos && S.logos[v]){ delete S.logos[v]; saveNow(); render(); toast(v+" 심벌 삭제"); }
+      break;
+    case "tlv": S.ui.tlv = v; save(); render(); break;
+    case "addTeam": {
+      const n = ($("#team_new") && $("#team_new").value || "").trim();
+      if(!n){ toast("팀 이름 입력"); break; }
+      S.teams = S.teams || {}; S.teams[n] = v; S.ui.tlv = v;
+      saveNow(); render(); toast(n+" 등록"); break; }
+    case "regTeam": {
+      const lv = (TEAM_LV.some(x=>x[0]===S.ui.tlv))? S.ui.tlv : lvToTeamLv(curLevel());
+      S.teams = S.teams || {}; S.teams[v] = lv; saveNow(); render(); toast(v+" 등록"); break; }
+    case "delTeam":
+      ask("상대팀 삭제", `<b>${esc(v)}</b> — 등록과 심벌만 지움 (경기 기록은 그대로)`, [{label:"삭제",style:"dan"},{label:"취소"}]).then(k=>{
+        if(k!==0) return;
+        if(S.teams) delete S.teams[v]; if(S.logos) delete S.logos[v];
+        saveNow(); render(); toast(v+" 삭제"); }); break;
     case "delSchoolLogo":
       if(S.profiles && S.profiles[v]){ delete S.profiles[v].logo; saveNow(); render(); toast(v+"년 학교 심벌 삭제"); }
       break;
@@ -7245,6 +7348,27 @@ function fitTables(){
     while(t.scrollWidth > box.clientWidth + 1 && fs > 9 && n++ < 10){ fs -= .5; t.style.fontSize = fs + "px"; }
   });
 }
+/* 설정 — 카드마다 접기 · 펴기 (제목 줄을 누르면) · 상태는 기억합니다 */
+function setupFolds(){
+  if(S.ui.tab !== "settings") return;
+  S.ui.fold = S.ui.fold || {};
+  $$("#view > .card").forEach(c=>{
+    const hd = c.firstElementChild, h = c.querySelector(":scope > .hd h3");
+    if(!hd || !hd.classList.contains("hd") || !h) return;
+    const key = h.textContent.trim();
+    c.classList.add("fold"); c.dataset.fold = key;
+    c.classList.toggle("closed", S.ui.fold[key] !== true);      // 기본은 접힘
+  });
+}
+document.addEventListener("click", e=>{
+  const hd = e.target.closest("#view > .card.fold > .hd");
+  if(!hd || e.target.closest("button,a,input,label,select,textarea")) return;
+  const c = hd.parentElement, key = c.dataset.fold;
+  const open = c.classList.contains("closed");
+  c.classList.toggle("closed", !open);
+  S.ui.fold = S.ui.fold || {}; S.ui.fold[key] = open; save();
+  if(open) requestAnimationFrame(()=>{ fitLines(); fitTables(); });
+});
 function xbarAll(){
   $$(".xscroll").forEach(box=>{
     const w = box.querySelector(".tblwrap");
@@ -7281,6 +7405,7 @@ function render(){
   envBanner();
   fillQuota();
   fillMissing();
+  setupFolds();
   requestAnimationFrame(()=>{ xbarAll(); fitLines(); fitTables(); });
 }
 /* 영구 저장 요청 — 기기 저장공간이 부족할 때 시스템이 기록·영상을
