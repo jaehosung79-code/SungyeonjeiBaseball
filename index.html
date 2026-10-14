@@ -5441,7 +5441,8 @@ async function ghPull(manual){
     // 이 기기에서 고친 내용이 있거나, 아직 한 번도 맞춰 본 적이 없는데 기록이 있으면 반드시 물어봅니다
     const dirty = (ghDirty() && !!ghState.hash) || (!ghState.hash && S.games.length > 0);
     let mode = "replace";
-    if(manual || dirty){
+    // 보기 모드(받기 전용 포함)에서는 묻지 않고 저장소 기록으로 바로 교체합니다
+    if(!readOnly() && (manual || dirty)){
       const k = await ask("GitHub에서 받기",
         `저장소: <b>${o.games.length}경기</b> · 이 기기: ${S.games.length}경기`
         + (dirty? `<br><br>이 기기에 <b>바뀐 기록</b> 있음 — 교체하면 사라짐` : ""),
@@ -5472,6 +5473,7 @@ function ghSchedule(){
 function ghEditing(){ const m = $("#modal"); return !!(m && m.innerHTML); }
 function ghTry(){
   if(!ghOn() || !navigator.onLine || ghEditing()) return;
+  if(readOnly()){ ghPull(false); return; }            // 보기 모드 — 올리지 않고 저장소 기록을 자동으로 받습니다
   if(ghCanPush()){ if(ghCfg().auto || ghCfg().autoPull) ghPush(false, ghCfg().autoPull); }
   else if(ghCfg().autoPull) ghPull(false);
 }
@@ -7189,6 +7191,7 @@ document.addEventListener("click", ev=>{
       if(roForced()){ toast(roMsg()); break; }
       S.settings.viewOnly = (v === "on");
       saveNow(); render();
+      if(S.settings.viewOnly) setTimeout(ghTry, 300);   // 보기 모드로 바꾸면 바로 저장소 기록으로 교체
       toast(S.settings.viewOnly? "보기 모드 잠금" : "수정 가능");
       break; }
     case "saveMenu": saveMenu(); break;
