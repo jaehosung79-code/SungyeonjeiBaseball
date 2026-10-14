@@ -1380,6 +1380,29 @@ thead th{background:var(--surface-2);color:var(--text-2)}
 /* 선수 카드 — 아래 AVG·OBP·SLG·OPS 줄을 없앤 만큼 아래 여백 정리 */
 .pcard{padding-bottom:16px}
 .pcard .filters{margin-bottom:0!important}
+/* 홈 최근 경기 — 야구공 모양 카드 (흰 공 · 양옆 빨간 실밥) */
+.hscroll.gballs{gap:12px;padding-top:6px;padding-bottom:14px}
+.gball{flex:0 0 calc((100% - 24px)/3);max-width:168px;aspect-ratio:1;border-radius:50%;position:relative;overflow:hidden;
+  scroll-snap-align:start;cursor:pointer;color:#1d1d2b;
+  background:radial-gradient(circle at 34% 28%, #ffffff 0%, #fbfaf6 45%, #ece8de 100%);
+  box-shadow:inset -6px -8px 14px rgba(0,0,0,.08), 0 2px 6px rgba(20,20,40,.14);border:1px solid #e3ded2}
+.gball:active{transform:scale(.97)}
+.gball::before,.gball::after{content:"";position:absolute;top:-6%;width:62%;height:112%;border-radius:50%;
+  border:2px dashed #d81e3a;pointer-events:none;opacity:.85}
+.gball::before{left:-44%}
+.gball::after{right:-44%}
+.gball .in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:0 22%;text-align:center;gap:1px;line-height:1.15;z-index:1}
+.gball .bm{font-size:10px;color:#6b6b78;white-space:nowrap;font-variant-numeric:tabular-nums}
+.gball .bm .ty{font-weight:800}
+.gball .bm .ty.off{color:#e4002b} .gball .bm .ty.prac{color:#1aa37a}
+.gball .bop{max-width:100%;font-size:12.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gball .bsc{font-size:17px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.gball .bsc .osc{color:#8a8a96}
+.gball .brs .rp{font-size:16px;line-height:1}
+.gball .bav{font-size:9.5px;color:#6b6b78;white-space:nowrap}
+.gball .bav b{font-size:11px;color:#1d1d2b} .gball .bav b.hot{color:var(--hi)}
+@media(min-width:760px){ .gball{flex-basis:150px} .gball .bop{font-size:14px} .gball .bsc{font-size:20px} .gball .brs .rp{font-size:19px} .gball .bm{font-size:11px} .gball .bav{font-size:10.5px} }
 /* 홈 숫자 띠 — 위 선수 카드와 같은 네이비 바탕 · 흰 글씨 */
 .strip.navy{background:radial-gradient(500px 260px at 110% -20%, var(--navy-2), transparent 70%), var(--navy);border:0;border-radius:16px;color:#fff}
 .strip.navy .sv{color:#fff}
@@ -3507,12 +3530,16 @@ function gameMini(g){
   const t = battingOf(g.pas), res = gameResult(g);
   const hasSc = g.myScore!=="" && g.myScore!=null && g.oppScore!=="" && g.oppScore!=null;
   const prac = gameType(g)==="practice";
-  /* 3줄 · 모두 왼쪽 정렬 — ① 날짜 · O/P · 승패 ② 학교명 ③ 점수 · 타율 · H for AB */
-  return `<div class="gcard" data-act="openGame" data-id="${g.id}" role="button" tabindex="0">
-    <div class="gr1"><span class="gm">${esc(mdDate(g.date))} <span class="ty ${prac?"prac":"off"}" title="${prac? "Practice" : "Official"}">${prac? "P" : "O"}</span>${res? ` <span class="rp ${res==="승"?"w":res==="패"?"l":""}">${resFull(res)}</span>` : ""}</span></div>
-    <div class="gop">${esc(g.opponent||"상대 미입력")}</div>
-    <div class="gr2"><span class="gsc">${hasSc? `${esc(String(g.myScore))} : <span class="osc">${esc(String(g.oppScore))}</span>` : "–"}</span>
-      ${t.PA? `<span class="a${hi400(t.AVG)?" hot":""}">${avg3(t.AVG)}</span><span class="d">${t.H} for ${t.AB}</span>` : `<span class="d">타석 없음</span>`}</div>
+  /* 야구공 모양 — 가운데에 ① 날짜 · O/P ② 학교명 ③ 점수 ④ 승패 ⑤ 타율 · H for AB */
+  return `<div class="gball" data-act="openGame" data-id="${g.id}" role="button" tabindex="0"
+      aria-label="${esc(fmtDate(g.date))} ${esc(g.opponent||"상대 미입력")} ${res||""}">
+    <div class="in">
+      <div class="bm">${esc(mdDate(g.date))} <span class="ty ${prac?"prac":"off"}" title="${prac? "Practice" : "Official"}">${prac? "P" : "O"}</span></div>
+      <div class="bop">${esc(g.opponent||"상대 미입력")}</div>
+      <div class="bsc">${hasSc? `${esc(String(g.myScore))} : <span class="osc">${esc(String(g.oppScore))}</span>` : "–"}</div>
+      ${res? `<div class="brs"><span class="rp ${res==="승"?"w":res==="패"?"l":""}">${resFull(res)}</span></div>` : ""}
+      <div class="bav">${t.PA? `<b class="${hi400(t.AVG)?"hot":""}">${avg3(t.AVG)}</b> ${t.H} for ${t.AB}` : "타석 없음"}</div>
+    </div>
   </div>`;
 }
 function tile(lb, v, sub, ic){
@@ -3597,7 +3624,7 @@ function viewHome(){
   + strip([[IC.cal,"경기",gs.length],[IC.rbi,"타점",b.RBI],[IC.run,"득점",b.R],[IC.eye,"볼넷",b.BB],[IC.k,"삼진",b.SO],
             [IC.sb,"도루",b.SB,(b.SB+b.CS)? "/"+(b.SB+b.CS) : ""]], "navy")
   + `<div class="hrow"><h3>Recent Games</h3><button data-act="nav" data-v="games">전체 보기</button></div>
-     <div class="hscroll g3">${gs.slice(-12).reverse().map(gameMini).join("")}</div>`
+     <div class="hscroll gballs">${gs.slice(-12).reverse().map(gameMini).join("")}</div>`
   + `<div class="grid g2">`
   + chartCard("Cumulative "+METRICS[m].k+" Trend", "마지막 값 = 현재 기록",
       lineChart([{pts, color:"var(--chart)"}], {aria:"누적 "+METRICS[m].ko+" 추이", fmt:avg3,
