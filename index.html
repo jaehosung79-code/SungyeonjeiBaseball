@@ -1358,6 +1358,18 @@ thead th{background:var(--surface-2);color:var(--text-2)}
 .g3 .gcard .gr2 .gbt .d{font-size:8.5px;white-space:nowrap}
 
 .g3 .gop.wrap{white-space:nowrap!important}
+
+/* 최근 경기 카드 — 3줄 · 왼쪽 정렬 */
+.g3 .gcard{gap:3px;padding:9px 9px 8px}
+.g3 .gcard .gr1{display:flex;justify-content:flex-start}
+.g3 .gcard .gm{justify-content:flex-start;font-size:10px;gap:3px;color:var(--text-3)}
+.g3 .gcard .gm .rp{font-size:14px}
+.g3 .gcard .gop{font-size:13px;font-weight:700;text-align:left;white-space:nowrap;overflow:hidden}
+.g3 .gcard .gr2{display:flex;flex-direction:row;align-items:baseline;justify-content:flex-start;gap:5px;white-space:nowrap}
+.g3 .gcard .gr2 .gsc{flex:0 0 auto;font-size:15px}
+.g3 .gcard .gr2 .a{font-size:11.5px;font-weight:700}
+.g3 .gcard .gr2 .a.hot{color:var(--hi)}
+.g3 .gcard .gr2 .d{font-size:9px;color:var(--text-3)}
 </style>
 </head>
 <body>
@@ -3478,12 +3490,12 @@ function gameMini(g){
   const t = battingOf(g.pas), res = gameResult(g);
   const hasSc = g.myScore!=="" && g.myScore!=null && g.oppScore!=="" && g.oppScore!=null;
   const prac = gameType(g)==="practice";
-  /* 1줄: 학교명(왼쪽) · 날짜 · 경기 종류 · 결과(오른쪽) / 2줄: 점수(왼쪽) · 타율 · H for AB(오른쪽) */
+  /* 3줄 · 모두 왼쪽 정렬 — ① 날짜 · O/P · 승패 ② 학교명 ③ 점수 · 타율 · H for AB */
   return `<div class="gcard" data-act="openGame" data-id="${g.id}" role="button" tabindex="0">
-    <div class="gr1"><span class="gop">${esc(g.opponent||"상대 미입력")}</span>
-      <span class="gm">${esc(mdDate(g.date))} <span class="ty ${prac?"prac":"off"}" title="${prac? "Practice" : "Official"}">${prac? "P" : "O"}</span>${res? ` <span class="rp ${res==="승"?"w":res==="패"?"l":""}">${resEn(res)}</span>` : ""}</span></div>
+    <div class="gr1"><span class="gm">${esc(mdDate(g.date))} <span class="ty ${prac?"prac":"off"}" title="${prac? "Practice" : "Official"}">${prac? "P" : "O"}</span>${res? ` <span class="rp ${res==="승"?"w":res==="패"?"l":""}">${resEn(res)}</span>` : ""}</span></div>
+    <div class="gop">${esc(g.opponent||"상대 미입력")}</div>
     <div class="gr2"><span class="gsc">${hasSc? `${esc(String(g.myScore))} : <span class="osc">${esc(String(g.oppScore))}</span>` : "–"}</span>
-      <span class="gbt">${t.PA? `<span class="a${hi400(t.AVG)?" hot":""}">${avg3(t.AVG)}</span><span class="d">${t.H} for ${t.AB}</span>` : `<span class="d">타석 없음</span>`}</span></div>
+      ${t.PA? `<span class="a${hi400(t.AVG)?" hot":""}">${avg3(t.AVG)}</span><span class="d">${t.H} for ${t.AB}</span>` : `<span class="d">타석 없음</span>`}</div>
   </div>`;
 }
 function tile(lb, v, sub, ic){
@@ -7386,7 +7398,7 @@ function xbarSync(box){
 }
 /* 설명 한 줄 맞추기 — 넘치면 글씨를 조금씩 줄여(최소 8.5px) 한 줄에 다 보이게 합니다 */
 function fitLines(){
-  $$(".card .cap, .ins li, .card > .hint, .g3 .gop").forEach(e=>{
+  $$(".card .cap, .ins li, .card > .hint, .g3 .gop, .g3 .gr2").forEach(e=>{
     if(!e.offsetParent) return;
     e.style.fontSize = ""; e.classList.remove("wrap");
     if(e.querySelector("button,input,select,.btnrow")){ e.classList.add("wrap"); return; }   // 단추가 든 안내는 그대로
