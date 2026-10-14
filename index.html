@@ -1370,6 +1370,10 @@ thead th{background:var(--surface-2);color:var(--text-2)}
 .g3 .gcard .gr2 .a{font-size:11.5px;font-weight:700}
 .g3 .gcard .gr2 .a.hot{color:var(--hi)}
 .g3 .gcard .gr2 .d{font-size:9px;color:var(--text-3)}
+
+/* 선수 카드 — 아래 AVG·OBP·SLG·OPS 줄을 없앤 만큼 아래 여백 정리 */
+.pcard{padding-bottom:16px}
+.pcard .filters{margin-bottom:0!important}
 </style>
 </head>
 <body>
@@ -3575,8 +3579,7 @@ function viewHome(){
       <div class="filters" style="position:relative;margin:12px 0 0"><div class="seg" role="group" aria-label="지표 선택">`
       + Object.keys(METRICS).map(k=>`<button data-act="metric" data-v="${k}" aria-pressed="${m===k}">${METRICS[k].ko}</button>`).join("")
       + `</div></div>
-      <div class="slash"><div><div class="k">AVG</div><div class="x">${avg3(b.AVG)}</div></div><div><div class="k">OBP</div><div class="x">${avg3(b.OBP)}</div></div>
-        <div><div class="k">SLG</div><div class="x">${avg3(b.SLG)}</div></div><div><div class="k">OPS</div><div class="x">${avg3(b.OPS)}</div></div></div>
+
       </div>`; })()
   + strip([[IC.cal,"경기",gs.length],[IC.rbi,"타점",b.RBI],[IC.run,"득점",b.R],[IC.eye,"볼넷",b.BB],[IC.k,"삼진",b.SO],
             [IC.sb,"도루",b.SB,(b.SB+b.CS)? "/"+(b.SB+b.CS) : ""]])
