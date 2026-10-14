@@ -1268,6 +1268,16 @@ thead th{background:var(--surface-2);color:var(--text-2)}
   -webkit-mask-image:linear-gradient(to left, #000 35%, transparent 100%);mask-image:linear-gradient(to left, #000 35%, transparent 100%)}
 .pcard.hasph::before{display:none}
 .pcard > *:not(.pbg):not(.art){position:relative}
+
+/* 경기 종류 색 — Official 빨강 · Practice 초록 */
+.mcard .mh .tg b.ty.off,.tag.off,.grow .l2 .gt.off,.sboard .tag.off{color:#e4002b!important}
+.mcard .mh .tg b.ty.prac,.tag.prac,.grow .l2 .gt.prac{color:#1aa37a!important}
+:root[data-theme="dark"] .mcard .mh .tg b.ty.off,:root[data-theme="dark"] .tag.off,:root[data-theme="dark"] .sboard .tag.off{color:#ff5a72!important}
+:root[data-theme="dark"] .mcard .mh .tg b.ty.prac,:root[data-theme="dark"] .tag.prac{color:#3fd29c!important}
+@media (prefers-color-scheme: dark){
+  :root:where(:not([data-theme="light"])) .mcard .mh .tg b.ty.off,:root:where(:not([data-theme="light"])) .tag.off{color:#ff5a72!important}
+  :root:where(:not([data-theme="light"])) .mcard .mh .tg b.ty.prac,:root:where(:not([data-theme="light"])) .tag.prac{color:#3fd29c!important}
+}
 </style>
 </head>
 <body>
@@ -1386,7 +1396,20 @@ function emptyArt(icon){
 }
 /* 유튜브 주소면 영상 id — 썸네일 그림에 씁니다 (인터넷 연결 시에만 보임) */
 function ytId(u){ const m = String(u||"").match(/(?:youtu\.be\/|[?&]v=|shorts\/|embed\/|live\/)([\w-]{11})/); return m? m[1] : ""; }
-function ytThumb(u){ const id = ytId(u); return id? `https://i.ytimg.com/vi/${id}/mqdefault.jpg` : ""; }
+/* 썸네일 주소 — 유튜브, 구글 드라이브 파일(…/file/d/ID/…, open?id=ID, uc?id=ID)
+   드라이브는 '링크가 있는 모든 사용자' 공유이거나, 이 브라우저에 그 파일을 볼 수 있는 구글 계정이 로그인돼 있어야 보입니다.
+   폴더 링크는 썸네일이 없어 기본 그림으로 나옵니다. */
+function gdId(u){
+  u = String(u||"");
+  if(!/drive\.google\.com|docs\.google\.com/i.test(u) || /\/folders\//i.test(u)) return "";
+  const m = u.match(/\/file\/d\/([\w-]{10,})/) || u.match(/[?&]id=([\w-]{10,})/);
+  return m? m[1] : "";
+}
+function ytThumb(u){
+  const id = ytId(u); if(id) return `https://i.ytimg.com/vi/${id}/mqdefault.jpg`;
+  const gd = gdId(u); if(gd) return `https://drive.google.com/thumbnail?id=${gd}&sz=w640`;
+  return "";
+}
 const IC_PLAYF = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>';
 /* ---- 팀 · 학교 심벌 ----
    상대팀 심벌은 팀 이름별로 한 번 등록하면 같은 이름의 경기에 모두 쓰입니다 (S.logos).
@@ -3550,7 +3573,7 @@ function matchCard(g){
   const tag = [gameType(g)==="practice"? "Practice" : "", gameTour(g)].filter(Boolean).join(" · ");
   return `<div class="mcard" data-act="openGame" data-id="${g.id}" role="button" tabindex="0" aria-label="${esc(fmtDate(g.date))} ${esc(op.n)}">
     <div class="mh">${ok? `${dt.getFullYear()}.${pad2(dt.getMonth()+1)}.${pad2(dt.getDate())} ${wd}` : "-"}${g.time? " "+esc(g.time) : ""}${g.venue? " "+esc(g.venue) : ""}
-      ${tag? `<span class="tg">${gameType(g)==="practice"? `<b>Practice</b>${gameTour(g)? " · "+esc(gameTour(g)) : ""}` : esc(tag)}</span>` : ""}</div>
+      <span class="tg">${gameType(g)==="practice"? `<b class="ty prac">Practice</b>` : `<b class="ty off">Official</b>`}${gameTour(g)? " · "+esc(gameTour(g)) : ""}</span></div>
     <div class="mb">${side(L,false)}<span class="st">${st}</span>${side(R,true)}</div>
   </div>`;
 }
