@@ -1189,6 +1189,8 @@ thead th{background:var(--surface-2);color:var(--text-2)}
 /* 상대팀 점수 — 회색 */
 .osc{color:var(--text-3)}
 .sboard .tm.opp .sc{color:rgba(255,255,255,.45);opacity:1}
+.sboard .tm:not(.opp) .n{font-weight:800;color:#fff}
+.sboard .tm.opp .n{font-weight:400}
 .sboard .tm:not(.opp) .sc{opacity:1}
 
 /* 그래프 색 — 지정 색(#D96846)으로 고정 (밝은 · 어두운 화면 공통) */
@@ -1241,7 +1243,8 @@ thead th{background:var(--surface-2);color:var(--text-2)}
 .mcard .mh{padding:11px 14px;font-size:12.5px;color:var(--text-1)}
 .mcard .mh .tg{font-size:11px}
 .mcard .mb{grid-template-columns:1.25fr .7fr 1fr 1fr 1fr .7fr 1.25fr;padding:14px 4px}
-.mcard .tn2,.mcard .tn2.me{font-size:13px;font-weight:400}
+.mcard .tn2{font-size:13px;font-weight:400}
+.mcard .tn2.me{font-size:13px;font-weight:800;color:var(--text-1)}
 .mcard .sc2{font-size:15.5px;font-weight:800}
 .mcard .st{font-size:12px}
 .mcard .tlogo{width:22px;height:22px}
@@ -3472,6 +3475,8 @@ function typeBadge(g){
 /* 경기 결과 표시는 영어 — W(승) · L(패) · D(무) */
 const RES_EN = {"승":"W", "패":"L", "무":"D"};
 function resEn(r){ return RES_EN[r] || r || ""; }
+const RES_FULL = {"승":"Win", "패":"Loss", "무":"Draw"};
+function resFull(r){ return RES_FULL[r] || r || ""; }
 function resTag(res){
   return res? `<span class="tag ${res==="승"?"w":res==="패"?"l":"d"}">${resEn(res)}</span>` : "";
 }
@@ -3496,7 +3501,7 @@ function gameMini(g){
   const prac = gameType(g)==="practice";
   /* 3줄 · 모두 왼쪽 정렬 — ① 날짜 · O/P · 승패 ② 학교명 ③ 점수 · 타율 · H for AB */
   return `<div class="gcard" data-act="openGame" data-id="${g.id}" role="button" tabindex="0">
-    <div class="gr1"><span class="gm">${esc(mdDate(g.date))} <span class="ty ${prac?"prac":"off"}" title="${prac? "Practice" : "Official"}">${prac? "P" : "O"}</span>${res? ` <span class="rp ${res==="승"?"w":res==="패"?"l":""}">${resEn(res)}</span>` : ""}</span></div>
+    <div class="gr1"><span class="gm">${esc(mdDate(g.date))} <span class="ty ${prac?"prac":"off"}" title="${prac? "Practice" : "Official"}">${prac? "P" : "O"}</span>${res? ` <span class="rp ${res==="승"?"w":res==="패"?"l":""}">${resFull(res)}</span>` : ""}</span></div>
     <div class="gop">${esc(g.opponent||"상대 미입력")}</div>
     <div class="gr2"><span class="gsc">${hasSc? `${esc(String(g.myScore))} : <span class="osc">${esc(String(g.oppScore))}</span>` : "–"}</span>
       ${t.PA? `<span class="a${hi400(t.AVG)?" hot":""}">${avg3(t.AVG)}</span><span class="d">${t.H} for ${t.AB}</span>` : `<span class="d">타석 없음</span>`}</div>
