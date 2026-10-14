@@ -1380,6 +1380,11 @@ thead th{background:var(--surface-2);color:var(--text-2)}
 /* 선수 카드 — 아래 AVG·OBP·SLG·OPS 줄을 없앤 만큼 아래 여백 정리 */
 .pcard{padding-bottom:16px}
 .pcard .filters{margin-bottom:0!important}
+/* 홈 숫자 띠 — 위 선수 카드와 같은 네이비 바탕 · 흰 글씨 */
+.strip.navy{background:radial-gradient(500px 260px at 110% -20%, var(--navy-2), transparent 70%), var(--navy);border:0;border-radius:16px;color:#fff}
+.strip.navy .sv{color:#fff}
+.strip.navy .sv small,.strip.navy .sl{color:rgba(255,255,255,.66)}
+.strip.navy > div+div{border-left-color:rgba(255,255,255,.14)}
 </style>
 </head>
 <body>
@@ -3493,8 +3498,8 @@ function bMode(){ return (S.ui.bmode==="saber")? "saber" : "classic"; }
 function pMode(){ return (S.ui.pmode==="saber")? "saber" : "classic"; }
 
 /* 숫자 띠 — [아이콘, 이름, 값, 작은 글씨] 목록 */
-function strip(items){
-  return `<div class="strip">${items.map(([ic, lb, v, sub])=>`<div><span class="si">${ic||""}</span>
+function strip(items, cls){
+  return `<div class="strip${cls? " "+cls : ""}">${items.map(([ic, lb, v, sub])=>`<div><span class="si">${ic||""}</span>
     <span class="sv">${v}${sub? `<small>${sub}</small>` : ""}</span><span class="sl">${esc(lb)}</span></div>`).join("")}</div>`;
 }
 /* 홈 — 가로로 넘기는 최근 경기 카드 */
@@ -3590,7 +3595,7 @@ function viewHome(){
 
       </div>`; })()
   + strip([[IC.cal,"경기",gs.length],[IC.rbi,"타점",b.RBI],[IC.run,"득점",b.R],[IC.eye,"볼넷",b.BB],[IC.k,"삼진",b.SO],
-            [IC.sb,"도루",b.SB,(b.SB+b.CS)? "/"+(b.SB+b.CS) : ""]])
+            [IC.sb,"도루",b.SB,(b.SB+b.CS)? "/"+(b.SB+b.CS) : ""]], "navy")
   + `<div class="hrow"><h3>Recent Games</h3><button data-act="nav" data-v="games">전체 보기</button></div>
      <div class="hscroll g3">${gs.slice(-12).reverse().map(gameMini).join("")}</div>`
   + `<div class="grid g2">`
