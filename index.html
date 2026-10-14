@@ -1254,6 +1254,13 @@ thead th{background:var(--surface-2);color:var(--text-2)}
 .chips{flex-wrap:nowrap;gap:12px;overflow:hidden;white-space:nowrap}
 .chip2,.sboard .chip2{background:none!important;border:0;padding:0;border-radius:0;gap:4px;flex:0 1 auto;min-width:0;font-size:12px}
 .chip2 svg{width:12px;height:12px}
+
+/* 대회별 성적 — 가로 스크롤 없이 한 화면에 (좁은 칸 · 대회명은 줄바꿈) */
+.fitw .tblwrap{overflow-x:hidden}
+.fitw table{table-layout:auto;width:100%;font-size:12px}
+.fitw th,.fitw td{padding:7px 3px;white-space:nowrap}
+.fitw th{font-size:10.5px}
+.fitw td:first-child,.fitw th:first-child{white-space:normal;word-break:keep-all;line-height:1.3;padding-left:6px;width:28%}
 </style>
 </head>
 <body>
@@ -4332,9 +4339,8 @@ function viewStats(){
   + ((tourRows.length || pTeams.length)? sectHTML(IC.vs, "대회 · 상대", "vs") : "")
   + (tourRows.length? `<div class="card"><div class="hd"><div style="flex:1"><h3>대회별 성적</h3>
       <div class="cap">${tourRows.length}개 대회 · 최근순</div></div></div>
-      <div class="xscroll">${tableHTML(["대회","경기","W-L","타석","안타","홈런","타점","타율","OPS"],
-        tourRows.map(r=>[esc(r.name), r.G, `${r.W}W ${r.L}L`, r.t.PA, r.t.H, r.t.HR, r.t.RBI, avg3(r.t.AVG), avg3(r.t.OPS)]))}
-        <div class="xbar" aria-hidden="true"><i></i></div><div class="xhint">← 좌우로 밀어서 보기 →</div></div>
+      <div class="fitw">${tableHTML(["대회","G","W-L","PA","H","HR","RBI","AVG","OPS"],
+        tourRows.map(r=>[esc(r.name), r.G, `${r.W}-${r.L}`, r.t.PA, r.t.H, r.t.HR, r.t.RBI, avg3(r.t.AVG), avg3(r.t.OPS)]))}</div>
       ${insBox(insTours(tourRows))}</div>` : "")
   + (pTeams.length? `<div class="card"><div class="hd"><div style="flex:1"><h3>상대 투수별 성적</h3>
       <div class="cap">${pYears}개 시즌 · ${pTeams.length}개 팀 · 투수 ${pitcherN}명</div></div></div>
@@ -7204,6 +7210,14 @@ function fitLines(){
     if(e.scrollWidth > e.clientWidth + 1) e.classList.add("wrap");                           // 그래도 넘치면 잘리지 않게 줄바꿈
   });
 }
+/* 표가 넘치면 글씨를 조금씩 줄여 가로 스크롤 없이 맞춥니다 (최소 9px) */
+function fitTables(){
+  $$(".fitw").forEach(box=>{
+    const t = box.querySelector("table"); if(!t || !box.offsetParent) return;
+    t.style.fontSize = ""; let fs = parseFloat(getComputedStyle(t).fontSize), n = 0;
+    while(t.scrollWidth > box.clientWidth + 1 && fs > 9 && n++ < 10){ fs -= .5; t.style.fontSize = fs + "px"; }
+  });
+}
 function xbarAll(){
   $$(".xscroll").forEach(box=>{
     const w = box.querySelector(".tblwrap");
@@ -7240,7 +7254,7 @@ function render(){
   envBanner();
   fillQuota();
   fillMissing();
-  requestAnimationFrame(()=>{ xbarAll(); fitLines(); });
+  requestAnimationFrame(()=>{ xbarAll(); fitLines(); fitTables(); });
 }
 /* 영구 저장 요청 — 기기 저장공간이 부족할 때 시스템이 기록·영상을
    임의로 지우지 못하게 합니다. 홈 화면에 추가해 두면 승인될 확률이 높습니다. */
