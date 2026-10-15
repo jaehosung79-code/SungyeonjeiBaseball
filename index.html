@@ -2422,6 +2422,7 @@ function toggleFullscreen(){
   saveNow();
 }
 function armFullscreen(){
+  return;                                          // 전체 화면 모드 사용 안 함 (자동 전환 끔)
   if(!FULL_OK || fsScreenArmed) return;
   if(S.settings.fullscreen === false) return;
   if(displayMode() === "fullscreen") return;       // 이미 전체 화면으로 열렸습니다
@@ -4873,7 +4874,6 @@ function viewSettings(){
   const raw = (()=>{ try{ return new Blob([JSON.stringify(S)]).size; }catch(e){ return null; } })();
   const vids = S.games.reduce((a,g)=>a+g.videos.filter(v=>v.kind==="file").reduce((x,v)=>x+(v.size||0),0),0);
   return `${installCard()}
-    ${screenCard()}
 
     <div class="card"><div class="hd"><div style="flex:1"><h3>선수 정보</h3>
       <div class="cap">연도별 저장</div></div></div>
