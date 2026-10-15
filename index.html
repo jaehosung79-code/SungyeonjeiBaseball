@@ -3154,7 +3154,7 @@ function addBtn(act, attrs, label){
 
 function filterRow(){
   const ys = years();
-  const items = [["all","Total"]].concat(ys.map(y=>[y, y.slice(2)+"Season"]));
+  const items = [["all","전체"]].concat(ys.map(y=>[y, y.slice(2)+"시즌"]));
   const yseg = ys.length? `<div class="seg" role="group" aria-label="시즌 선택">`
     + items.map(([v,l])=>`<button data-act="year" data-v="${v}" aria-pressed="${S.ui.year===v}">${l}</button>`).join("")
     + `</div>` : "";
@@ -4272,12 +4272,7 @@ function videoCard(v, g, lite){
 function viewVideos(){
   const gs = scopedGames().slice().reverse();
   const withV = gs.filter(g=>g.videos.length);
-  const vAll = withV.reduce((a,g)=>a+g.videos.length, 0);
-  const vLink = withV.reduce((a,g)=>a+g.videos.filter(v=>v.kind==="link").length, 0);
-  const vSize = withV.reduce((a,g)=>a+g.videos.reduce((x,v)=>x+(v.size||0),0), 0);
   return filterRow()
-  + (vAll? `<div class="tiles vt3" style="margin-bottom:12px">${tile("영상", vAll, "개", IC.film)+tile("경기", withV.length, "", IC.cal)
-      +tile("기기 파일", vAll-vLink, vSize? " · "+bytes(vSize) : "개", IC.disk)}</div>` : "")
   + (withV.length? monthGroups(withV).map(gr=>{
     const vc = gr.list.reduce((a,g)=>a+g.videos.length, 0);
     const sz = gr.list.reduce((a,g)=>a+g.videos.reduce((x,v)=>x+(v.size||0),0), 0);
