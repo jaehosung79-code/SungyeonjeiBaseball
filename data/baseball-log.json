@@ -1977,6 +1977,28 @@
   },
   {
    "id": "mv60130ybki92",
+   "pdec": "",
+   "date": "2026-02-12",
+   "opponent": "all",
+   "venue": "보은",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "26 2월 보은",
+   "myScore": "0",
+   "oppScore": "0",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": "",
+   "mt": 1791859840097,
+   "fm": {
+    "tour": 1791859840097
+   },
    "pas": [
     {
      "id": "mv601jbl12ggo",
@@ -2240,55 +2262,10 @@
     }
    ],
    "def": [],
-   "videos": [],
-   "pdec": "",
-   "date": "2026-02-12",
-   "opponent": "all",
-   "venue": "보은",
-   "homeAway": "홈",
-   "level": "",
-   "type": "official",
-   "tour": "26 2월 보은",
-   "myScore": "0",
-   "oppScore": "0",
-   "inn": 6,
-   "dinn": [
-    {
-     "pos": "2B",
-     "inn": 6
-    }
-   ],
-   "note": "",
-   "fm": {
-    "tour": 1791859840097
-   },
-   "mt": 1791859840097
+   "videos": []
   },
   {
    "id": "mv604we3ndvev",
-   "pdec": "",
-   "date": "2026-02-21",
-   "opponent": "인헌초",
-   "venue": "",
-   "homeAway": "홈",
-   "level": "",
-   "type": "practice",
-   "tour": "",
-   "myScore": "4",
-   "oppScore": "3",
-   "inn": 6,
-   "dinn": [
-    {
-     "pos": "2B",
-     "inn": 6
-    }
-   ],
-   "note": "",
-   "mt": 1791880077694,
-   "fm": {
-    "myScore": 1791880077694,
-    "oppScore": 1791880077694
-   },
    "pas": [
     {
      "id": "mv605dfnynocx",
@@ -2344,7 +2321,30 @@
     }
    ],
    "def": [],
-   "videos": []
+   "videos": [],
+   "pdec": "",
+   "date": "2026-02-21",
+   "opponent": "인헌초",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "practice",
+   "tour": "",
+   "myScore": "4",
+   "oppScore": "3",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": "",
+   "fm": {
+    "myScore": 1791880077694,
+    "oppScore": 1791880077694
+   },
+   "mt": 1791880077694
   },
   {
    "id": "mv606ork82p02",
@@ -2719,29 +2719,6 @@
   },
   {
    "id": "mv60ikh06ulja",
-   "pdec": "",
-   "date": "2026-03-21",
-   "opponent": "방배초",
-   "venue": "",
-   "homeAway": "홈",
-   "level": "",
-   "type": "practice",
-   "tour": "",
-   "myScore": "3",
-   "oppScore": "4",
-   "inn": 6,
-   "dinn": [
-    {
-     "pos": "2B",
-     "inn": 6
-    }
-   ],
-   "note": "",
-   "mt": 1791880098745,
-   "fm": {
-    "myScore": 1791880098745,
-    "oppScore": 1791880098745
-   },
    "pas": [
     {
      "id": "mv60isc87kwjp",
@@ -2784,7 +2761,30 @@
     }
    ],
    "def": [],
-   "videos": []
+   "videos": [],
+   "pdec": "",
+   "date": "2026-03-21",
+   "opponent": "방배초",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "practice",
+   "tour": "",
+   "myScore": "3",
+   "oppScore": "4",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": "",
+   "fm": {
+    "myScore": 1791880098745,
+    "oppScore": 1791880098745
+   },
+   "mt": 1791880098745
   },
   {
    "id": "mv60lj76jf8u0",
@@ -3103,29 +3103,6 @@
   },
   {
    "id": "mv60vj9axxmqu",
-   "pdec": "",
-   "date": "2026-04-12",
-   "opponent": "유천초",
-   "venue": "",
-   "homeAway": "홈",
-   "level": "",
-   "type": "official",
-   "tour": "26 인제친선",
-   "myScore": "4",
-   "oppScore": "3",
-   "inn": 6,
-   "dinn": [
-    {
-     "pos": "2B",
-     "inn": 6
-    }
-   ],
-   "note": "",
-   "mt": 1791880125202,
-   "fm": {
-    "myScore": 1791880125202,
-    "oppScore": 1791880125202
-   },
    "pas": [
     {
      "id": "mv60vljqqd7rm",
@@ -3168,7 +3145,30 @@
     }
    ],
    "def": [],
-   "videos": []
+   "videos": [],
+   "pdec": "",
+   "date": "2026-04-12",
+   "opponent": "유천초",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "26 인제친선",
+   "myScore": "4",
+   "oppScore": "3",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": "",
+   "fm": {
+    "myScore": 1791880125202,
+    "oppScore": 1791880125202
+   },
+   "mt": 1791880125202
   },
   {
    "id": "mv60wvpze894l",
@@ -3808,24 +3808,6 @@
   },
   {
    "id": "mv61c8emndcpv",
-   "pdec": "",
-   "date": "2026-06-01",
-   "opponent": "역삼",
-   "venue": "",
-   "homeAway": "홈",
-   "level": "",
-   "type": "official",
-   "tour": "26 서울컵",
-   "myScore": "3",
-   "oppScore": "4",
-   "inn": 6,
-   "dinn": [],
-   "note": "",
-   "mt": 1791880277910,
-   "fm": {
-    "myScore": 1791880277910,
-    "oppScore": 1791880277910
-   },
    "pas": [
     {
      "id": "mv61ccismhg8y",
@@ -3855,33 +3837,31 @@
     }
    ],
    "def": [],
-   "videos": []
-  },
-  {
-   "id": "mv61el8571sqy",
+   "videos": [],
    "pdec": "",
-   "date": "2026-06-11",
-   "opponent": "영종유소년",
+   "date": "2026-06-01",
+   "opponent": "역삼초",
    "venue": "",
    "homeAway": "홈",
    "level": "",
    "type": "official",
-   "tour": "26 U12-울진",
-   "myScore": "4",
-   "oppScore": "3",
+   "tour": "26 서울컵",
+   "myScore": "3",
+   "oppScore": "4",
    "inn": 6,
-   "dinn": [
-    {
-     "pos": "2B",
-     "inn": 6
-    }
-   ],
+   "dinn": [],
    "note": "",
-   "mt": 1791880243629,
    "fm": {
-    "myScore": 1791880243629,
-    "oppScore": 1791880243629
+    "myScore": 1791880277910,
+    "oppScore": 1791880277910,
+    "opponent": 1792024007151,
+    "time": 1792024007151
    },
+   "mt": 1792024007151,
+   "time": ""
+  },
+  {
+   "id": "mv61el8571sqy",
    "pas": [
     {
      "id": "mv61epd2jpnmw",
@@ -3911,20 +3891,17 @@
     }
    ],
    "def": [],
-   "videos": []
-  },
-  {
-   "id": "mv61frpfqf4xp",
+   "videos": [],
    "pdec": "",
-   "date": "2026-06-14",
-   "opponent": "김해삼성",
+   "date": "2026-06-11",
+   "opponent": "영종유소년",
    "venue": "",
    "homeAway": "홈",
    "level": "",
    "type": "official",
    "tour": "26 U12-울진",
-   "myScore": "3",
-   "oppScore": "4",
+   "myScore": "4",
+   "oppScore": "3",
    "inn": 6,
    "dinn": [
     {
@@ -3933,11 +3910,14 @@
     }
    ],
    "note": "",
-   "mt": 1791880227287,
    "fm": {
-    "myScore": 1791880227287,
-    "oppScore": 1791880227287
+    "myScore": 1791880243629,
+    "oppScore": 1791880243629
    },
+   "mt": 1791880243629
+  },
+  {
+   "id": "mv61frpfqf4xp",
    "pas": [
     {
      "id": "mv61futjqxfnn",
@@ -3967,7 +3947,30 @@
     }
    ],
    "def": [],
-   "videos": []
+   "videos": [],
+   "pdec": "",
+   "date": "2026-06-14",
+   "opponent": "김해삼성",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "26 U12-울진",
+   "myScore": "3",
+   "oppScore": "4",
+   "inn": 6,
+   "dinn": [
+    {
+     "pos": "2B",
+     "inn": 6
+    }
+   ],
+   "note": "",
+   "fm": {
+    "myScore": 1791880227287,
+    "oppScore": 1791880227287
+   },
+   "mt": 1791880227287
   }
  ],
  "plans": [
@@ -4737,6 +4740,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-15T00:25:58.580Z",
+ "savedAt": "2026-10-15T00:26:52.757Z",
  "by": "Sung YeonJei"
 }
