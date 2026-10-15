@@ -1270,6 +1270,13 @@ thead th{background:var(--surface-2);color:var(--text-2)}
   opacity:.38;pointer-events:none;
   -webkit-mask-image:linear-gradient(to left, #000 35%, transparent 100%);mask-image:linear-gradient(to left, #000 35%, transparent 100%)}
 .pcard.hasph::before{display:none}
+.pcard .pbg.sl{opacity:0;transition:opacity 1s ease}
+.pcard .pbg.sl.on{opacity:.38}
+.phth{display:flex;gap:8px;margin-top:8px}
+.phth .t{position:relative;width:56px;height:56px;border-radius:10px;overflow:hidden;background:var(--surface-2)}
+.phth .t img{width:100%;height:100%;object-fit:cover;display:block}
+.phth .t .rep{position:absolute;left:3px;bottom:3px;font-size:9.5px;font-weight:700;color:#fff;background:rgba(0,0,0,.55);border-radius:4px;padding:0 4px}
+.phth .t button{position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:13px;line-height:20px;padding:0;cursor:pointer}
 .pcard > *:not(.pbg):not(.art){position:relative}
 
 /* 경기 종류 색 — Official 빨강 · Practice 초록 */
@@ -1644,8 +1651,12 @@ window.__photoPick = function(inp, y){
     const d = c.toDataURL("image/jpeg", 0.82);
     y = y || thisYear();
     S.profiles = S.profiles || {};
-    S.profiles[y] = Object.assign({}, S.profiles[y] || profileFor(y), {photo:d});
-    syncProfile(); saveNow(); render(); toast(y + "년 선수 사진 저장");
+    const list = ownPhotos(y);
+    if(list.length >= PHOTO_MAX){ toast("사진은 " + PHOTO_MAX + "장까지"); return; }
+    const rec = Object.assign({}, S.profiles[y] || profileFor(y), {photos: list.concat([d])});
+    delete rec.photo;
+    S.profiles[y] = rec;
+    syncProfile(); saveNow(); render(); toast(y + "년 사진 " + rec.photos.length + "/" + PHOTO_MAX + " 저장");
   };
   im.onerror = ()=>{ URL.revokeObjectURL(url); toast("사진을 읽지 못함"); };
   im.src = url;
@@ -2044,17 +2055,37 @@ function latestProfYear(){
   return ks.length? ks[ks.length-1] : thisYear();
 }
 /* 그 해 정보가 없으면 그 이전 가장 가까운 해의 정보를 씁니다 */
-function profileFor(y){ const o = profileFor0(y); delete o.photo; return o; }
+function profileFor(y){ const o = profileFor0(y); delete o.photo; delete o.photos; return o; }
 /* 선수 사진 — 연도별로 저장 (S.profiles[연도].photo). 그 해 사진이 없으면 이전 가장 가까운 해의 사진,
    그것도 없으면 예전 방식의 공통 사진(S.photo)을 씁니다 */
-function photoFor(y){
-  const P = S.profiles || {};
-  const ks = Object.keys(P).filter(k=> P[k] && P[k].photo && (!y || k <= y)).sort();
-  if(ks.length) return P[ks[ks.length-1]].photo;
-  return S.photo || "";
+/* 연도별 사진 목록 (최대 3장, 첫 장 = 대표 사진) — 예전 한 장(photo)도 읽습니다 */
+const PHOTO_MAX = 3;
+function ownPhotos(y){
+  const r = (S.profiles||{})[y]; if(!r) return [];
+  if(Array.isArray(r.photos)) return r.photos.filter(Boolean).slice(0, PHOTO_MAX);
+  return r.photo? [r.photo] : [];
 }
+/* 그 해 사진이 없으면 이전 가장 가까운 해의 사진, 그것도 없으면 예전 방식의 공통 사진(S.photo) */
+function photosFor(y){
+  const P = S.profiles || {};
+  const ks = Object.keys(P).filter(k=> ownPhotos(k).length && (!y || k <= y)).sort();
+  if(ks.length) return ownPhotos(ks[ks.length-1]);
+  return S.photo? [S.photo] : [];
+}
+function photoFor(y){ return photosFor(y)[0] || ""; }
+function curPhotos(){ return photosFor(curPhotoYear()); }
 function curPhotoYear(){ return (S.ui.year && S.ui.year !== "all")? S.ui.year : latestProfYear(); }
 function curPhoto(){ return photoFor(curPhotoYear()); }
+/* 홈 선수 카드 사진 슬라이드 — 3초마다 다음 사진으로 서서히 바뀝니다 (화면을 다시 그려도 순서 유지) */
+let slideN = 0;
+function slideIdx(n){ return n? slideN % n : 0; }
+setInterval(()=>{
+  if(document.visibilityState !== "visible") return;
+  const ls = document.querySelectorAll(".pcard .pbg.sl"); if(ls.length < 2) return;
+  if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  slideN++;
+  ls.forEach((e,i)=> e.classList.toggle("on", i === slideN % ls.length));
+}, 3000);
 function profileFor0(y){
   const P = S.profiles || {}, base = blank().profile;
   if(y && P[y]) return Object.assign({}, base, P[y]);
@@ -3619,9 +3650,9 @@ function viewHome(){
   return filterRow()
   + (()=>{ const pf = curProfile();
       const sub = [pf.team, PMAP[pf.position]||"", (pf.throws||"")+(pf.bats||"")].filter(Boolean).join(" · ");
-      const ph = curPhoto();
-      return `<div class="pcard${ph? " hasph" : ""}" data-no="${esc(pf.number||"")}">${fieldArt("art")}
-      ${ph? `<div class="pbg" style="background-image:url('${ph}')" aria-hidden="true"></div>` : ""}
+      const phs = curPhotos();
+      return `<div class="pcard${phs.length? " hasph" : ""}" data-no="${esc(pf.number||"")}">${fieldArt("art")}
+      ${phs.map((u,i)=>`<div class="pbg${phs.length>1? " sl" : ""}${i===slideIdx(phs.length)? " on" : ""}" style="background-image:url('${u}')" aria-hidden="true"></div>`).join("")}
       <div class="who">${avatarHTML()}
         <div style="min-width:0"><div class="nm">${esc(pf.name || "선수 이름")}${pf.number? `<span class="no">#${esc(pf.number)}</span>` : ""}</div>
           <div class="sb">${esc(sub || "설정에서 선수 정보 · 사진 등록")}</div></div></div>
@@ -4838,7 +4869,7 @@ function viewSettings(){
   const pfY = (S.ui.pfYear && pfYears.indexOf(S.ui.pfYear)>=0)? S.ui.pfYear : pfYears[0];
   const p = profileFor(pfY);
   const pfSaved = !!(S.profiles && S.profiles[pfY]);
-  const ownPh = !!(S.profiles && S.profiles[pfY] && S.profiles[pfY].photo);
+  const ownPh = ownPhotos(pfY);
   const raw = (()=>{ try{ return new Blob([JSON.stringify(S)]).size; }catch(e){ return null; } })();
   const vids = S.games.reduce((a,g)=>a+g.videos.filter(v=>v.kind==="file").reduce((x,v)=>x+(v.size||0),0),0);
   return `${installCard()}
@@ -4852,11 +4883,13 @@ function viewSettings(){
       ${addBtn("pfAddYear", "", "연도 추가")}</div>
       <div class="hint" style="margin:-4px 0 10px"><b>${esc(pfY)}년</b>${pfSaved? "" : " · 이전 연도 정보 자동 채움"}</div>
     <div class="phrow">${avatarHTML("lg", pfY)}
-      <div><div class="pb">
-        <label class="btn sm" style="cursor:pointer">${IC.camera.replace('<svg','<svg width="16" height="16"')} ${esc(pfY)}년 사진 ${ownPh? "바꾸기" : "등록"}
-          <input type="file" accept="image/*" hidden onchange="__photoPick(this,'${esc(pfY)}')" ${readOnly()? "disabled" : ""}></label>
-        ${(ownPh || (S.photo && photoFor(pfY)===S.photo)) && !readOnly()? `<button class="btn sm" data-act="delPhoto" data-v="${esc(pfY)}">사진 삭제</button>` : ""}</div>
-        <div class="hint" style="margin-top:6px">${ownPh? esc(pfY)+"년 사진" : (photoFor(pfY)? "이전 연도 사진 사용 중" : "사진 없음")} · 홈 · 상단 표시 · 기기 간 공유</div></div></div>
+      <div style="min-width:0"><div class="pb">
+        ${ownPh.length < PHOTO_MAX? `<label class="btn sm" style="cursor:pointer">${IC.camera.replace('<svg','<svg width="16" height="16"')} ${esc(pfY)}년 사진 추가 (${ownPh.length}/${PHOTO_MAX})
+          <input type="file" accept="image/*" hidden onchange="__photoPick(this,'${esc(pfY)}')" ${readOnly()? "disabled" : ""}></label>` : ""}
+        ${!ownPh.length && S.photo && photoFor(pfY)===S.photo && !readOnly()? `<button class="btn sm" data-act="delPhoto" data-v="">예전 사진 삭제</button>` : ""}</div>
+        ${ownPh.length? `<div class="phth">${ownPh.map((u,i)=>`<div class="t"><img src="${esc(u)}" alt="${esc(pfY)}년 사진 ${i+1}">${i===0? `<span class="rep">대표</span>` : ""}
+          ${readOnly()? "" : `<button data-act="delPhoto" data-v="${esc(pfY)}" data-id="${i}" aria-label="${i+1}번째 사진 삭제">×</button>`}</div>`).join("")}</div>` : ""}
+        <div class="hint" style="margin-top:6px">${ownPh.length? `${esc(pfY)}년 사진 ${ownPh.length}장 · 홈에서 번갈아 표시` : (photoFor(pfY)? "이전 연도 사진 사용 중" : "사진 없음")} · 첫 장 = 대표 사진</div></div></div>
     <div class="slrow">${logoHTML(p.logo, p.team||"학교", true)}
       <div><div class="pb">
         <label class="btn sm" style="cursor:pointer">${esc(pfY)}년 학교 심벌 ${p.logo? "바꾸기" : "등록"}
@@ -7183,10 +7216,13 @@ document.addEventListener("click", ev=>{
         S.ui.pfYear = null; syncProfile(); saveNow(); render(); toast("삭제 완료");
       }); break;
     case "delPhoto":
-      ask((v? v+"년 " : "") + "선수 사진 삭제", "이 연도에 등록한 사진을 지웁니다", [{label:"삭제",style:"dan"},{label:"취소"}]).then(k=>{
+      ask((v? v+"년 " : "") + "선수 사진 삭제", "이 사진을 지웁니다", [{label:"삭제",style:"dan"},{label:"취소"}]).then(k=>{
         if(k!==0) return;
-        if(v && S.profiles && S.profiles[v] && S.profiles[v].photo) delete S.profiles[v].photo;
-        else S.photo = "";                                   // 예전 방식의 공통 사진
+        if(v && S.profiles && S.profiles[v]){
+          const list = ownPhotos(v); list.splice(num(id,0), 1);
+          delete S.profiles[v].photo;
+          if(list.length) S.profiles[v].photos = list; else delete S.profiles[v].photos;
+        } else S.photo = "";                                 // 예전 방식의 공통 사진
         syncProfile(); saveNow(); render(); toast("사진 삭제"); }); break;
     case "delTeamLogo":
       if(S.logos && S.logos[v]){ delete S.logos[v]; saveNow(); render(); toast(v+" 심벌 삭제"); }
