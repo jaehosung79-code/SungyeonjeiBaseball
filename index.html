@@ -3583,7 +3583,6 @@ function viewPlans(){
         <div class="cap">${selHol? `<span style="color:var(--crit);font-weight:650">${esc(selHol)}</span> · ` : ""}${list.length? "일정 "+list.length+"개" : "일정 없음"}${gsel.length? " · 경기 "+gsel.length+"건" : ""}</div></div>
         ${addBtn("newPlan", `data-v="${sel}"`, "일정 추가")}</div>
       <div class="list">${rows || `<div class="hint">이 날은 비어 있음${readOnly()? "" : " · 오른쪽 위 + 로 추가"}</div>`}</div>
-      ${readOnly()? "" : `<button class="btn block txt" data-act="newPlan" data-v="${sel}" style="margin-top:10px">+ 일정 추가</button>`}
     </div>`;
 }
 
