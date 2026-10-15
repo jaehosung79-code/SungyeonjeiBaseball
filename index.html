@@ -1241,6 +1241,7 @@ radial-gradient(circle at 34% 28%, #ffffff 0%, #fbfaf6 45%, #ece8de 100%)}
   .gballs .gball.low:nth-child(4){animation-delay:.21s,.9s}
   .gballs .gball.low:nth-child(n+5){animation-delay:.28s,.9s}
 }
+.gtabs button.ng{color:var(--text-1);font-weight:700;margin-left:auto}
 </style>
 </head>
 <body>
@@ -3360,9 +3361,9 @@ function viewGames(){
   let w=0, l=0, d=0;
   list.forEach(g=>{ const r=gameResult(g); if(r==="승")w++; else if(r==="패")l++; else if(r==="무")d++; });
   const t = battingOf(allPAs(list));
-  return `<button class="btn block txt" data-act="newGame" style="margin-bottom:6px">+ New Game</button>
-    <div class="gtabs" role="group" aria-label="경기 종류">
-      ${[["all","All"],["official","Official"],["practice","Practice"]].map(([v,lb])=>`<button data-act="gtype" data-v="${v}" aria-pressed="${ty===v}">${lb}</button>`).join("")}</div>
+  return `<div class="gtabs" role="group" aria-label="경기 종류">
+      ${[["all","All"],["official","Official"],["practice","Practice"]].map(([v,lb])=>`<button data-act="gtype" data-v="${v}" aria-pressed="${ty===v}">${lb}</button>`).join("")}
+      <button class="ng" data-act="newGame">+ New Game</button></div>
     <div class="mnav"><button data-act="gmMove" data-v="-1" aria-label="이전 달">${IC_BACK}</button>
       <span class="t">${+m.slice(0,4)}년 ${+m.slice(5,7)}월</span>
       <button data-act="gmMove" data-v="1" aria-label="다음 달" style="transform:scaleX(-1)">${IC_BACK}</button></div>
