@@ -1221,6 +1221,7 @@ radial-gradient(circle at 34% 28%, #ffffff 0%, #fbfaf6 45%, #ece8de 100%)}
 .mcard .mres.w{color:var(--good)} .mcard .mres.l{color:var(--crit)}
 @keyframes gbIn{from{opacity:0;transform:translateX(70px)}to{opacity:1;transform:none}}
 @keyframes gbPop{0%{scale:1}45%{scale:1.08}100%{scale:1}}
+@keyframes gbShrink{0%{scale:1}45%{scale:.9}100%{scale:1}}
 @keyframes gbRoll{from{transform:rotate(200deg)}to{transform:rotate(0)}}
 @media (prefers-reduced-motion: no-preference){
   .gballs .gball{animation:gbIn .6s cubic-bezier(.2,.8,.25,1) backwards}
@@ -1234,6 +1235,11 @@ radial-gradient(circle at 34% 28%, #ffffff 0%, #fbfaf6 45%, #ece8de 100%)}
   .gballs .gball.hot:nth-child(3){animation-delay:.14s,.74s}
   .gballs .gball.hot:nth-child(4){animation-delay:.21s,.81s}
   .gballs .gball.hot:nth-child(n+5){animation-delay:.28s,.88s}
+  .gballs .gball.low{animation:gbIn .6s cubic-bezier(.2,.8,.25,1) backwards, gbShrink .7s cubic-bezier(.3,1.6,.5,1) .6s}
+  .gballs .gball.low:nth-child(2){animation-delay:.07s,.67s}
+  .gballs .gball.low:nth-child(3){animation-delay:.14s,.74s}
+  .gballs .gball.low:nth-child(4){animation-delay:.21s,.81s}
+  .gballs .gball.low:nth-child(n+5){animation-delay:.28s,.88s}
 }
 </style>
 </head>
@@ -3182,7 +3188,7 @@ function gameMini(g){
   const t = battingOf(g.pas), res = gameResult(g);
   const hasSc = g.myScore!=="" && g.myScore!=null && g.oppScore!=="" && g.oppScore!=null;
   const prac = gameType(g)==="practice";
-  return `<div class="gball${t.PA && t.AVG < .300 ? " cold" : ""}${t.PA && t.AVG >= .300 ? " hot" : ""}" data-act="openGame" data-id="${g.id}" role="button" tabindex="0"
+  return `<div class="gball${t.PA && t.AVG < .300 ? " cold" : ""}${t.PA && t.AVG >= .300 ? " hot" : ""}${t.PA && t.AVG <= .100 ? " low" : ""}" data-act="openGame" data-id="${g.id}" role="button" tabindex="0"
       aria-label="${esc(fmtDate(g.date))} ${esc(g.opponent||"상대 미입력")} ${res||""}">
     <div class="in">
       <div class="bm">${esc(mdDate(g.date))} <span class="ty ${prac?"prac":"off"}" title="${prac? "Practice" : "Official"}">${prac? "P" : "O"}</span></div>
