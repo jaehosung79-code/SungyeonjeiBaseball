@@ -1209,6 +1209,8 @@ thead th{background:var(--surface-2);color:var(--text-2)}
 .strip.navy .sv{color:#fff}
 .strip.navy .sv small,.strip.navy .sl{color:rgba(255,255,255,.66)}
 .strip.navy > div+div{border-left-color:rgba(255,255,255,.14)}
+.tinl{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.tinl .cap{margin:0}
 </style>
 </head>
 <body>
@@ -3075,7 +3077,7 @@ let cardSeq=0;
 function chartCard(title, cap, chartHTML, tableHTML, insHTML){
   const id="tv"+(++cardSeq);
   return `<div class="card">
-    <div class="hd"><div style="flex:1"><h3>${esc(title)}</h3>${cap?`<div class="cap">${cap}</div>`:""}</div>
+    <div class="hd"><div style="flex:1">${cap && cap[0]==="~"? `<div class="tinl"><h3>${esc(title)}</h3><span class="cap">${cap.slice(1)}</span></div>` : `<h3>${esc(title)}</h3>${cap?`<div class="cap">${cap}</div>`:""}`}</div>
     ${tableHTML?`<button class="iconbtn sm" data-toggle="${id}" aria-expanded="false" title="표로 보기" aria-label="표로 보기">${IC_TABLE}</button>`:""}</div>
     ${chartHTML}
     ${insHTML||""}
@@ -3246,21 +3248,21 @@ function viewHome(){
       </div>`; })()
   + strip([[IC.cal,"경기",gs.length],[IC.rbi,"타점",b.RBI],[IC.run,"득점",b.R],[IC.eye,"볼넷",b.BB],[IC.k,"삼진",b.SO],
             [IC.sb,"도루",b.SB,(b.SB+b.CS)? "/"+(b.SB+b.CS) : ""]], "navy")
-  + `<div class="hrow"><h3>Recent Games</h3><button data-act="nav" data-v="games">전체 보기</button></div>
+  + `<div class="hrow"><h3>Recent Games</h3><button data-act="nav" data-v="games">Total games</button></div>
      <div class="hscroll gballs">${gs.slice(-12).reverse().map(gameMini).join("")}</div>`
   + `<div class="grid g2">`
-  + chartCard("Cumulative "+METRICS[m].k+" Trend", "마지막 값 = 현재 기록",
+  + chartCard("Cumulative "+METRICS[m].k+" Trend", "",
       lineChart([{pts, color:"var(--chart)"}], {aria:"누적 "+METRICS[m].ko+" 추이", fmt:avg3,
         ref:{v:career[mk], label:"Career "+METRICS[m].k+" "+avg3(career[mk])}}), trendTbl)
-  + chartCard("Hits per Game", "최근 "+recent.length+"경기",
+  + chartCard("Hits per Game", "~최근 "+recent.length+"경기",
       colChart(hitCols, {aria:"경기별 안타 수", labelTop:true, fmt:v=>String(Math.round(v)),
         ref:{v: recent.length? hitCols.reduce((a,d)=>a+d.value,0)/recent.length : null,
              label:"H/G "+(recent.length? (hitCols.reduce((a,d)=>a+d.value,0)/recent.length).toFixed(1):"-")}}),
       tableHTML(["경기","상대","타수","안타","타점","타율"], recent.map(g=>{const t=battingOf(g.pas);
         return [fmtDate(g.date), esc(g.opponent||"-"), t.AB, t.H, t.RBI, avg3(t.AVG)];})))
   + `</div>`
-  + (f.INN>0? `<div class="card"><div class="hd"><div style="flex:1"><h3>Fielding</h3>
-      <div class="cap">기록된 수비 이닝 ${fmtInn(f.outs)} · 수비율 ${avg3(f.FPCT)}</div></div></div>
+  + (f.INN>0? `<div class="card"><div class="hd"><div style="flex:1"><div class="tinl"><h3>Fielding</h3>
+      <span class="cap">기록된 수비 이닝 ${fmtInn(f.outs)} · 수비율 ${avg3(f.FPCT)}</span></div></div></div>
       ${strip([[IC.field,"이닝",fmtInn(f.outs)],[IC.glove,"자살",f.PO],[IC.arm,"보살",f.A],[IC.k,"실책",f.E],[IC.bolt,"병살",f.DP],[IC.pct,"수비율",avg3(f.FPCT)]])}</div>`:"")
   + (hp.APP? `<div class="card"><div class="hd"><div style="flex:1"><h3>투수</h3>
       <div class="cap">${hp.G}경기 ${hp.APP}등판 · ${fmtInn(hp.outs)}이닝${hp.W||hp.L||hp.SV?` · ${hp.W}W ${hp.L}L${hp.SV?" "+hp.SV+"SV":""}`:""}</div></div>
