@@ -1626,14 +1626,14 @@ window.__oppLogo = function(inp){
   inp.value = "";
 };
 /* 선수 사진 또는 이니셜 */
-function avatarHTML(cls){
-  const p = curProfile();
-  if(S.photo) return `<div class="avatar ${cls||""}"><img src="${esc(S.photo)}" alt="선수 사진"></div>`;
+function avatarHTML(cls, y){
+  const p = y? profileFor(y) : curProfile(), ph = y? photoFor(y) : curPhoto();
+  if(ph) return `<div class="avatar ${cls||""}"><img src="${esc(ph)}" alt="선수 사진"></div>`;
   const t = p.number? p.number : (p.name? p.name.slice(-2) : "");
   return `<div class="avatar ${cls||""}" aria-hidden="true">${t? esc(t) : IC.ball}</div>`;
 }
 /* 사진 고르기 — 가운데를 정사각형으로 잘라 320px JPEG 로 줄여 저장합니다 (기록 파일 크기 절약) */
-window.__photoPick = function(inp){
+window.__photoPick = function(inp, y){
   const f = inp && inp.files && inp.files[0]; if(!f) return;
   const url = URL.createObjectURL(f), im = new Image();
   im.onload = ()=>{
@@ -1641,8 +1641,11 @@ window.__photoPick = function(inp){
     const c = document.createElement("canvas"); c.width = c.height = sz;
     c.getContext("2d").drawImage(im, (im.naturalWidth-n)/2, (im.naturalHeight-n)/2, n, n, 0, 0, sz, sz);
     URL.revokeObjectURL(url);
-    S.photo = c.toDataURL("image/jpeg", 0.82);
-    saveNow(); render(); toast("선수 사진 저장");
+    const d = c.toDataURL("image/jpeg", 0.82);
+    y = y || thisYear();
+    S.profiles = S.profiles || {};
+    S.profiles[y] = Object.assign({}, S.profiles[y] || profileFor(y), {photo:d});
+    syncProfile(); saveNow(); render(); toast(y + "년 선수 사진 저장");
   };
   im.onerror = ()=>{ URL.revokeObjectURL(url); toast("사진을 읽지 못함"); };
   im.src = url;
@@ -2041,7 +2044,18 @@ function latestProfYear(){
   return ks.length? ks[ks.length-1] : thisYear();
 }
 /* 그 해 정보가 없으면 그 이전 가장 가까운 해의 정보를 씁니다 */
-function profileFor(y){
+function profileFor(y){ const o = profileFor0(y); delete o.photo; return o; }
+/* 선수 사진 — 연도별로 저장 (S.profiles[연도].photo). 그 해 사진이 없으면 이전 가장 가까운 해의 사진,
+   그것도 없으면 예전 방식의 공통 사진(S.photo)을 씁니다 */
+function photoFor(y){
+  const P = S.profiles || {};
+  const ks = Object.keys(P).filter(k=> P[k] && P[k].photo && (!y || k <= y)).sort();
+  if(ks.length) return P[ks[ks.length-1]].photo;
+  return S.photo || "";
+}
+function curPhotoYear(){ return (S.ui.year && S.ui.year !== "all")? S.ui.year : latestProfYear(); }
+function curPhoto(){ return photoFor(curPhotoYear()); }
+function profileFor0(y){
   const P = S.profiles || {}, base = blank().profile;
   if(y && P[y]) return Object.assign({}, base, P[y]);
   const ks = Object.keys(P).sort();
@@ -3605,8 +3619,9 @@ function viewHome(){
   return filterRow()
   + (()=>{ const pf = curProfile();
       const sub = [pf.team, PMAP[pf.position]||"", (pf.throws||"")+(pf.bats||"")].filter(Boolean).join(" · ");
-      return `<div class="pcard${S.photo? " hasph" : ""}" data-no="${esc(pf.number||"")}">${fieldArt("art")}
-      ${S.photo? `<div class="pbg" style="background-image:url('${S.photo}')" aria-hidden="true"></div>` : ""}
+      const ph = curPhoto();
+      return `<div class="pcard${ph? " hasph" : ""}" data-no="${esc(pf.number||"")}">${fieldArt("art")}
+      ${ph? `<div class="pbg" style="background-image:url('${ph}')" aria-hidden="true"></div>` : ""}
       <div class="who">${avatarHTML()}
         <div style="min-width:0"><div class="nm">${esc(pf.name || "선수 이름")}${pf.number? `<span class="no">#${esc(pf.number)}</span>` : ""}</div>
           <div class="sb">${esc(sub || "설정에서 선수 정보 · 사진 등록")}</div></div></div>
@@ -4823,6 +4838,7 @@ function viewSettings(){
   const pfY = (S.ui.pfYear && pfYears.indexOf(S.ui.pfYear)>=0)? S.ui.pfYear : pfYears[0];
   const p = profileFor(pfY);
   const pfSaved = !!(S.profiles && S.profiles[pfY]);
+  const ownPh = !!(S.profiles && S.profiles[pfY] && S.profiles[pfY].photo);
   const raw = (()=>{ try{ return new Blob([JSON.stringify(S)]).size; }catch(e){ return null; } })();
   const vids = S.games.reduce((a,g)=>a+g.videos.filter(v=>v.kind==="file").reduce((x,v)=>x+(v.size||0),0),0);
   return `${installCard()}
@@ -4835,12 +4851,12 @@ function viewSettings(){
       </div>
       ${addBtn("pfAddYear", "", "연도 추가")}</div>
       <div class="hint" style="margin:-4px 0 10px"><b>${esc(pfY)}년</b>${pfSaved? "" : " · 이전 연도 정보 자동 채움"}</div>
-    <div class="phrow">${avatarHTML("lg")}
+    <div class="phrow">${avatarHTML("lg", pfY)}
       <div><div class="pb">
-        <label class="btn sm" style="cursor:pointer">${IC.camera.replace('<svg','<svg width="16" height="16"')} ${S.photo? "사진 바꾸기" : "선수 사진 등록"}
-          <input type="file" accept="image/*" hidden onchange="__photoPick(this)" ${readOnly()? "disabled" : ""}></label>
-        ${S.photo && !readOnly()? `<button class="btn sm" data-act="delPhoto">사진 삭제</button>` : ""}</div>
-        <div class="hint" style="margin-top:6px">홈 · 상단 표시 · 기기 간 공유</div></div></div>
+        <label class="btn sm" style="cursor:pointer">${IC.camera.replace('<svg','<svg width="16" height="16"')} ${esc(pfY)}년 사진 ${ownPh? "바꾸기" : "등록"}
+          <input type="file" accept="image/*" hidden onchange="__photoPick(this,'${esc(pfY)}')" ${readOnly()? "disabled" : ""}></label>
+        ${(ownPh || (S.photo && photoFor(pfY)===S.photo)) && !readOnly()? `<button class="btn sm" data-act="delPhoto" data-v="${esc(pfY)}">사진 삭제</button>` : ""}</div>
+        <div class="hint" style="margin-top:6px">${ownPh? esc(pfY)+"년 사진" : (photoFor(pfY)? "이전 연도 사진 사용 중" : "사진 없음")} · 홈 · 상단 표시 · 기기 간 공유</div></div></div>
     <div class="slrow">${logoHTML(p.logo, p.team||"학교", true)}
       <div><div class="pb">
         <label class="btn sm" style="cursor:pointer">${esc(pfY)}년 학교 심벌 ${p.logo? "바꾸기" : "등록"}
@@ -7167,8 +7183,11 @@ document.addEventListener("click", ev=>{
         S.ui.pfYear = null; syncProfile(); saveNow(); render(); toast("삭제 완료");
       }); break;
     case "delPhoto":
-      ask("선수 사진 삭제", "등록한 사진을 지웁니다", [{label:"삭제",style:"dan"},{label:"취소"}]).then(k=>{
-        if(k!==0) return; S.photo = ""; saveNow(); render(); toast("사진 삭제"); }); break;
+      ask((v? v+"년 " : "") + "선수 사진 삭제", "이 연도에 등록한 사진을 지웁니다", [{label:"삭제",style:"dan"},{label:"취소"}]).then(k=>{
+        if(k!==0) return;
+        if(v && S.profiles && S.profiles[v] && S.profiles[v].photo) delete S.profiles[v].photo;
+        else S.photo = "";                                   // 예전 방식의 공통 사진
+        syncProfile(); saveNow(); render(); toast("사진 삭제"); }); break;
     case "delTeamLogo":
       if(S.logos && S.logos[v]){ delete S.logos[v]; saveNow(); render(); toast(v+" 심벌 삭제"); }
       break;
@@ -7509,7 +7528,8 @@ function render(){
   const p = curProfile();
   $("#subttl").textContent = p.name? [p.name, p.number?"#"+p.number:"", p.team].filter(Boolean).join(" · ") : "기록 · 분석 · 영상";
   const tb = $(".topbar .ball");
-  if(tb){ tb.classList.toggle("ph", !!S.photo); tb.style.backgroundImage = S.photo? `url("${S.photo}")` : ""; }
+  const tph = curPhoto();
+  if(tb){ tb.classList.toggle("ph", !!tph); tb.style.backgroundImage = tph? `url("${tph}")` : ""; }
   syncTopbarH();
   if(lastTab!==t){ window.scrollTo(0,0); lastTab=t; }
   envBanner();
