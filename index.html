@@ -3154,7 +3154,7 @@ function addBtn(act, attrs, label){
 
 function filterRow(){
   const ys = years();
-  const items = [["all","전체"]].concat(ys.map(y=>[y, y.slice(2)+"시즌"]));
+  const items = [["all","Total"]].concat(ys.map(y=>[y, y.slice(2)+"Season"]));
   const yseg = ys.length? `<div class="seg" role="group" aria-label="시즌 선택">`
     + items.map(([v,l])=>`<button data-act="year" data-v="${v}" aria-pressed="${S.ui.year===v}">${l}</button>`).join("")
     + `</div>` : "";
