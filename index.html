@@ -1270,7 +1270,7 @@ thead th{background:var(--surface-2);color:var(--text-2)}
   opacity:.38;pointer-events:none;
   -webkit-mask-image:linear-gradient(to left, #000 35%, transparent 100%);mask-image:linear-gradient(to left, #000 35%, transparent 100%)}
 .pcard.hasph::before{display:none}
-.pcard .pbg.sl{opacity:0;transition:opacity 1s ease}
+.pcard .pbg.sl{opacity:0;transition:opacity 1.4s ease}
 .pcard .pbg.sl.on{opacity:.38}
 .phth{display:flex;gap:8px;margin-top:8px}
 .phth .t{position:relative;width:56px;height:56px;border-radius:10px;overflow:hidden;background:var(--surface-2)}
@@ -2076,7 +2076,7 @@ function photoFor(y){ return photosFor(y)[0] || ""; }
 function curPhotos(){ return photosFor(curPhotoYear()); }
 function curPhotoYear(){ return (S.ui.year && S.ui.year !== "all")? S.ui.year : latestProfYear(); }
 function curPhoto(){ return photoFor(curPhotoYear()); }
-/* 홈 선수 카드 사진 슬라이드 — 3초마다 다음 사진으로 서서히 바뀝니다 (화면을 다시 그려도 순서 유지) */
+/* 홈 선수 카드 사진 슬라이드 — 5초마다 다음 사진으로 서서히 바뀝니다 (화면을 다시 그려도 순서 유지) */
 let slideN = 0;
 function slideIdx(n){ return n? slideN % n : 0; }
 setInterval(()=>{
@@ -2085,7 +2085,7 @@ setInterval(()=>{
   if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   slideN++;
   ls.forEach((e,i)=> e.classList.toggle("on", i === slideN % ls.length));
-}, 3000);
+}, 5000);
 function profileFor0(y){
   const P = S.profiles || {}, base = blank().profile;
   if(y && P[y]) return Object.assign({}, base, P[y]);
