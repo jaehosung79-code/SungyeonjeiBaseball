@@ -1293,8 +1293,28 @@ label.f > span{font-size:var(--fs-s)!important}
 table{font-size:13px} th{font-size:var(--fs-xs)!important}
 .legend{font-size:var(--fs-s)}
 .tile .lb{font-size:var(--fs-xs)}
-.vthumb img,.vgame .vt img,.vg2 .th img{opacity:.7;transition:opacity .2s}
-.vthumb:hover img,.vg2 > button:hover .th img,.vgame:hover .vt img{opacity:1}
+/* 영상 썸네일 — 모던 */
+.vgrid{gap:12px}
+.vg2{border:0!important;border-radius:16px!important;background:var(--surface-1)!important;box-shadow:0 1px 2px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.08)!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+.vg2 > button{position:relative}
+.vg2 .th,.vthumb{background:linear-gradient(140deg,#2A2E30 0%,#3a4246 55%,#0E9A93 140%)!important}
+.vg2 .th img,.vthumb img{transition:transform .35s ease}
+.vg2 > button:hover .th img,.vthumb:hover img{transform:scale(1.04)}
+.vg2 .th::after,.vthumb::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.62) 100%)}
+.vg2 .th .pl,.vthumb .pl{z-index:1;width:42px!important;height:42px!important;border-radius:50%;background:rgba(255,255,255,.18)!important;
+  border:1px solid rgba(255,255,255,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.vg2 .th .pl svg,.vthumb .pl svg{width:15px!important;height:15px!important}
+.vg2 .th .c{z-index:1;top:8px;right:8px;bottom:auto!important;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;
+  background:rgba(0,0,0,.38)!important;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.25)}
+.vg2 .bd{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:10px 12px!important;color:#fff;pointer-events:none}
+.vg2 .bd .t{color:#fff;font-size:14px!important;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.35)}
+.vg2 .bd .s{color:rgba(255,255,255,.82)!important;font-size:11px!important}
+.vg2 .vlist{padding:12px!important;margin-top:0;border-top:0}
+.vthumb{border-radius:12px!important;margin-bottom:10px}
+.vgame .vt{border-radius:10px;background:linear-gradient(140deg,#2A2E30,#0E9A93)!important}
+.vg2 .th .pl{position:absolute!important;left:10px;top:8px;width:30px!important;height:30px!important}
+.vg2 .th .pl svg{width:12px!important;height:12px!important}
 </style>
 </head>
 <body>
@@ -4117,8 +4137,8 @@ function viewStats(){
   const ptS = pitchingOf(defs);
   const iPit = ptS.APP? insPitching(ptS) : [];
   return filterRow()
-  + `<div class="card insw"><span>자동해설 분석</span>
-      <button class="sw" role="switch" aria-checked="${insOn()}" aria-label="자동해설 분석" data-act="toggleIns" data-v="${insOn()? "off" : "on"}"><i></i></button></div>`
+  + `<div class="card insw"><span>Automated data analysis</span>
+      <button class="sw" role="switch" aria-checked="${insOn()}" aria-label="Automated data analysis" data-act="toggleIns" data-v="${insOn()? "off" : "on"}"><i></i></button></div>`
   + insSummary([["타격",iBat],["도루",iSteal],["방향",iDir],["타구",iDepth],["결과",iRes],["이닝",iInn],["월별",iMon],
                 ["상대",iVs],["투수",iPit],["수비",iDef],["포지션",iPos]])
   + sectHTML(IC.bat, "Batting", "bat")
