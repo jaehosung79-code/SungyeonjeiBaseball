@@ -1249,6 +1249,10 @@ radial-gradient(circle at 34% 28%, #ffffff 0%, #fbfaf6 45%, #ece8de 100%)}
 .sw[aria-checked="true"]{background:#E2495B}
 .sw[aria-checked="true"] i{transform:translateX(20px)}
 .mcard .tn2.me,.mcard .sc2:not(.op){color:#0C4A60!important}
+.sect{padding-left:0!important}
+.sect::before{display:none!important}
+.sect .si{display:grid!important;width:24px;height:24px;background:none!important;border-radius:0;color:var(--red,#e4002b)}
+.sect .si svg{width:22px;height:22px}
 </style>
 </head>
 <body>
@@ -3162,7 +3166,7 @@ function addBtn(act, attrs, label){
 
 function filterRow(){
   const ys = years();
-  const items = [["all","전체"]].concat(ys.map(y=>[y, y.slice(2)+"시즌"]));
+  const items = [["all","Total"]].concat(ys.map(y=>[y, y.slice(2)+" Season"]));
   const yseg = ys.length? `<div class="seg" role="group" aria-label="시즌 선택">`
     + items.map(([v,l])=>`<button data-act="year" data-v="${v}" aria-pressed="${S.ui.year===v}">${l}</button>`).join("")
     + `</div>` : "";
@@ -3948,7 +3952,9 @@ function gaugeHTML(ic, k, v, fmt, max, ref, refLb, low){
     <div class="gt"><i class="${good? "hot":""}" style="width:${w.toFixed(1)}%"></i><b style="left:${(clamp(ref/max,0,1)*100).toFixed(1)}%"></b></div>
     <div class="gs"><span>0</span><span>${refLb}</span><span>${fmt(max)}</span></div></div>`;
 }
-function sectHTML(ic, t, id){ return `<div class="sect"${id? ` id="sec-${id}"` : ""}><span class="si">${ic}</span>${esc(t)}</div>`; }
+const SEC_IC = {bat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 3.6a2.4 2.4 0 0 1 2.6 2.6c-.3 1-1.6 2.5-4 4.7l-7.6 7-2.7-2.7 7-7.6c2.2-2.4 3.7-3.7 4.7-4z"/><path d="M5.6 16.6l-2.3 2.3 1.8 1.8 2.3-2.3"/><circle cx="18" cy="18" r="2.2"/></svg>',bip:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="8" r="3.6"/><path d="M4 20l7-7M3.5 14.5h5M9.5 20.5v-5"/></svg>',vs:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7M10 17h4"/></svg>',pit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M8.5 5.5c1.6 3.9 1.6 9.1 0 13M15.5 5.5c-1.6 3.9-1.6 9.1 0 13"/></svg>',def:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 20c-2-1.5-3-4-3-7V8.5a1.5 1.5 0 0 1 3 0V11V5.5a1.5 1.5 0 0 1 3 0V10V4.5a1.5 1.5 0 0 1 3 0V10V6a1.5 1.5 0 0 1 3 0v6l1.7-2a1.6 1.6 0 0 1 2.4 2.1L16.5 17c-1.3 2-3 3-5.5 3z"/></svg>'};
+function sectHTML(ic, t, id){ if(id && SEC_IC[id]) ic = SEC_IC[id];
+  return `<div class="sect"${id? ` id="sec-${id}"` : ""}><span class="si">${ic}</span>${esc(t)}</div>`; }
 /* 분석 */
 function viewStats(){
   const gs = scopedGames(), pas = allPAs(gs), b = battingOf(pas), defs = allDef(gs);
@@ -4059,7 +4065,7 @@ function viewStats(){
       <button class="sw" role="switch" aria-checked="${insOn()}" aria-label="자동해설 분석" data-act="toggleIns" data-v="${insOn()? "off" : "on"}"><i></i></button></div>`
   + insSummary([["타격",iBat],["도루",iSteal],["방향",iDir],["타구",iDepth],["결과",iRes],["이닝",iInn],["월별",iMon],
                 ["상대",iVs],["투수",iPit],["수비",iDef],["포지션",iPos]])
-  + sectHTML(IC.bat, "타격", "bat")
+  + sectHTML(IC.bat, "Batting", "bat")
   + (b.PA? `<div class="card"><div class="hd"><div style="flex:1"><h3>타격 프로필</h3>
       <div class="cap">세로선 = 기준 · 넘으면 주황</div></div></div>
       <div class="gauges">
@@ -4082,7 +4088,7 @@ function viewStats(){
       <div class="cap">도루 시도 ${b.SB+b.CS}회</div></div></div>
       <div class="tiles">${tile("시도", b.SB+b.CS)+tile("성공", b.SB)+tile("실패", b.CS)+tile("성공률", pct1(b.SBP))
         +tile("경기당 시도", fx2(gs.length? (b.SB+b.CS)/gs.length : null))+tile("추가 진루", b.SB-b.CS)}</div>${insBox(iSteal)}</div>` : "")
-  + sectHTML(IC.field, "타구", "bip")
+  + sectHTML(IC.field, "Batted Balls", "bip")
   + chartCard("타구 방향 (스프레이 차트)", `인플레이 타구 ${bip.length}개 · ${esc(LEVELS[curLevel()].ko)} 규격`,
       sprayChart(pas, curLevel(), {ruler:true}),
       bip.length? tableHTML(["날짜","이닝","결과","위치","추정 거리"], bip.map(p=>{const z=zoneOf(p.zone, gameLevel(p._g));
@@ -4105,7 +4111,7 @@ function viewStats(){
   + (months.length>1? chartCard("월별 타율", "월별 흐름",
       colChart(months, {aria:"월별 타율", fmt:avg3, ref:{v:b.AVG, label:"AVG "+avg3(b.AVG)}}),
       tableHTML(["월","타수","안타","타점","타율","OPS"], months.map(d=>[d.label, d._t.AB, d._t.H, d._t.RBI, avg3(d._t.AVG), avg3(d._t.OPS)])), insBox(iMon)) : "")
-  + ((tourRows.length || pTeams.length)? sectHTML(IC.vs, "대회 · 상대", "vs") : "")
+  + ((tourRows.length || pTeams.length)? sectHTML(IC.vs, "Tournaments · Opponents", "vs") : "")
   + (tourRows.length? `<div class="card"><div class="hd"><div style="flex:1"><h3>대회별 성적</h3>
       <div class="cap">${tourRows.length}개 대회 · 최근순</div></div></div>
       <div class="fitw">${tableHTML(["대회","G","W-L","PA","H","HR","RBI","AVG","OPS"],
@@ -4114,9 +4120,9 @@ function viewStats(){
   + (pTeams.length? `<div class="card"><div class="hd"><div style="flex:1"><h3>상대 투수별 성적</h3>
       <div class="cap">${pYears}개 시즌 · ${pTeams.length}개 팀 · 투수 ${pitcherN}명</div></div></div>
       ${insBox(iVs)}${vsPitcherTable(pTeams)}</div>` : "")
-  + (pitchingOf(defs).APP? sectHTML(IC.arm, "투수", "pit") : "")
+  + (pitchingOf(defs).APP? sectHTML(IC.arm, "Pitching", "pit") : "")
   + pitchingSection(gs, defs)
-  + ((defDist.length || posRows.length)? sectHTML(IC.glove, "수비", "def") : "")
+  + ((defDist.length || posRows.length)? sectHTML(IC.glove, "Fielding", "def") : "")
   + (defDist.length? chartCard("수비 결과 분포", `수비 기록 ${defPlays.length}건`,
       hbarChart(defDist, {aria:"수비 결과 분포", left:82, total:defPlays.length, fmt:v=>String(Math.round(v))}),
       tableHTML(["결과","횟수","비중"], defDist.map(d=>[d.label, d.value, pct1(d.value/Math.max(defPlays.length,1))])), insBox(iDef)) : "")
