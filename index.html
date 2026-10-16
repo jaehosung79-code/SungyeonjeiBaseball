@@ -1342,6 +1342,7 @@ svg.chart:not(.go) .ln-draw,svg.chart:not(.go) .ln-area,svg.chart:not(.go) .ln-p
   .bar-grow{transform-box:fill-box;transform-origin:50% 100%;animation:barGrow .7s cubic-bezier(.3,.9,.35,1) both}
   .bar-lbl{animation:lnFade .4s ease-out both}
 }
+.card.sboard{background:#2A2E30!important;color:#fff;border:0!important;-webkit-backdrop-filter:none;backdrop-filter:none}
 </style>
 </head>
 <body>
@@ -3354,6 +3355,9 @@ function viewHome(){
   const hp = pitchingOf(allDef(gs));
   const m = S.ui.metric, mk = METRICS[m].k;
 
+  if(!S.games.length && ghOn() && ghBusy){
+    return `<div class="empty">${emptyArt(IC_EMPTY_BALL)}GitHub에서 기록 불러오는 중…</div>`;
+  }
   if(!S.games.length){
     return `<div class="empty">${emptyArt(IC_EMPTY_BALL)}
       아직 기록 없음<br>첫 경기를 추가해 타석 기록 시작
@@ -3455,7 +3459,7 @@ function matchCard(g){
   const hasSc = g.myScore!=="" && g.myScore!=null && g.oppScore!=="" && g.oppScore!=null;
   const me = {n:our, lg:ourLogo(yr), sc:g.myScore, me:true}, op = {n:g.opponent||"상대 미입력", lg:teamLogo(g.opponent), sc:g.oppScore, me:false};
   const [L, R] = g.homeAway==="홈"? [op, me] : [me, op];
-  const st = hasSc? "종료" : ((g.date||"") > today()? "예정" : "-");
+  const st = hasSc? "종료" : ((g.date||"") > today()? "예정" : "미입력");
   const wonBy = hasSc? (num(g.myScore,0) > num(g.oppScore,0)? "me" : num(g.myScore,0) < num(g.oppScore,0)? "op" : "") : "";
   const side = (t, right)=>{ const w = wonBy && (wonBy==="me") === !!t.me;
     const lg = logoHTML(t.lg, t.n, t.me).replace('class="tlogo', w? 'class="wn tlogo' : 'class="tlogo'), nm = `<span class="tn2${t.me?" me":""}${w?" wn":""}">${esc(t.n)}</span>`;
@@ -4523,9 +4527,9 @@ function viewSettings(){
     </div>
 
     <div class="card"><div class="hd"><div style="flex:1"><h3>화면 테마</h3>
-      <div class="cap">기본값은 기기 설정을 따름</div></div></div>
+      <div class="cap">기본값은 밝게</div></div></div>
       <div class="filters" style="margin-bottom:0"><div class="seg" role="group" aria-label="화면 테마">
-        ${[["","시스템"],["light","밝게"],["dark","어둡게"]].map(([v,l])=>
+        ${[["light","밝게"],["dark","어둡게"]].map(([v,l])=>
           `<button data-act="theme" data-v="${v}" aria-pressed="${curTheme()===v}">${l}</button>`).join("")}
       </div></div>
     </div>
@@ -5073,7 +5077,7 @@ async function ghPull(manual){
     if(manual) toast("받기 실패: " + ghState.err);
     ghBusy = false; softRender();
     return false;
-  }finally{ ghBusy = false; }
+  }finally{ ghBusy = false; if(!S.games.length && S.ui.tab==="home") softRender(); }
 }
 function ghSchedule(){
   if(!ghCanPush() || !ghCfg().auto) return;
@@ -5095,7 +5099,8 @@ function ghTry(){
 function ghInit(){
   ghLoad();
   if(ghOn()) ghCheckWrite().then(()=>{ if(S.ui.tab==="settings") softRender(); }).catch(()=>{});
-  setTimeout(ghTry, 1500);
+  ghTry();
+  if(ghBusy) softRender();
   window.addEventListener("online", ()=> setTimeout(ghTry, 1200));
   let tick = 0;
   setInterval(()=>{
@@ -6932,7 +6937,7 @@ function banners(){
         <button class="btn pri sm nb" data-act="ghPullNow">${IC_REFRESH}다시 받기</button>
       </div></div>`;
   }
-  if(!readOnly() && S.games.length){
+  if(!readOnly() && !S.settings.viewOnly && !ghCanPush() && S.games.length){
     const b = S.backup||{};
     const stale = !b.at || (b.sig !== dataSig() && (Date.now()-b.at) > 3*86400000);
     if(stale){
@@ -7092,15 +7097,17 @@ function fillQuota(){
     }).catch(()=> draw("저장 공간 정보 확인 불가"));
   } else draw("저장 공간 정보 확인 불가");
 }
-function curTheme(){ return document.documentElement.getAttribute("data-theme") || ""; }
+function curTheme(){ return document.documentElement.getAttribute("data-theme") || "light"; }
 function setTheme(v){
-  if(v) document.documentElement.setAttribute("data-theme", v);
-  else document.documentElement.removeAttribute("data-theme");
+  v = (v === "dark")? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", v);
   try{ v? localStorage.setItem(THEME_KEY, v) : localStorage.removeItem(THEME_KEY); }catch(e){}
   render();
 }
 (function init(){
-  try{ const th = localStorage.getItem(THEME_KEY); if(th) document.documentElement.setAttribute("data-theme", th); }catch(e){}
+  let th0 = "light";
+  try{ const th = localStorage.getItem(THEME_KEY); if(th === "dark") th0 = "dark"; }catch(e){}
+  document.documentElement.setAttribute("data-theme", th0);
   load();
   try{ localStorage.setItem("__bb_t","1"); localStorage.removeItem("__bb_t"); }
   catch(e){ ENV.storage=false; }
