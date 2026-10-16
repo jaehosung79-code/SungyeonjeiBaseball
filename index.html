@@ -1254,6 +1254,9 @@ radial-gradient(circle at 34% 28%, #ffffff 0%, #fbfaf6 45%, #ece8de 100%)}
 .sect,.sect .si{color:#E2495B!important}
 .sect .si{display:grid!important;width:24px;height:24px;background:none!important;border-radius:0}
 .sect .si svg{width:22px;height:22px}
+.chorow{display:flex;align-items:center;gap:10px;margin:-4px 0 8px}
+.chorow span{font-size:12px;color:var(--text-2);font-weight:550;white-space:nowrap}
+.chorow select{flex:1;min-width:0}
 </style>
 </head>
 <body>
@@ -1419,6 +1422,14 @@ window.__schoolLogo = function(inp, y){
 };
 /* 상대팀 등록 (초등 · 중등 · 고등) */
 const TEAM_LV = [["elem","초등"],["mid","중등"],["high","고등"]];
+const CHO_ALL = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ", CHO_BASE = {"ㄲ":"ㄱ","ㄸ":"ㄷ","ㅃ":"ㅂ","ㅆ":"ㅅ","ㅉ":"ㅈ"};
+const CHO_GROUPS = [["gnd","ㄱ · ㄴ · ㄷ","ㄱㄴㄷ"],["rmb","ㄹ · ㅁ · ㅂ","ㄹㅁㅂ"],["soj","ㅅ · ㅇ · ㅈ","ㅅㅇㅈ"],["ckt","ㅊ · ㅋ · ㅌ","ㅊㅋㅌ"],["ph","ㅍ · ㅎ","ㅍㅎ"],["etc","기타",""]];
+function choOf(name){
+  const c = String(name||"").trim().charCodeAt(0) - 0xAC00;
+  if(!(c >= 0 && c <= 11171)) return "";
+  const ch = CHO_ALL[Math.floor(c/588)]; return CHO_BASE[ch] || ch;
+}
+function choGroup(name){ const c = choOf(name); const g = CHO_GROUPS.find(x=> x[2] && c && x[2].indexOf(c)>=0); return g? g[0] : "etc"; }
 const MID_SEOUL_26 = ["강남중", "건대부중", "경원중", "대치중", "덕수중", "동도중", "동신중", "배명중", "배재중", "상명중", "서울클럽중", "선린중", "성남중", "신월중", "양천중", "언북중", "영남중", "영동중", "이수중", "자양중", "잠신중", "청량중", "청원중", "충암중", "홍은중", "휘문중"];
 function teamLvOf(name){ return (S.teams||{})[String(name||"").trim()] || ""; }
 function teamsAt(lv){ return Object.keys(S.teams||{}).filter(n=> S.teams[n]===lv).sort((a,b)=> a.localeCompare(b,"ko")); }
@@ -5304,6 +5315,7 @@ function gameSheet(id, preDate){
     </div>
     <label class="f"><span>상대 팀</span><input id="g_opp" value="${esc(d.opponent)}" list="dl_opp" placeholder="상대 팀 이름">
       <datalist id="dl_opp">${opps.map(o=>`<option value="${esc(o)}">`).join("")}</datalist></label>
+    <div class="chorow"><span>상대팀 찾기</span><select id="g_cho" aria-label="상대팀 초성"></select></div>
     <div class="tchips" id="g_tchips"></div>
     <div class="lgpick" id="g_lgpick" style="display:none"></div>
     <div class="f2">
@@ -5352,8 +5364,14 @@ function gameSheet(id, preDate){
     oppInp.addEventListener("input", ()=>{ if(!gdraft.logoTouched){ gdraft.logo = teamLogo(oppInp.value); gdraft.paintLogo(); } });
     gdraft.paintLogo();
     const tcBox = sheet.querySelector("#g_tchips"), lvSel0 = sheet.querySelector("#g_lv");
+    const choSel = sheet.querySelector("#g_cho");
+    let choCur = oppInp.value.trim()? choGroup(oppInp.value) : "";
     const paintTeams = ()=>{
-      const lv = lvToTeamLv((lvSel0 && lvSel0.value) || curLevel()), list = teamsAt(lv), lvKo = TEAM_LV.find(x=>x[0]===lv)[1];
+      const lv = lvToTeamLv((lvSel0 && lvSel0.value) || curLevel()), all = teamsAt(lv), lvKo = TEAM_LV.find(x=>x[0]===lv)[1];
+      const cnt = {}; all.forEach(n=>{ const g = choGroup(n); cnt[g] = (cnt[g]||0) + 1; });
+      if(!choCur || !cnt[choCur]) choCur = (CHO_GROUPS.find(x=>cnt[x[0]]) || CHO_GROUPS[0])[0];
+      choSel.innerHTML = CHO_GROUPS.map(([k,lb])=>`<option value="${k}" ${k===choCur?"selected":""} ${cnt[k]? "" : "disabled"}>${lb} (${cnt[k]||0})</option>`).join("");
+      const list = all.filter(n=> choGroup(n)===choCur);
       const typed = oppInp.value.trim(), canReg = typed && teamLvOf(typed) !== lv && !readOnly();
       tcBox.innerHTML = `<span class="tl">${lvKo} 상대팀</span>`
         + (list.length? list.map(n=>`<button type="button" class="tc" data-team="${esc(n)}" aria-pressed="${typed===n}">${teamLogo(n)? `<img src="${esc(teamLogo(n))}" alt="">` : ""}${esc(n)}</button>`).join("")
@@ -5366,6 +5384,7 @@ function gameSheet(id, preDate){
       const b = e.target.closest("button[data-team]"); if(!b) return;
       oppInp.value = b.dataset.team; oppInp.dispatchEvent(new Event("input", {bubbles:true})); paintTeams(); });
     oppInp.addEventListener("input", paintTeams);
+    choSel.addEventListener("change", ()=>{ choCur = choSel.value; paintTeams(); });
     if(lvSel0) lvSel0.addEventListener("change", paintTeams);
     paintTeams();
     const innInp = sheet.querySelector("#g_inn");
