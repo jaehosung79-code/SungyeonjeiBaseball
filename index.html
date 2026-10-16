@@ -4067,8 +4067,7 @@ function viewStats(){
   + insSummary([["타격",iBat],["도루",iSteal],["방향",iDir],["타구",iDepth],["결과",iRes],["이닝",iInn],["월별",iMon],
                 ["상대",iVs],["투수",iPit],["수비",iDef],["포지션",iPos]])
   + sectHTML(IC.bat, "Batting", "bat")
-  + (b.PA? `<div class="card"><div class="hd"><div style="flex:1"><h3>타격 프로필</h3>
-      <div class="cap">세로선 = 기준 · 넘으면 주황</div></div></div>
+  + (b.PA? `<div class="card"><div class="hd"><div style="flex:1"><h3>타격 프로필</h3></div></div>
       <div class="gauges">
         ${gaugeHTML(IC.ball, "타율 AVG", b.AVG, avg3, .5, .3, "기준 .300")}
         ${gaugeHTML(IC.eye, "출루율 OBP", b.OBP, avg3, .6, .38, "기준 .380")}
@@ -4085,8 +4084,7 @@ function viewStats(){
       <div class="cap" style="margin:0 0 10px">${S.ui.year==="all"?"전체 기간":S.ui.year+"시즌"} · ${gtypeLabel()} · ${gs.length}경기 ${b.PA}타석
 </div>
       ${bm==="saber"? bSaber : bClassic}${insBox(iBat)}</div>`
-  + ((b.SB+b.CS)? `<div class="card"><div class="hd"><div style="flex:1"><h3>도루</h3>
-      <div class="cap">도루 시도 ${b.SB+b.CS}회</div></div></div>
+  + ((b.SB+b.CS)? `<div class="card"><div class="hd"><div style="flex:1"><div class="tinl"><h3>도루</h3><span class="cap">도루 시도 ${b.SB+b.CS}회</span></div></div></div>
       <div class="tiles">${tile("시도", b.SB+b.CS)+tile("성공", b.SB)+tile("실패", b.CS)+tile("성공률", pct1(b.SBP))
         +tile("경기당 시도", fx2(gs.length? (b.SB+b.CS)/gs.length : null))+tile("추가 진루", b.SB-b.CS)}</div>${insBox(iSteal)}</div>` : "")
   + sectHTML(IC.field, "Batted Balls", "bip")
@@ -4096,39 +4094,36 @@ function viewStats(){
         return [fmtDate(p._g.date), (p.inning||"-")+"회", esc(RMAP[p.result].ko), esc(z.label), Math.round(z.m)+"m"];})) : "",
       insBox(insSpray(bip)))
   + `<div class="grid g2">`
-  + chartCard("방향별 타구 수", "당겨치기 · 밀어치기",
+  + chartCard("방향별 타구 수", "",
       colChart(dirs, {aria:"방향별 타구 수", labelTop:true, fmt:v=>String(Math.round(v))}),
       tableHTML(["방향","타구","안타"], dirs.map(d=>[d.label, d.value, d._h])), insBox(iDir))
-  + chartCard("타구 깊이", "내야 / 외야",
+  + chartCard("타구 깊이", "",
       colChart(depth, {aria:"타구 깊이 분포", labelTop:true, fmt:v=>String(Math.round(v))}),
       tableHTML(["깊이","타구"], depth.map(d=>[d.label, d.value])), insBox(iDepth))
   + `</div>`
-  + chartCard("타석 결과 분포", `총 ${pas.length}타석`,
+  + chartCard("타석 결과 분포", `~총 ${pas.length}타석`,
       hbarChart(dist, {aria:"타석 결과 분포", left:78, total:pas.length, fmt:v=>String(Math.round(v))}),
       tableHTML(["결과","횟수","비중"], dist.map(d=>[d.label, d.value, pct1(d.value/Math.max(pas.length,1))])), insBox(iRes))
-  + (innings.length? chartCard("이닝별 타율", `정규 ${regInnings(curLevel())}이닝`,
+  + (innings.length? chartCard("이닝별 타율", "",
       colChart(innings, {aria:"이닝별 타율", fmt:avg3, ref:{v:b.AVG, label:"AVG "+avg3(b.AVG)}}),
       tableHTML(["이닝","타수","안타","타율"], innings.map(d=>[d.label, d._t.AB, d._t.H, avg3(d._t.AVG)])), insBox(iInn)) : "")
-  + (months.length>1? chartCard("월별 타율", "월별 흐름",
+  + (months.length>1? chartCard("월별 타율", "",
       colChart(months, {aria:"월별 타율", fmt:avg3, ref:{v:b.AVG, label:"AVG "+avg3(b.AVG)}}),
       tableHTML(["월","타수","안타","타점","타율","OPS"], months.map(d=>[d.label, d._t.AB, d._t.H, d._t.RBI, avg3(d._t.AVG), avg3(d._t.OPS)])), insBox(iMon)) : "")
   + ((tourRows.length || pTeams.length)? sectHTML(IC.vs, "Tournaments · Opponents", "vs") : "")
-  + (tourRows.length? `<div class="card"><div class="hd"><div style="flex:1"><h3>대회별 성적</h3>
-      <div class="cap">${tourRows.length}개 대회 · 최근순</div></div></div>
+  + (tourRows.length? `<div class="card"><div class="hd"><div style="flex:1"><h3>대회별 성적</h3></div></div>
       <div class="fitw">${tableHTML(["대회","G","W-L","PA","H","HR","RBI","AVG","OPS"],
         tourRows.map(r=>[esc(r.name), r.G, `${r.W}-${r.L}`, r.t.PA, r.t.H, r.t.HR, r.t.RBI, avg3(r.t.AVG), avg3(r.t.OPS)]))}</div>
       ${insBox(insTours(tourRows))}</div>` : "")
-  + (pTeams.length? `<div class="card"><div class="hd"><div style="flex:1"><h3>상대 투수별 성적</h3>
-      <div class="cap">${pYears}개 시즌 · ${pTeams.length}개 팀 · 투수 ${pitcherN}명</div></div></div>
+  + (pTeams.length? `<div class="card"><div class="hd"><div style="flex:1"><div class="tinl"><h3>상대 투수별 성적</h3><span class="cap">${pYears}개 시즌 · ${pTeams.length}개 팀 · 투수 ${pitcherN}명</span></div></div></div>
       ${insBox(iVs)}${vsPitcherTable(pTeams)}</div>` : "")
   + (pitchingOf(defs).APP? sectHTML(IC.arm, "Pitching", "pit") : "")
   + pitchingSection(gs, defs)
   + ((defDist.length || posRows.length)? sectHTML(IC.glove, "Fielding", "def") : "")
-  + (defDist.length? chartCard("수비 결과 분포", `수비 기록 ${defPlays.length}건`,
+  + (defDist.length? chartCard("수비 결과 분포", "",
       hbarChart(defDist, {aria:"수비 결과 분포", left:82, total:defPlays.length, fmt:v=>String(Math.round(v))}),
       tableHTML(["결과","횟수","비중"], defDist.map(d=>[d.label, d.value, pct1(d.value/Math.max(defPlays.length,1))])), insBox(iDef)) : "")
-  + (posRows.length? (()=>{ const ft = fieldingOf(defs, gs); return `<div class="card"><div class="hd"><div style="flex:1"><h3>포지션별 수비</h3>
-      <div class="cap">수비율 = (자살+보살) / 수비 기회</div></div></div>
+  + (posRows.length? (()=>{ const ft = fieldingOf(defs, gs); return `<div class="card"><div class="hd"><div style="flex:1"><h3>포지션별 수비</h3></div></div>
       ${tableHTML(["포지션","이닝","자살","보살","실책","병살","수비율"],
         posRows.map(r=>[esc(PMAP[r.pos]||r.pos), fmtInn(r.f.outs), r.f.PO, r.f.A, r.f.E, r.f.DP, avg3(r.f.FPCT)]),
         ["합계", fmtInn(ft.outs), ft.PO, ft.A, ft.E, ft.DP, avg3(ft.FPCT)])}${insBox(iPos)}</div>`; })() : "")
