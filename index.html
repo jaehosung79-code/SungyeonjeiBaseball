@@ -1418,6 +1418,7 @@ window.__schoolLogo = function(inp, y){
 };
 /* 상대팀 등록 (초등 · 중등 · 고등) */
 const TEAM_LV = [["elem","초등"],["mid","중등"],["high","고등"]];
+const MID_SEOUL_26 = ["강남중", "건대부중", "경원중", "대치중", "덕수중", "동도중", "동신중", "배명중", "배재중", "상명중", "서울클럽중", "선린중", "성남중", "신월중", "양천중", "언북중", "영남중", "영동중", "이수중", "자양중", "잠신중", "청량중", "청원중", "충암중", "홍은중", "휘문중"];
 function teamLvOf(name){ return (S.teams||{})[String(name||"").trim()] || ""; }
 function teamsAt(lv){ return Object.keys(S.teams||{}).filter(n=> S.teams[n]===lv).sort((a,b)=> a.localeCompare(b,"ko")); }
 function lvToTeamLv(k){ return k==="elem"||k==="mid"? k : "high"; }
@@ -1821,6 +1822,10 @@ function load(){
   if(!S.tomb || typeof S.tomb!=="object") S.tomb = {};
   if(!S.logos || typeof S.logos!=="object") S.logos = {};
   if(!S.teams || typeof S.teams!=="object") S.teams = {};
+  if(!S.seedMid26){
+    MID_SEOUL_26.forEach(n=>{ if(!S.teams[n]) S.teams[n] = "mid"; });
+    S.seedMid26 = true;
+  }
   S.profMt = num(S.profMt, 0);
   trkReset();
   try{ localStorage.removeItem("bb_gh_base"); }catch(e){}
@@ -4918,8 +4923,8 @@ async function ghPush(manual, poll){
     return false;
   }finally{
     ghBusy = false;
-    if(changedHere){ relinkAll().then(()=> render()).catch(()=>{}); render(); }
-    else if(S.ui.tab==="settings") render();
+    if(changedHere){ relinkAll().then(()=> softRender()).catch(()=>{}); softRender(); }
+    else if(S.ui.tab==="settings") softRender();
   }
 }
 function ghMk(P){
@@ -4944,7 +4949,7 @@ async function ghPull(manual){
     if(same){
       ghMarkSynced(got.sha, null, "pull");
       if(manual) toast("이미 최신");
-      if(S.ui.tab==="settings") render();
+      if(S.ui.tab==="settings") softRender();
       return false;
     }
     const dirty = (ghDirty() && !!ghState.hash) || (!ghState.hash && S.games.length > 0);
@@ -4959,14 +4964,14 @@ async function ghPull(manual){
     ghApply(o, mode, !manual);
     if(mode==="merge"){ ghState.sha = got.sha; ghState.pull = Date.now(); ghSaveState(); }
     else ghMarkSynced(got.sha, null, "pull");
-    await relinkAll(); render();
+    await relinkAll(); softRender();
     if(manual) toast("GitHub에서 " + o.games.length + "경기 받음");
     else toast("최신 기록 받음");
     return true;
   }catch(e){
     ghState.err = e.message || String(e);
     if(manual) toast("받기 실패: " + ghState.err);
-    ghBusy = false; render();
+    ghBusy = false; softRender();
     return false;
   }finally{ ghBusy = false; }
 }
@@ -4975,7 +4980,12 @@ function ghSchedule(){
   clearTimeout(ghTimer);
   ghTimer = setTimeout(()=>{ if(ghDirty()) ghPush(false); }, 8000);
 }
-function ghEditing(){ const m = $("#modal"); return !!(m && m.innerHTML); }
+function typing(){ const a = document.activeElement;
+  return !!(a && (a.tagName==="TEXTAREA" || a.tagName==="SELECT" || (a.tagName==="INPUT" && !/^(file|button|checkbox|radio|submit)$/i.test(a.type||"")) || a.isContentEditable)); }
+let pendingRender = false;
+function softRender(){ if(typing()){ pendingRender = true; return; } render(); }
+document.addEventListener("focusout", ()=> setTimeout(()=>{ if(pendingRender && !typing()){ pendingRender = false; render(); } }, 250));
+function ghEditing(){ const m = $("#modal"); return !!(m && m.innerHTML) || typing(); }
 function ghTry(){
   if(!ghOn() || !navigator.onLine || ghEditing()) return;
   if(readOnly()){ ghPull(false); return; }
@@ -4984,7 +4994,7 @@ function ghTry(){
 }
 function ghInit(){
   ghLoad();
-  if(ghOn()) ghCheckWrite().then(()=>{ if(S.ui.tab==="settings") render(); }).catch(()=>{});
+  if(ghOn()) ghCheckWrite().then(()=>{ if(S.ui.tab==="settings") softRender(); }).catch(()=>{});
   setTimeout(ghTry, 1500);
   window.addEventListener("online", ()=> setTimeout(ghTry, 1200));
   let tick = 0;
@@ -6966,7 +6976,7 @@ function setTheme(v){
   render();
   askPersist().then(fillQuota);
   ghInit();
-  window.__onInstallReady = ()=>{ if(S.ui.tab==="settings") render(); };
+  window.__onInstallReady = ()=>{ if(S.ui.tab==="settings") softRender(); };
   window.__onInstalled = ()=>{ render(); toast("설치 완료 — 홈 화면 아이콘으로 열기"); };
   initBackButton();
   window.addEventListener("beforeunload", saveNow);
@@ -6975,7 +6985,7 @@ function setTheme(v){
   window.addEventListener("resize", ()=>{
     clearTimeout(rsTimer);
     rsTimer = setTimeout(()=>{ const before = CFS; calcChartFont();
-      if(Math.abs(before-CFS) > 0.2) render(); }, 200);
+      if(Math.abs(before-CFS) > 0.2) softRender(); }, 200);
   });
   window.addEventListener("pagehide", saveNow);
   document.addEventListener("visibilitychange", ()=>{
