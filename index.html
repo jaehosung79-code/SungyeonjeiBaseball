@@ -1344,6 +1344,9 @@ svg.chart:not(.go) .ln-draw,svg.chart:not(.go) .ln-area,svg.chart:not(.go) .ln-p
 }
 .card.sboard{background:#2A2E30!important;color:#fff;border:0!important;-webkit-backdrop-filter:none;backdrop-filter:none}
 #view > .empty{background:none!important;border:0!important;box-shadow:none!important}
+.fsticky{position:sticky;top:calc(var(--topbar-h,56px) - 1px);z-index:30;background:var(--surface-0);margin-left:-12px!important;margin-right:-12px!important;padding-left:12px;padding-right:12px;padding-top:8px;padding-bottom:6px}
+.gsticky{padding-top:0;padding-bottom:8px;box-shadow:0 1px 0 var(--border)}
+.gsticky .msum{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -3280,7 +3283,7 @@ function filterRow(){
     + [["all","All"],["official","Official"],["practice","Practice"]]
         .map(([v,l])=>`<button data-act="gtype" data-v="${v}" aria-pressed="${cur===v}">${l}</button>`).join("")
     + `</div>`;
-  return `<div class="filters">${yseg}${tseg}</div>`;
+  return `<div class="filters fsticky">${yseg}${tseg}</div>`;
 }
 function typeBadge(g){
   return gameType(g)==="practice"? `<span class="tag prac">Practice</span>` : `<span class="tag off">Official</span>`;
@@ -3483,13 +3486,14 @@ function viewGames(){
   let w=0, l=0, d=0;
   list.forEach(g=>{ const r=gameResult(g); if(r==="승")w++; else if(r==="패")l++; else if(r==="무")d++; });
   const t = battingOf(allPAs(list));
-  return `<div class="gtabs" role="group" aria-label="경기 종류">
+  return `<div class="fsticky gsticky"><div class="gtabs" role="group" aria-label="경기 종류">
       ${[["all","All"],["official","Official"],["practice","Practice"]].map(([v,lb])=>`<button data-act="gtype" data-v="${v}" aria-pressed="${ty===v}">${lb}</button>`).join("")}
       <button class="ng" data-act="newGame">+ New Game</button></div>
     <div class="mnav"><button data-act="gmMove" data-v="-1" aria-label="이전 달">${IC_BACK}</button>
       <span class="t">${+m.slice(0,4)}년 ${+m.slice(5,7)}월</span>
       <button data-act="gmMove" data-v="1" aria-label="다음 달" style="transform:scaleX(-1)">${IC_BACK}</button></div>
     ${list.length? `<div class="msum">${list.length}경기${(w+l+d)? ` · ${w}W ${l}L${d? " "+d+"D" : ""}` : ""}${t.AB? ` · 타율 ${avg3(t.AVG)}` : ""}</div>` : ""}
+    </div>
     ${list.length? list.map(matchCard).join("") : `<div class="empty">${emptyArt(IC_EMPTY_LIST)}이 달 경기 없음</div>`}`;
 }
 
