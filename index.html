@@ -1347,9 +1347,18 @@ svg.chart:not(.go) .ln-draw,svg.chart:not(.go) .ln-area,svg.chart:not(.go) .ln-p
 .fsticky{position:sticky;top:calc(var(--topbar-h,56px) - 1px);z-index:30;background:var(--surface-0);margin-left:-12px!important;margin-right:-12px!important;padding-left:12px;padding-right:12px;padding-top:8px;padding-bottom:6px}
 .gsticky{padding-top:0;padding-bottom:8px;box-shadow:0 1px 0 var(--border)}
 .gsticky .msum{margin-bottom:0}
+.headwrap{position:sticky;top:0;z-index:40}
+.headwrap .topbar{position:relative;top:auto}
+#subbar{background:var(--surface-0)}
+#subbar.on{border-bottom:1px solid var(--border)}
+#subbar .fsticky{position:static!important;max-width:1080px;margin:0 auto!important;padding:8px 12px 6px!important;box-shadow:none!important;background:none}
+#subbar .filters{margin-bottom:0}
+#subbar .gsticky{padding-top:0!important;padding-bottom:8px!important}
+#subbar .gdbar{margin-bottom:0!important;padding-top:6px!important;padding-bottom:6px!important}
 </style>
 </head>
 <body>
+<div class="headwrap">
 <header class="topbar">
   <div class="brand">
     <div class="ball" aria-hidden="true"></div>
@@ -1366,6 +1375,8 @@ svg.chart:not(.go) .ln-draw,svg.chart:not(.go) .ln-area,svg.chart:not(.go) .ln-p
     </svg>
   </button>
 </header>
+<div id="subbar"></div>
+</div>
 
 <main class="wrap" id="view" tabindex="-1"></main>
 
@@ -6955,8 +6966,15 @@ function banners(){
 }
 let lastTab = null;
 function syncTopbarH(){
-  const tb = document.querySelector(".topbar");
-  if(tb) document.documentElement.style.setProperty("--topbar-h", tb.offsetHeight + "px");
+  const tb = document.querySelector(".headwrap") || document.querySelector(".topbar");
+  if(tb) document.documentElement.style.setProperty("--topbar-h", Math.ceil(tb.getBoundingClientRect().height) + "px");
+}
+function moveSubbar(){
+  const sb = document.getElementById("subbar"); if(!sb) return;
+  sb.innerHTML = "";
+  const f = document.querySelector("#view > .fsticky");
+  if(f){ sb.appendChild(f); sb.classList.add("on"); } else sb.classList.remove("on");
+  syncTopbarH();
 }
 window.addEventListener("resize", syncTopbarH, {passive:true});
 function xbarSync(box){
@@ -7071,6 +7089,7 @@ function render(){
   fillQuota();
   fillMissing();
   setupFolds();
+  moveSubbar();
   if(t==="games") scoreCount();
   lineObserve();
   requestAnimationFrame(()=>{ xbarAll(); fitLines(); fitTables(); });
