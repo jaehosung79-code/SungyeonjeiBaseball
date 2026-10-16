@@ -1242,6 +1242,13 @@ radial-gradient(circle at 34% 28%, #ffffff 0%, #fbfaf6 45%, #ece8de 100%)}
   .gballs .gball.low:nth-child(n+5){animation-delay:.28s,.9s}
 }
 .gtabs button.ng{color:var(--text-1);font-weight:700;margin-left:auto}
+.gtabs button.ng{color:#E2495B}
+.card.insw{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;font-size:14px;font-weight:600;color:var(--text-1)}
+.sw{position:relative;width:46px;height:26px;border-radius:99px;border:0;padding:0;background:var(--muted-mark);cursor:pointer;transition:background .2s;flex:0 0 auto}
+.sw i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+.sw[aria-checked="true"]{background:#E2495B}
+.sw[aria-checked="true"] i{transform:translateX(20px)}
+.mcard .tn2.me,.mcard .sc2:not(.op){color:#0C4A60!important}
 </style>
 </head>
 <body>
@@ -3930,8 +3937,7 @@ function insSummary(groups){
   }));
   if(!good.length && !warn.length) return "";
   return `<div class="card"><div class="hd" style="align-items:center"><div style="flex:1"><h3>자동 분석 요약</h3>
-      <div class="cap">강점 · 보완점</div></div>
-      <button class="btn sm" data-act="toggleIns" data-v="off">해설 끄기</button></div>
+      <div class="cap">강점 · 보완점</div></div></div>
     <div class="inscols">${insBox(good, "강점")}${insBox(warn, "보완점")}</div></div>`;
 }
 
@@ -4049,10 +4055,10 @@ function viewStats(){
   const ptS = pitchingOf(defs);
   const iPit = ptS.APP? insPitching(ptS) : [];
   return filterRow()
+  + `<div class="card insw"><span>자동해설 분석</span>
+      <button class="sw" role="switch" aria-checked="${insOn()}" aria-label="자동해설 분석" data-act="toggleIns" data-v="${insOn()? "off" : "on"}"><i></i></button></div>`
   + insSummary([["타격",iBat],["도루",iSteal],["방향",iDir],["타구",iDepth],["결과",iRes],["이닝",iInn],["월별",iMon],
                 ["상대",iVs],["투수",iPit],["수비",iDef],["포지션",iPos]])
-  + (insOn()? "" : `<div class="card" style="padding:10px 14px"><div class="hd" style="align-items:center;margin:0">
-      <div style="flex:1" class="hint">자동 분석 해설 꺼짐</div><button class="btn sm" data-act="toggleIns" data-v="on">해설 켜기</button></div></div>`)
   + sectHTML(IC.bat, "타격", "bat")
   + (b.PA? `<div class="card"><div class="hd"><div style="flex:1"><h3>타격 프로필</h3>
       <div class="cap">세로선 = 기준 · 넘으면 주황</div></div></div>
