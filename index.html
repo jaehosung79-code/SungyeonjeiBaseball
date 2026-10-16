@@ -3526,7 +3526,7 @@ function viewGame(id){
 
   const vidList = g.videos.length? g.videos.map(v=>videoCard(v,g)).join("") : `<div class="hint">등록된 영상 없음</div>`;
 
-  return `<div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
+  return `<div class="fsticky gdbar" style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
       <button class="iconbtn sm" data-act="nav" data-v="games" title="경기 목록" aria-label="경기 목록으로 돌아가기">${IC_BACK}</button><div class="spacer" style="flex:1"></div>
       <button class="iconbtn sm" data-act="editGame" data-id="${g.id}" title="경기 정보 수정" aria-label="경기 정보 수정">${ICON_EDIT}</button>
       ${delBtn("delGame", `data-id="${g.id}"`, "이 경기 기록 삭제")}
