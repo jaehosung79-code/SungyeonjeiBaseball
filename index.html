@@ -7009,7 +7009,7 @@ function scoreCount(){
     const k = Math.min(1, (now - t0)/dur), ez = 1 - Math.pow(1-k, 3);
     els.forEach((e,i)=>{ if(e.isConnected) e.textContent = String(Math.round(to[i]*ez)); });
     if(k < 1) requestAnimationFrame(step);
-    else $$(".mcard .wn, .sboard .tm.win .tlogo, .sboard .tm.win .n").forEach(e=>{ e.classList.remove("pop"); void e.offsetWidth; e.classList.add("pop"); });
+    else $$(".mcard .tlogo.wn, .sboard .tm.win .tlogo").forEach(e=>{ e.classList.remove("pop"); void e.offsetWidth; e.classList.add("pop"); });
   };
   requestAnimationFrame(step);
 }
