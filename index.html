@@ -1336,6 +1336,7 @@ table{font-size:13px} th{font-size:var(--fs-xs)!important}
 .sect,.hrow{margin-top:22px!important;margin-bottom:var(--gap)!important}
 .hscroll.gballs{margin-bottom:var(--gap)}
 .card.insw{background:none!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;padding-left:4px!important;padding-right:4px!important}
+svg.chart:not(.go) .ln-draw,svg.chart:not(.go) .ln-area,svg.chart:not(.go) .ln-pt{animation-play-state:paused!important}
 </style>
 </head>
 <body>
@@ -6999,6 +7000,17 @@ function xbarAll(){
   });
 }
 window.addEventListener("resize", ()=>{ xbarAll(); fitLines(); });
+let lnIO = null;
+function lineObserve(){
+  const svgs = $$("svg.chart").filter(v=> v.querySelector(".ln-draw"));
+  if(!svgs.length) return;
+  if(!("IntersectionObserver" in window)){ svgs.forEach(v=> v.classList.add("go")); return; }
+  if(lnIO) lnIO.disconnect();
+  lnIO = new IntersectionObserver(es=> es.forEach(e=>{
+    if(e.isIntersecting && e.intersectionRatio >= 0.9){ e.target.classList.add("go"); lnIO.unobserve(e.target); }
+  }), {threshold:[0, 0.9, 1]});
+  svgs.forEach(v=> lnIO.observe(v));
+}
 function scoreCount(){
   if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const els = $$(".mcard .sc2, .sboard .sc").filter(e=> /^\d+$/.test(e.textContent.trim()));
@@ -7045,6 +7057,7 @@ function render(){
   fillMissing();
   setupFolds();
   if(t==="games") scoreCount();
+  lineObserve();
   requestAnimationFrame(()=>{ xbarAll(); fitLines(); fitTables(); });
 }
 function askPersist(){
