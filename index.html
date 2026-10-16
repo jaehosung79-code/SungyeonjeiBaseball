@@ -1317,6 +1317,13 @@ table{font-size:13px} th{font-size:var(--fs-xs)!important}
 .vg2 .th .pl svg{width:12px!important;height:12px!important}
 .vg2 .th .pl,.vthumb .pl{display:none!important}
 .strip.navy{background:#2A2E30!important;background-image:none!important;opacity:1}
+@keyframes lnDraw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes lnFade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion: no-preference){
+  .ln-draw{stroke-dasharray:1;stroke-dashoffset:0;animation:lnDraw 1.6s cubic-bezier(.45,.05,.35,1) both}
+  .ln-area{animation:lnFade .8s ease-out 1.2s both}
+  .ln-pt{animation:lnFade .4s ease-out 1.5s both}
+}
 </style>
 </head>
 <body>
@@ -2836,8 +2843,8 @@ function lineChart(series, opt){
       d += (started? " L":" M") + X(i).toFixed(1)+","+Y(p.y).toFixed(1); started=true; });
     if(!d) return;
     if(single && opt.area!==false && first>=0)
-      s += `<path d="${d.trim()} L${X(last).toFixed(1)},${(T+ph).toFixed(1)} L${X(first).toFixed(1)},${(T+ph).toFixed(1)} Z" fill="url(#${gid})"/>`;
-    s += `<path d="${d.trim()}" fill="none" stroke="${col}" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>`;
+      s += `<path${opt.anim? ' class="ln-area"' : ''} d="${d.trim()} L${X(last).toFixed(1)},${(T+ph).toFixed(1)} L${X(first).toFixed(1)},${(T+ph).toFixed(1)} Z" fill="url(#${gid})"/>`;
+    s += `<path${opt.anim? ' class="ln-draw" pathLength="1"' : ''} d="${d.trim()}" fill="none" stroke="${col}" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>`;
     ser._last = last;
   });
   if(ref){
@@ -2856,8 +2863,8 @@ function lineChart(series, opt){
     idx.push([last,false]);
     idx.forEach(([i,mutd])=>{
       const x=X(i), y=Y(ser.pts[i].y);
-      s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="${col}" stroke="var(--surface-1)" stroke-width="2"/>`;
-      s += `<text class="dlbl halo" x="${x.toFixed(1)}" y="${(y-CFS*0.8).toFixed(1)}" text-anchor="${i===n-1&&n>1?"end":"middle"}"`
+      s += `<circle${opt.anim? ' class="ln-pt"' : ''} cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="${col}" stroke="var(--surface-1)" stroke-width="2"/>`;
+      s += `<text class="dlbl halo${opt.anim? " ln-pt" : ""}" x="${x.toFixed(1)}" y="${(y-CFS*0.8).toFixed(1)}" text-anchor="${i===n-1&&n>1?"end":"middle"}"`
          + `${mutd?' fill="var(--text-2)"':''}>${fm(ser.pts[i].y)}</text>`;
     });
   });
@@ -3372,7 +3379,7 @@ function viewHome(){
      <div class="hscroll gballs">${gs.slice(-12).reverse().map(gameMini).join("")}</div>`
   + `<div class="grid g2">`
   + chartCard("Cumulative "+METRICS[m].k+" Trend", "",
-      lineChart([{pts, color:"var(--chart)"}], {aria:"누적 "+METRICS[m].ko+" 추이", fmt:avg3,
+      lineChart([{pts, color:"var(--chart)"}], {aria:"누적 "+METRICS[m].ko+" 추이", fmt:avg3, anim:true,
         ref:{v:career[mk], label:"Career "+METRICS[m].k+" "+avg3(career[mk])}}), trendTbl)
   + chartCard("Hits per Game", "~최근 "+recent.length+"경기",
       colChart(hitCols, {aria:"경기별 안타 수", labelTop:true, fmt:v=>String(Math.round(v)),
@@ -6977,6 +6984,20 @@ function xbarAll(){
   });
 }
 window.addEventListener("resize", ()=>{ xbarAll(); fitLines(); });
+function scoreCount(){
+  if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const els = $$(".mcard .sc2, .sboard .sc").filter(e=> /^\d+$/.test(e.textContent.trim()));
+  if(!els.length) return;
+  const to = els.map(e=> +e.textContent.trim()), mx = Math.max(1, ...to);
+  const dur = Math.min(1200, 450 + mx*60), t0 = performance.now();
+  els.forEach(e=> e.textContent = "0");
+  const step = now=>{
+    const k = Math.min(1, (now - t0)/dur), ez = 1 - Math.pow(1-k, 3);
+    els.forEach((e,i)=>{ if(e.isConnected) e.textContent = String(Math.round(to[i]*ez)); });
+    if(k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
 function render(){
   const v = $("#view");
   calcChartFont();
@@ -7007,6 +7028,7 @@ function render(){
   fillQuota();
   fillMissing();
   setupFolds();
+  if(t==="games") scoreCount();
   requestAnimationFrame(()=>{ xbarAll(); fitLines(); fitTables(); });
 }
 function askPersist(){
