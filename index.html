@@ -1355,6 +1355,10 @@ svg.chart:not(.go) .ln-draw,svg.chart:not(.go) .ln-area,svg.chart:not(.go) .ln-p
 #subbar .filters{margin-bottom:0}
 #subbar .gsticky{padding-top:0!important;padding-bottom:8px!important}
 #subbar .gdbar{margin-bottom:0!important;padding-top:6px!important;padding-bottom:6px!important}
+.strip.team{grid-template-columns:repeat(5,1fr)!important;background:color-mix(in srgb, var(--surface-1) 55%, transparent);border:1px solid var(--border)}
+.strip.team > div:nth-child(2) .sv{color:#0E9A93} .strip.team > div:nth-child(3) .sv{color:#CC4A3A}
+.hrow{margin-top:var(--gap)!important;margin-bottom:var(--gap)!important;padding-top:4px}
+.hrow h3{line-height:1.2}
 </style>
 </head>
 <body>
@@ -3412,6 +3416,10 @@ function viewHome(){
       </div>`; })()
   + strip([[IC.cal,"경기",gs.length],[IC.rbi,"타점",b.RBI],[IC.run,"득점",b.R],[IC.eye,"볼넷",b.BB],[IC.k,"삼진",b.SO],
             [IC.sb,"도루",b.SB,(b.SB+b.CS)? "/"+(b.SB+b.CS) : ""]], "navy")
+  + (()=>{ let w=0,l=0,d=0; gs.forEach(g=>{ const r=gameResult(g); if(r==="승")w++; else if(r==="패")l++; else if(r==="무")d++; });
+      const wp = (w+l)? w/(w+l) : null;
+      return `<div class="hrow"><h3>Team Record</h3></div>`
+        + strip([[IC.cal,"경기",gs.length],[IC.trophy,"승",w],[IC.k,"패",l],[IC.vs,"무",d],[IC.pct,"승률",avg3(wp)]], "team"); })()
   + `<div class="hrow"><h3>Recent Games</h3><button data-act="nav" data-v="games">Total games</button></div>
      <div class="hscroll gballs">${gs.slice(-12).reverse().map(gameMini).join("")}</div>`
   + `<div class="grid g2">`
