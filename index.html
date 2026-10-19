@@ -1336,7 +1336,7 @@ table{font-size:13px} th{font-size:var(--fs-xs)!important}
 .sect,.hrow{margin-top:22px!important;margin-bottom:var(--gap)!important}
 .hscroll.gballs{margin-bottom:var(--gap)}
 .card.insw{background:none!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;padding-left:4px!important;padding-right:4px!important}
-svg.chart:not(.go) .ln-draw,svg.chart:not(.go) .ln-area,svg.chart:not(.go) .ln-pt,svg.chart:not(.go) .bar-grow,svg.chart:not(.go) .bar-lbl{animation-play-state:paused!important}
+svg.chart:not(.go) .ln-draw,svg.chart:not(.go) .ln-area,svg.chart:not(.go) .ln-pt,svg.chart:not(.go) .bar-grow,svg.chart:not(.go) .bar-lbl,svg.chart:not(.go) .sp-fly{animation-play-state:paused!important}
 @keyframes barGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 @media (prefers-reduced-motion: no-preference){
   .bar-grow{transform-box:fill-box;transform-origin:50% 100%;animation:barGrow .7s cubic-bezier(.3,.9,.35,1) both}
@@ -1359,6 +1359,27 @@ svg.chart:not(.go) .ln-draw,svg.chart:not(.go) .ln-area,svg.chart:not(.go) .ln-p
 .strip.team > div:nth-child(2) .sv{color:#0E9A93} .strip.team > div:nth-child(3) .sv{color:#CC4A3A}
 .hrow{margin-top:var(--gap)!important;margin-bottom:var(--gap)!important;padding-top:4px}
 .hrow h3{line-height:1.2}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes stampIn{0%{opacity:0;transform:scale(2.4) rotate(-12deg)}60%{opacity:1;transform:scale(.9) rotate(0)}100%{opacity:1;transform:scale(1)}}
+@keyframes gFill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion: no-preference){
+  .mcard.cardin{animation:cardIn .45s cubic-bezier(.2,.8,.3,1) both}
+  .prestamp{opacity:0}
+  .stamp{display:inline-block;animation:stampIn .5s cubic-bezier(.3,1.4,.5,1) both}
+  .gauges .gt i{transform-origin:0 50%;transform:scaleX(0)}
+  .gauges.go .gt i{animation:gFill 1s cubic-bezier(.25,.8,.3,1) both}
+  .gauges.go .gg:nth-child(2) .gt i{animation-delay:.1s} .gauges.go .gg:nth-child(3) .gt i{animation-delay:.2s}
+  .gauges.go .gg:nth-child(4) .gt i{animation-delay:.3s} .gauges.go .gg:nth-child(5) .gt i{animation-delay:.4s}
+  .gauges.go .gg:nth-child(6) .gt i{animation-delay:.5s}
+}
+@keyframes spFly{0%{transform:translate(var(--dx),var(--dy)) scale(.5);opacity:0}
+  10%{opacity:1}
+  55%{transform:translate(calc(var(--dx)*.4),calc(var(--dy)*.4)) scale(2.1)}
+  85%{transform:translate(0,0) scale(.85)}
+  100%{transform:translate(0,0) scale(1);opacity:1}}
+@media (prefers-reduced-motion: no-preference){
+  .sp-fly{transform-box:fill-box;transform-origin:50% 50%;animation:spFly 1s cubic-bezier(.35,.1,.4,1) both}
+}
 </style>
 </head>
 <body>
@@ -3140,14 +3161,14 @@ function sprayChart(pas, lv, opt){
   if(!pts.length) return `<div class="empty">타구 위치가 기록된 타석 없음<br><span class="hint">타석 기록에서 야구장을 눌러 타구 위치 표시</span></div>`;
   const fopt = {aria:"타구 방향 산점도", level:lv, ruler:!!opt.ruler, fit:true, include:pts.map(p=>p.zone)};
   const R = (opt.r||SPRAY_R).toFixed(2), SW = "1";
-  let inner="";
+  let inner="", fi=0;
   ["out","ob","hit","xbh"].forEach(cls=>{
     pts.filter(p=>paClass(p.result)===cls).forEach(p=>{
       const z = zoneOf(p.zone, p._g? gameLevel(p._g) : lv);
       const tip = `<b>${esc(RMAP[p.result].ko)}</b><br>${esc(fmtDate(p._g? p._g.date : ""))} ${p.inning?p.inning+"회":""}<br>${esc(z.label)} · 약 ${Math.round(z.m)}m`;
       inner += (cls==="out")
         ? `<circle cx="${p.zone.x.toFixed(1)}" cy="${p.zone.y.toFixed(1)}" r="${R}" fill="var(--surface-1)" fill-opacity=".55" stroke="${SPRAY_COLOR.out}" stroke-width="0.28" data-tip="${esc(tip)}"/>`
-        : `<circle cx="${p.zone.x.toFixed(1)}" cy="${p.zone.y.toFixed(1)}" r="${R}" fill="${SPRAY_COLOR[cls]}" stroke="var(--surface-1)" stroke-width="${SW}" data-tip="${esc(tip)}"/>`;
+        : `<circle${(opt.anim && (cls==="hit"||cls==="xbh"))? ` class="sp-fly" style="--dx:${(FIELD.hx-p.zone.x).toFixed(1)}px;--dy:${(FIELD.hy-p.zone.y).toFixed(1)}px;animation-delay:${(0.15*(fi++)).toFixed(2)}s"` : ""} cx="${p.zone.x.toFixed(1)}" cy="${p.zone.y.toFixed(1)}" r="${R}" fill="${SPRAY_COLOR[cls]}" stroke="var(--surface-1)" stroke-width="${SW}" data-tip="${esc(tip)}"/>`;
       inner += `<circle cx="${p.zone.x.toFixed(1)}" cy="${p.zone.y.toFixed(1)}" r="${(R*3).toFixed(2)}" fill="transparent" data-tip="${esc(tip)}"/>`;
     });
   });
@@ -4222,7 +4243,7 @@ function viewStats(){
         +tile("경기당 시도", fx2(gs.length? (b.SB+b.CS)/gs.length : null))+tile("추가 진루", b.SB-b.CS)}</div>${insBox(iSteal)}</div>` : "")
   + sectHTML(IC.field, "Batted Balls", "bip")
   + chartCard("타구 방향 (스프레이 차트)", `인플레이 타구 ${bip.length}개 · ${esc(LEVELS[curLevel()].ko)} 규격`,
-      sprayChart(pas, curLevel(), {ruler:true}),
+      sprayChart(pas, curLevel(), {ruler:true, anim:true}),
       bip.length? tableHTML(["날짜","이닝","결과","위치","추정 거리"], bip.map(p=>{const z=zoneOf(p.zone, gameLevel(p._g));
         return [fmtDate(p._g.date), (p.inning||"-")+"회", esc(RMAP[p.result].ko), esc(z.label), Math.round(z.m)+"m"];})) : "",
       insBox(insSpray(bip)))
@@ -7043,7 +7064,7 @@ function xbarAll(){
 window.addEventListener("resize", ()=>{ xbarAll(); fitLines(); });
 let lnIO = null;
 function lineObserve(){
-  const svgs = $$("svg.chart").filter(v=> v.querySelector(".ln-draw, .bar-grow"));
+  const svgs = $$("svg.chart").filter(v=> v.querySelector(".ln-draw, .bar-grow, .sp-fly"));
   if(!svgs.length) return;
   if(!("IntersectionObserver" in window)){ svgs.forEach(v=> v.classList.add("go")); return; }
   if(lnIO) lnIO.disconnect();
@@ -7052,10 +7073,37 @@ function lineObserve(){
   }), {threshold:[0, 0.9, 1]});
   svgs.forEach(v=> lnIO.observe(v));
 }
+let ggIO = null;
+function gaugeObserve(){
+  const gs = $$(".gauges"); if(!gs.length) return;
+  if(!("IntersectionObserver" in window)){ gs.forEach(g=> g.classList.add("go")); return; }
+  if(ggIO) ggIO.disconnect();
+  ggIO = new IntersectionObserver(es=> es.forEach(e=>{
+    if(e.isIntersecting && e.intersectionRatio >= 0.35){ e.target.classList.add("go"); ggIO.unobserve(e.target); }
+  }), {threshold:[0, 0.35, 0.6]});
+  gs.forEach(g=> ggIO.observe(g));
+}
+function figCount(){
+  if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const el = document.querySelector(".pcard .fig"); if(!el) return;
+  const txt = el.textContent.trim(), to = parseFloat(txt); if(!isFinite(to) || to<=0) return;
+  const lead = txt[0]===".", dec = (txt.split(".")[1]||"").length || 3;
+  const fmt = v=>{ let s2 = v.toFixed(dec); return (lead && v<1)? s2.replace(/^0/,"") : s2; };
+  const dur = 1300, t0 = performance.now();
+  el.textContent = fmt(0);
+  const step = now=>{ const k = Math.min(1,(now-t0)/dur), ez = 1-Math.pow(1-k,3);
+    if(el.isConnected) el.textContent = k<1? fmt(to*ez) : txt;
+    if(k<1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
 function scoreCount(){
   if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  $$("#view .mcard").forEach((c,i)=>{ c.style.animationDelay = Math.min(i*0.06, 0.6).toFixed(2)+"s"; c.classList.add("cardin"); });
+
   const els = $$(".mcard .sc2, .sboard .sc").filter(e=> /^\d+$/.test(e.textContent.trim()));
   if(!els.length) return;
+  const stamps = $$(".mcard .mres, .sboard .mid .res");
+  stamps.forEach(e=> e.classList.add("prestamp"));
   const to = els.map(e=> +e.textContent.trim()), mx = Math.max(1, ...to);
   const dur = Math.min(1700, 700 + mx*90), t0 = performance.now();
   els.forEach(e=> e.textContent = "0");
@@ -7063,7 +7111,8 @@ function scoreCount(){
     const k = Math.min(1, (now - t0)/dur), ez = 1 - Math.pow(1-k, 2.2);
     els.forEach((e,i)=>{ if(e.isConnected) e.textContent = String(Math.round(to[i]*ez)); });
     if(k < 1) requestAnimationFrame(step);
-    else $$(".mcard .tlogo.wn, .sboard .tm.win .tlogo").forEach(e=>{ e.classList.remove("pop"); void e.offsetWidth; e.classList.add("pop"); });
+    else { stamps.forEach(e=>{ e.classList.remove("prestamp"); e.classList.add("stamp"); });
+      $$(".mcard .tlogo.wn, .sboard .tm.win .tlogo").forEach(e=>{ e.classList.remove("pop"); void e.offsetWidth; e.classList.add("pop"); }); }
   };
   requestAnimationFrame(step);
 }
@@ -7100,6 +7149,8 @@ function render(){
   moveSubbar();
   if(t==="games") scoreCount();
   lineObserve();
+  gaugeObserve();
+  if(t==="home") figCount();
   requestAnimationFrame(()=>{ xbarAll(); fitLines(); fitTables(); });
 }
 function askPersist(){
