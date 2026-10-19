@@ -4149,6 +4149,28 @@
     "oppScore": 1791880227287
    },
    "mt": 1791880227287
+  },
+  {
+   "id": "mvelq442ug7m8",
+   "pas": [],
+   "def": [],
+   "videos": [],
+   "pdec": "",
+   "date": "2026-10-19",
+   "time": "",
+   "opponent": "",
+   "venue": "",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "tour": "26 딜라이브",
+   "myScore": "",
+   "oppScore": "",
+   "inn": 3,
+   "dinn": [],
+   "note": "",
+   "mt": 1792374879314,
+   "ct": 1792374879314
   }
  ],
  "plans": [
@@ -4918,6 +4940,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-16T10:33:51.473Z",
+ "savedAt": "2026-10-19T01:54:47.920Z",
  "by": "Sung YeonJei"
 }
