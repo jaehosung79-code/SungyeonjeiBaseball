@@ -7209,9 +7209,12 @@ function lineObserve(){
   if(!svgs.length) return;
   if(!("IntersectionObserver" in window)){ svgs.forEach(v=>{ v.classList.add("go"); flyBalls(v); pitchFly(v); }); return; }
   if(lnIO) lnIO.disconnect();
+  const topH = Math.ceil((document.querySelector(".headwrap")||{getBoundingClientRect:()=>({height:0})}).getBoundingClientRect().height);
+  const nav = document.querySelector("nav.tabs"), botH = nav? Math.ceil(nav.getBoundingClientRect().height) : 0;
   lnIO = new IntersectionObserver(es=> es.forEach(e=>{
-    if(e.isIntersecting && e.intersectionRatio >= 0.9){ e.target.classList.add("go"); flyBalls(e.target); pitchFly(e.target); lnIO.unobserve(e.target); }
-  }), {threshold:[0, 0.9, 1]});
+    const need = e.target.querySelector(".sp-fx")? 0.995 : 0.9;
+    if(e.isIntersecting && e.intersectionRatio >= need){ e.target.classList.add("go"); flyBalls(e.target); pitchFly(e.target); lnIO.unobserve(e.target); }
+  }), {threshold:[0, 0.5, 0.9, 0.95, 0.995, 1], rootMargin:`-${topH}px 0px -${botH}px 0px`});
   svgs.forEach(v=> lnIO.observe(v));
 }
 let ggIO = null;
