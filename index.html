@@ -1432,6 +1432,22 @@ svg.chart:not(.go) .ln-draw,svg.chart:not(.go) .ln-area,svg.chart:not(.go) .ln-p
 .mcard .mh .hbadge{display:inline-flex;align-items:center;gap:3px;margin-left:4px;padding:0;background:none;border:0;color:#E2495B;font-size:11px;font-weight:700;white-space:nowrap}
 nav.tabs{box-sizing:border-box;overflow:hidden;transform:translateZ(0)}
 nav.tabs button{height:var(--nav-h);min-height:0!important}
+.mcard{position:relative}
+.mcard .mh .hballs{display:inline-flex;align-items:center;gap:2px;margin-left:6px;vertical-align:-2px}
+.mcard .mh .hb{display:inline-flex;width:13px;height:13px}
+.mcard .hbfly{position:absolute;width:13px;height:13px;display:block;pointer-events:none;z-index:5;filter:drop-shadow(0 2px 2px rgba(0,0,0,.18))}
+@keyframes hbLand{0%{transform:scale(1.4)}60%{transform:scale(.85)}100%{transform:scale(1)}}
+.mcard .hb.land{animation:hbLand .3s ease-out}
+/* 앱 셸: 내용만 스크롤 (하단 메뉴 고정) */
+html,body{height:100%;overflow:hidden}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;padding-bottom:0!important;overscroll-behavior:none}
+.headwrap{position:relative!important;flex:none}
+#view{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  max-width:none!important;width:100%;margin:0!important;
+  padding-left:max(12px, calc((100% - 1056px) / 2))!important;padding-right:max(12px, calc((100% - 1056px) / 2))!important;padding-bottom:28px!important}
+nav.tabs{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;flex:none}
+.sect{scroll-margin-top:8px!important}
+@media print{ html,body{height:auto;overflow:visible} body{display:block;height:auto} #view{overflow:visible} }
 </style>
 </head>
 <body>
@@ -2874,6 +2890,7 @@ document.addEventListener("pointerdown", e=>{
 });
 document.addEventListener("pointerleave", tipHide);
 window.addEventListener("scroll", tipHide, {passive:true});
+document.addEventListener("scroll", e=>{ if(e.target && e.target.id==="view") tipHide(); }, {passive:true, capture:true});
 
 function niceTicks(min, max, n){
   n = n||4;
@@ -3656,7 +3673,7 @@ function matchCard(g){
     : `${nm}${lg}<span class="sc2 ${t.me?"":"op"}">${hasSc? esc(String(t.sc)) : ""}</span>`; };
   const tag = [gameType(g)==="practice"? "Practice" : "", gameTour(g)].filter(Boolean).join(" · ");
   return `<div class="mcard" data-act="openGame" data-id="${g.id}" role="button" tabindex="0" aria-label="${esc(fmtDate(g.date))} ${esc(op.n)}">
-    <div class="mh">${ok? `${dt.getFullYear()}.${pad2(dt.getMonth()+1)}.${pad2(dt.getDate())} ${wd}` : "-"}${g.time? " "+esc(g.time) : ""}${g.venue? " "+esc(g.venue) : ""}${(()=>{ const bt = battingOf(g.pas); return bt.H? `<span class="hbadge"><svg viewBox="0 0 24 24" width="11" height="11" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#fff" stroke="currentColor" stroke-width="2"/><path d="M8 5.5c2 4 2 9 0 13M16 5.5c-2 4-2 9 0 13" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>${bt.H} ${bt.H>1?"Hits":"Hit"}${bt.HR? " · "+bt.HR+" HR" : ""}</span>` : ""; })()}
+    <div class="mh">${ok? `${dt.getFullYear()}.${pad2(dt.getMonth()+1)}.${pad2(dt.getDate())} ${wd}` : "-"}${g.time? " "+esc(g.time) : ""}${g.venue? " "+esc(g.venue) : ""}${(()=>{ const bt = battingOf(g.pas); return bt.H? `<span class="hballs" aria-label="${bt.H}안타">${Array.from({length:Math.min(bt.H,8)},()=>`<i class="hb">${MINI_BALL}</i>`).join("")}</span>` : ""; })()}
       <span class="tg">${gameType(g)==="practice"? `<b class="ty prac">Practice</b>` : `<b class="ty off">Official</b>`}${gameTour(g)? " · "+esc(gameTour(g)) : ""}</span></div>
     <div class="mb">${side(L,false)}<span class="st">${st}${gameResult(g)? `<b class="mres ${gameResult(g)==="승"?"w":gameResult(g)==="패"?"l":"d"}">${gameResult(g)}</b>` : ""}</span>${side(R,true)}</div>
   </div>`;
@@ -6611,7 +6628,7 @@ document.addEventListener("click", ev=>{
     case "gtype": S.ui.gtype=v; save(); render(); break;
     case "gmMove": { const all = S.games.filter(g=> (S.ui.gtype||"all")==="all" || gameType(g)===S.ui.gtype)
         .sort((a,b)=> (a.date||"").localeCompare(b.date||""));
-      S.ui.gm = shiftMonth(gamesMonth(all), num(v,0)); save(); render(); window.scrollTo(0,0); break; }
+      S.ui.gm = shiftMonth(gamesMonth(all), num(v,0)); save(); render(); $("#view").scrollTop = 0; break; }
     case "pickGType": {
       $$("#modal [data-act='pickGType']").forEach(b=> b.setAttribute("aria-pressed", String(b.dataset.v===v)));
       const h=$("#g_type"); if(h) h.value=v;
@@ -7152,6 +7169,34 @@ function freezeNav(){
   nav.style.height = "calc(var(--nav-h) + " + navPadMax + "px)";
 }
 window.addEventListener("load", freezeNav);
+const MINI_BALL = '<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#fff" stroke="#bdb6aa" stroke-width="1.2"/><path d="M7.6 4.2c2.4 4.6 2.4 11 0 15.6M16.4 4.2c-2.4 4.6-2.4 11 0 15.6" fill="none" stroke="#d2312b" stroke-width="1.5" stroke-dasharray="2 1.3"/></svg>';
+function hitFly(){
+  const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  $$("#view .mcard").forEach((card, ci)=>{
+    const balls = $$(".hballs .hb", card); if(!balls.length) return;
+    const logo = card.querySelector(".mb .tlogo.me"); if(!logo || reduce || !card.animate) return;
+    balls.forEach(b=> b.style.opacity = "0");
+    const base = 450 + Math.min(ci*60, 600);
+    requestAnimationFrame(()=>{
+      const cr = card.getBoundingClientRect(), lr = logo.getBoundingClientRect();
+      const sx = lr.left + lr.width/2 - cr.left, sy = lr.top + lr.height/2 - cr.top;
+      balls.forEach((b, i)=>{
+        const br = b.getBoundingClientRect(), ex = br.left + br.width/2 - cr.left, ey = br.top + br.height/2 - cr.top;
+        const fl = document.createElement("i"); fl.className = "hbfly"; fl.innerHTML = MINI_BALL;
+        fl.style.left = (sx-6.5)+"px"; fl.style.top = (sy-6.5)+"px"; card.appendChild(fl);
+        const dx = ex - sx, dy = ey - sy, peak = Math.max(9, Math.min(sy, ey) - 26) - sy;
+        const an = fl.animate([
+          {transform:"translate(0px,0px) scale(.6) rotate(0deg)", opacity:0, offset:0},
+          {transform:`translate(${dx*0.12}px,${peak*0.45}px) scale(1.25) rotate(140deg)`, opacity:1, offset:0.15},
+          {transform:`translate(${dx*0.5}px,${peak}px) scale(1.6) rotate(420deg)`, opacity:1, offset:0.5},
+          {transform:`translate(${dx*0.88}px,${dy*0.8}px) scale(1.15) rotate(680deg)`, opacity:1, offset:0.85},
+          {transform:`translate(${dx}px,${dy}px) scale(1) rotate(720deg)`, opacity:1, offset:1}
+        ], {duration:900, delay:base + i*170, easing:"cubic-bezier(.3,.05,.45,1)", fill:"both"});
+        an.onfinish = ()=>{ b.style.opacity = ""; b.classList.add("land"); fl.remove(); };
+      });
+    });
+  });
+}
 function moveSubbar(){
   const sb = document.getElementById("subbar"); if(!sb) return;
   sb.innerHTML = "";
@@ -7299,14 +7344,14 @@ function render(){
   const tph = curPhoto();
   if(tb){ tb.classList.toggle("ph", !!tph); tb.style.backgroundImage = tph? `url("${tph}")` : ""; }
   syncTopbarH();
-  if(lastTab!==t){ window.scrollTo(0,0); lastTab=t; }
+  if(lastTab!==t){ v.scrollTop = 0; window.scrollTo(0,0); lastTab=t; }
   envBanner();
   fillQuota();
   fillMissing();
   setupFolds();
   moveSubbar();
   if(navPadMax < 0) freezeNav();
-  if(t==="games") scoreCount();
+  if(t==="games"){ scoreCount(); if(!S.ui.gameId) hitFly(); }
   lineObserve();
   gaugeObserve();
   if(t==="home") figCount();
