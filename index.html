@@ -1448,6 +1448,11 @@ nav.tabs{position:relative!important;left:auto!important;right:auto!important;bo
 .sect{scroll-margin-top:8px!important}
 @media print{ html,body{height:auto;overflow:visible} body{display:block;height:auto} #view{overflow:visible} }
 .mcard svg.hbfx{position:absolute;left:0;top:0;pointer-events:none;z-index:5;overflow:visible}
+#ptr{position:fixed;left:50%;z-index:45;width:36px;height:36px;border-radius:50%;background:var(--surface-1);color:var(--text-2);
+  display:grid;place-items:center;box-shadow:0 2px 10px rgba(0,0,0,.15);opacity:0;pointer-events:none;transform:translateX(-50%)}
+#ptr.ready{color:#CC4A3A}
+@keyframes ptrSpin{to{transform:translateX(-50%) rotate(360deg)}}
+#ptr.spin{animation:ptrSpin .7s linear infinite;opacity:1!important}
 </style>
 </head>
 <body>
@@ -7168,6 +7173,35 @@ function freezeNav(){
   nav.style.paddingBottom = navPadMax + "px";
 }
 window.addEventListener("load", freezeNav);
+/* 당겨서 새로고침 */
+(function(){
+  let y0 = null, pull = 0, ind = null;
+  const TH = 80;
+  const view = ()=> document.getElementById("view");
+  const getInd = ()=>{ if(!ind){ ind = document.createElement("div"); ind.id = "ptr"; ind.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg>'; document.body.appendChild(ind); } return ind; };
+  document.addEventListener("touchstart", e=>{
+    const v = view(); if(!v || !v.contains(e.target) || $("#modal").innerHTML) { y0 = null; return; }
+    y0 = (v.scrollTop <= 0)? e.touches[0].clientY : null; pull = 0;
+  }, {passive:true});
+  document.addEventListener("touchmove", e=>{
+    if(y0 == null) return;
+    const v = view(); if(v.scrollTop > 0){ y0 = null; return; }
+    pull = Math.max(0, e.touches[0].clientY - y0);
+    const d = Math.min(pull*0.5, 70), el = getInd();
+    const top = (document.querySelector(".headwrap")||{getBoundingClientRect:()=>({bottom:0})}).getBoundingClientRect().bottom;
+    el.style.top = (top + d - 30) + "px"; el.style.opacity = Math.min(1, pull/TH);
+    el.style.transform = `translateX(-50%) rotate(${Math.min(pull/TH,1)*270}deg)`;
+    el.classList.toggle("ready", pull >= TH);
+  }, {passive:true});
+  document.addEventListener("touchend", ()=>{
+    if(y0 == null){ return; }
+    y0 = null;
+    const el = ind; if(!el) return;
+    if(pull >= TH){ el.classList.add("spin"); saveNow(); setTimeout(()=> location.reload(), 250); }
+    else { el.style.opacity = 0; }
+    pull = 0;
+  }, {passive:true});
+})();
 function setAppH(){
   const h = window.innerHeight;
   if(h > 200) document.documentElement.style.setProperty("--app-h", h + "px");
