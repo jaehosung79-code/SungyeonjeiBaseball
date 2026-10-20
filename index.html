@@ -1453,6 +1453,9 @@ nav.tabs{position:relative!important;left:auto!important;right:auto!important;bo
 #ptr.ready{color:#CC4A3A}
 @keyframes ptrSpin{to{transform:translateX(-50%) rotate(360deg)}}
 #ptr.spin{animation:ptrSpin .7s linear infinite;opacity:1!important}
+@keyframes batSwing{0%{opacity:0;transform:rotate(95deg)}15%{opacity:1;transform:rotate(85deg)}
+  45%{transform:rotate(-20deg)}62%{opacity:1;transform:rotate(-95deg)}100%{opacity:0;transform:rotate(-105deg)}}
+.mcard svg.hbfx .hbat{opacity:0;transform-origin:0 0;animation:batSwing .55s cubic-bezier(.5,0,.3,1) both}
 </style>
 </head>
 <body>
@@ -7228,7 +7231,10 @@ function hitFly(){
       balls.forEach((b, i)=>{
         const br = b.getBoundingClientRect(), ex = br.left + br.width/2 - cr.left, ey = br.top + br.height/2 - cr.top;
         const cx = (sx+ex)/2, cy = Math.max(4, Math.min(sy, ey) - 34);
-        const dl = base + i*0.22; ends.push(dl + 0.95);
+        const bs = base + i*0.62, dl = bs + 0.24; ends.push(dl + 0.95);
+        svg += `<g transform="translate(${(sx+12).toFixed(1)} ${(sy+10).toFixed(1)})"><g class="hbat" style="animation-delay:${bs.toFixed(2)}s">`
+          + `<path d="M-1.5,0 L-2.4,-22 Q-3.2,-31 0,-32.5 Q3.2,-31 2.4,-22 L1.5,0 Z" fill="#C9965E" stroke="#8a5a2b" stroke-width=".8"/>`
+          + `<rect x="-1.9" y="-3" width="3.8" height="5" rx="1" fill="#2A2E30"/><circle cx="0" cy="2.6" r="2.4" fill="#8a5a2b"/></g></g>`;
         svg += `<g class="sp-fx" data-q="${sx.toFixed(1)},${sy.toFixed(1)},${cx.toFixed(1)},${cy.toFixed(1)},${ex.toFixed(1)},${ey.toFixed(1)}" data-d="${dl.toFixed(2)}" data-r="6.2">`
           + `<ellipse class="sp-shadow" cx="${sx}" cy="${sy}" rx="0" ry="0" fill="rgba(0,0,0,.2)" opacity="0"/>`
           + `<path class="sp-wind w1" d="" fill="none" stroke="rgba(120,140,150,.38)" stroke-width="9" stroke-linecap="round" filter="url(#${fid})"/>`
