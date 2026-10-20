@@ -1430,6 +1430,8 @@ svg.chart:not(.go) .ln-draw,svg.chart:not(.go) .ln-area,svg.chart:not(.go) .ln-p
 @keyframes sealInL{0%{opacity:0;transform:translateY(-10px) scale(2.8) rotate(30deg);filter:blur(1.5px)}55%{opacity:.95;transform:scale(.86) rotate(11deg);filter:blur(0)}72%{transform:scale(1.06) rotate(7deg)}100%{opacity:.95;transform:scale(1) rotate(9deg)}}
 @keyframes sealInD{0%{opacity:0;transform:translateY(-10px) scale(2.8) rotate(-20deg);filter:blur(1.5px)}55%{opacity:.95;transform:scale(.86) rotate(-3deg);filter:blur(0)}72%{transform:scale(1.06) rotate(-6deg)}100%{opacity:.95;transform:scale(1) rotate(-4deg)}}
 .mcard .mh .hbadge{display:inline-flex;align-items:center;gap:3px;margin-left:4px;padding:0;background:none;border:0;color:#E2495B;font-size:11px;font-weight:700;white-space:nowrap}
+nav.tabs{box-sizing:border-box;overflow:hidden;transform:translateZ(0)}
+nav.tabs button{height:var(--nav-h);min-height:0!important}
 </style>
 </head>
 <body>
@@ -7140,6 +7142,16 @@ function syncTopbarH(){
   const tb = document.querySelector(".headwrap") || document.querySelector(".topbar");
   if(tb) document.documentElement.style.setProperty("--topbar-h", Math.ceil(tb.getBoundingClientRect().height) + "px");
 }
+let navPadMax = -1;
+function freezeNav(){
+  const nav = document.querySelector("nav.tabs"); if(!nav) return;
+  if(navPadMax < 0){ nav.style.paddingBottom = ""; }
+  const pb = parseFloat(getComputedStyle(nav).paddingBottom) || 0;
+  if(pb > navPadMax){ navPadMax = pb; }
+  nav.style.paddingBottom = navPadMax + "px";
+  nav.style.height = "calc(var(--nav-h) + " + navPadMax + "px)";
+}
+window.addEventListener("load", freezeNav);
 function moveSubbar(){
   const sb = document.getElementById("subbar"); if(!sb) return;
   sb.innerHTML = "";
@@ -7293,6 +7305,7 @@ function render(){
   fillMissing();
   setupFolds();
   moveSubbar();
+  if(navPadMax < 0) freezeNav();
   if(t==="games") scoreCount();
   lineObserve();
   gaugeObserve();
