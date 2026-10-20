@@ -1453,8 +1453,9 @@ nav.tabs{position:relative!important;left:auto!important;right:auto!important;bo
 #ptr.ready{color:#CC4A3A}
 @keyframes ptrSpin{to{transform:translateX(-50%) rotate(360deg)}}
 #ptr.spin{animation:ptrSpin .7s linear infinite;opacity:1!important}
-@keyframes batSwing{0%{opacity:0;transform:rotate(25deg)}15%{opacity:1;transform:rotate(20deg)}
-  45%{transform:rotate(-90deg)}65%{opacity:1;transform:rotate(-160deg)}100%{opacity:0;transform:rotate(-170deg)}}
+@keyframes batSwing{0%{opacity:0;transform:rotate(-90deg) scaleY(-1)}12%{opacity:1;transform:rotate(-88deg) scaleY(-.95)}
+  30%{transform:rotate(-90deg) scaleY(-.15)}45%{transform:rotate(-92deg) scaleY(1)}
+  70%{opacity:1;transform:rotate(-80deg) scaleY(.35)}100%{opacity:0;transform:rotate(-72deg) scaleY(-.2)}}
 .mcard svg.hbfx .hbat{opacity:0;transform-origin:0 0;animation:batSwing .55s cubic-bezier(.5,0,.3,1) both}
 </style>
 </head>
