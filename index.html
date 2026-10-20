@@ -6595,7 +6595,7 @@ document.addEventListener("click", ev=>{
   const el = ev.target.closest("[data-act]"); if(!el) return;
   const a = el.dataset.act, id = el.dataset.id, gid = el.dataset.gid, v = el.dataset.v;
 
-  if(readOnly() && RO_BLOCK.has(a)){ toast(roMsg()); return; }
+  if(readOnly() && RO_BLOCK.has(a)) return;
 
   switch(a){
     case "close": closeSheet(); break;
