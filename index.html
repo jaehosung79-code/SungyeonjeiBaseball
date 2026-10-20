@@ -1429,6 +1429,7 @@ svg.chart:not(.go) .ln-draw,svg.chart:not(.go) .ln-area,svg.chart:not(.go) .ln-p
 }
 @keyframes sealInL{0%{opacity:0;transform:translateY(-10px) scale(2.8) rotate(30deg);filter:blur(1.5px)}55%{opacity:.95;transform:scale(.86) rotate(11deg);filter:blur(0)}72%{transform:scale(1.06) rotate(7deg)}100%{opacity:.95;transform:scale(1) rotate(9deg)}}
 @keyframes sealInD{0%{opacity:0;transform:translateY(-10px) scale(2.8) rotate(-20deg);filter:blur(1.5px)}55%{opacity:.95;transform:scale(.86) rotate(-3deg);filter:blur(0)}72%{transform:scale(1.06) rotate(-6deg)}100%{opacity:.95;transform:scale(1) rotate(-4deg)}}
+.mcard .mh .hbadge{display:inline-flex;align-items:center;gap:3px;margin-left:4px;padding:0;background:none;border:0;color:#E2495B;font-size:11px;font-weight:700;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -3653,7 +3654,7 @@ function matchCard(g){
     : `${nm}${lg}<span class="sc2 ${t.me?"":"op"}">${hasSc? esc(String(t.sc)) : ""}</span>`; };
   const tag = [gameType(g)==="practice"? "Practice" : "", gameTour(g)].filter(Boolean).join(" · ");
   return `<div class="mcard" data-act="openGame" data-id="${g.id}" role="button" tabindex="0" aria-label="${esc(fmtDate(g.date))} ${esc(op.n)}">
-    <div class="mh">${ok? `${dt.getFullYear()}.${pad2(dt.getMonth()+1)}.${pad2(dt.getDate())} ${wd}` : "-"}${g.time? " "+esc(g.time) : ""}${g.venue? " "+esc(g.venue) : ""}
+    <div class="mh">${ok? `${dt.getFullYear()}.${pad2(dt.getMonth()+1)}.${pad2(dt.getDate())} ${wd}` : "-"}${g.time? " "+esc(g.time) : ""}${g.venue? " "+esc(g.venue) : ""}${(()=>{ const bt = battingOf(g.pas); return bt.H? `<span class="hbadge"><svg viewBox="0 0 24 24" width="11" height="11" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#fff" stroke="currentColor" stroke-width="2"/><path d="M8 5.5c2 4 2 9 0 13M16 5.5c-2 4-2 9 0 13" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>${bt.H} ${bt.H>1?"Hits":"Hit"}${bt.HR? " · "+bt.HR+" HR" : ""}</span>` : ""; })()}
       <span class="tg">${gameType(g)==="practice"? `<b class="ty prac">Practice</b>` : `<b class="ty off">Official</b>`}${gameTour(g)? " · "+esc(gameTour(g)) : ""}</span></div>
     <div class="mb">${side(L,false)}<span class="st">${st}${gameResult(g)? `<b class="mres ${gameResult(g)==="승"?"w":gameResult(g)==="패"?"l":"d"}">${gameResult(g)}</b>` : ""}</span>${side(R,true)}</div>
   </div>`;
