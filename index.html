@@ -4438,7 +4438,7 @@ function viewStats(){
      ["wOBA",avg3(b.wOBA),"볼넷/삼진 BB/K",fx2(b.BBK)],
      ["BABIP",avg3(b.BABIP),"2차 타율 SecA",avg3(b.SecA)],
      ["득점생산 RC",fx2(b.RC),"인플레이 전환율",pct1(b.PSO)],
-     ["타수/홈런",fx2(b.ABHR),"",""]], null, "kv");
+     ["타수/홈런",fx2(b.ABHR),"도루 성공률",pct1(b.SBP)]], null, "kv");
 
   const bm = bMode();
   const iBat = insBatting(b, gs), iSteal = insSteal(b, gs), iDir = insDirs(dirs, bip), iDepth = insDepth(depth, b),
