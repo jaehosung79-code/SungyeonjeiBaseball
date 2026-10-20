@@ -1455,13 +1455,13 @@ nav.tabs{position:relative!important;left:auto!important;right:auto!important;bo
 #ptr.spin{animation:ptrSpin .7s linear infinite;opacity:1!important}
 
 /* 홈런 전광판 */
-.mcard .hrboard{position:absolute;inset:4px;z-index:6;border-radius:10px;overflow:hidden;pointer-events:none;
+.mcard .hrboard{position:absolute;inset:4px;z-index:6;border-radius:8px;overflow:hidden;pointer-events:none;
   background:#0d0f10;background-image:radial-gradient(rgba(255,255,255,.06) 1px, transparent 1.4px);background-size:5px 5px;
   display:flex;align-items:center;justify-content:center;gap:10px;animation:hrIn .35s cubic-bezier(.2,.9,.3,1.2) both;box-shadow:0 0 0 2px #1d2124 inset}
 .mcard .hrboard.out{animation:hrOut .45s ease-in both}
 .mcard .hrboard .bulbs{position:absolute;inset:3px;border-radius:8px;border:3px dotted #FFC531;opacity:.85;animation:bulb .25s steps(2) infinite}
 .mcard .hrboard .led{position:relative;overflow:hidden;width:78%;text-align:center}
-.mcard .hrboard .led span{display:inline-block;font-family:"Courier New",ui-monospace,monospace;font-weight:900;font-size:30px;letter-spacing:4px;color:#FFC531;
+.mcard .hrboard .led span{display:inline-block;font-family:"Courier New",ui-monospace,monospace;font-weight:900;font-size:24px;letter-spacing:3px;color:#FFC531;
   text-shadow:0 0 6px #FF9F1C,0 0 14px rgba(255,140,0,.75);animation:ledScroll .9s cubic-bezier(.2,.8,.3,1) both, ledBlink .32s steps(2) .95s 6}
 .mcard .hrboard .led::after{content:"";position:absolute;inset:0;background:radial-gradient(transparent 55%, rgba(13,15,16,.55) 60%);background-size:3px 3px;pointer-events:none}
 .mcard .hrboard .cnt{position:relative;font-family:"Courier New",monospace;font-weight:900;font-size:22px;color:#ff5a3c;text-shadow:0 0 8px #ff3b1f}
@@ -7240,6 +7240,8 @@ function hrBoard(card, n){
   card.insertAdjacentHTML("beforeend", `<div class="hrboard" aria-hidden="true"><div class="bulbs"></div>
     <div class="led"><span>HOME RUN!</span></div>${n>1? `<div class="cnt">× ${n}</div>` : ""}<div class="sparks">${sp}</div></div>`);
   const el = card.querySelector(".hrboard:last-of-type");
+  const mb = card.querySelector(".mb");
+  if(mb){ el.style.inset = "auto"; el.style.left = "4px"; el.style.right = "4px"; el.style.top = (mb.offsetTop + 3) + "px"; el.style.height = (mb.offsetHeight - 6) + "px"; }
   setTimeout(()=>{ if(el && el.isConnected){ el.classList.add("out"); setTimeout(()=> el.remove(), 500); } }, 3000);
 }
 function hitFly(){
