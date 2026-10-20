@@ -1476,6 +1476,10 @@ nav.tabs{position:relative!important;left:auto!important;right:auto!important;bo
 @keyframes ledBlink{0%{opacity:1}100%{opacity:.25}}
 @keyframes spark{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(.4)}}
 #view .mhead,#view .snav,#view [class*="mhead"]{top:0!important}
+.vmon{position:relative}
+.vmon > button.mhead{position:sticky;top:0!important;z-index:20;background:var(--surface-0)!important;margin-left:-12px;margin-right:-12px;padding-left:16px;padding-right:16px;width:calc(100% + 24px)}
+#view .vmon > button.mhead{top:-14px!important}
+@media(min-width:820px){ #view .vmon > button.mhead{top:-20px!important} }
 </style>
 </head>
 <body>
@@ -4628,7 +4632,7 @@ function viewVideos(){
     const vc = gr.list.reduce((a,g)=>a+g.videos.length, 0);
     const sz = gr.list.reduce((a,g)=>a+g.videos.reduce((x,v)=>x+(v.size||0),0), 0);
     const mOpen = !closedMV.has(gr.m);
-    return monthHead("toggleMV", gr.m, mOpen, `${gr.list.length}경기 · 영상 ${vc}개${sz? " · "+bytes(sz):""}`)
+    return `<section class="vmon">` + monthHead("toggleMV", gr.m, mOpen, `${gr.list.length}경기 · 영상 ${vc}개${sz? " · "+bytes(sz):""}`)
       + `<div class="vgrid" ${mOpen?"":"hidden"}>` + gr.list.map(g=>{
       const open = openVG.has(g.id);
       const th = g.videos.map(v=> v.kind==="link"? ytThumb(v.url) : "").find(Boolean);
@@ -4656,7 +4660,7 @@ function viewVideos(){
           </div>
         </div>
       </div>`;
-      }).join("") + `</div>`;
+      }).join("") + `</div></section>`;
     }).join("")
     : `<div class="empty">${emptyArt(IC_EMPTY_PLAY)}등록된 영상 없음<br>
        <span class="hint">경기 상세 화면에서 영상 추가</span></div>`);
