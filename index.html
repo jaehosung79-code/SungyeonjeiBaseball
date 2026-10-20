@@ -1481,6 +1481,14 @@ nav.tabs{position:relative!important;left:auto!important;right:auto!important;bo
 #view .vmon > button.mhead{top:-14px!important}
 @media(min-width:820px){ #view .vmon > button.mhead{top:-20px!important} }
 #view button.mhead,#view .vmon > button.mhead{position:static!important;top:auto!important}
+.vg2 .bd .gi{display:none}
+.vg2.open > button .th{display:none!important}
+.vg2.open .bd{position:static!important;color:var(--text-1);padding:14px 14px 8px!important;pointer-events:auto}
+.vg2.open .bd .t{color:var(--text-1)!important;text-shadow:none!important;font-size:16px!important}
+.vg2.open .bd .s{color:var(--text-3)!important;font-size:12px!important}
+.vg2.open .bd .gi{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:6px;font-size:12.5px;color:var(--text-2)}
+.vg2 .bd .gi .ty{font-weight:700} .vg2 .bd .gi .ty.off{color:#CC4A3A} .vg2 .bd .gi .ty.prac{color:#0E9A93}
+.vg2 .bd .gi b.w{color:#CC4A3A} .vg2 .bd .gi b.l{color:var(--text-3)}
 </style>
 </head>
 <body>
@@ -4641,7 +4649,12 @@ function viewVideos(){
         <button data-act="toggleVG" data-id="${g.id}" aria-expanded="${open}" aria-label="${esc(fmtDate(g.date))} ${esc(g.opponent||"-")} 영상 ${g.videos.length}개">
           <div class="th">${th? `<img src="${th}" alt="" loading="lazy" onerror="this.remove()">` : ""}<span class="pl">${IC_PLAYF}</span><span class="c">${g.videos.length}</span></div>
           <div class="bd"><div class="t">${esc(g.opponent||"상대 미입력")}</div>
-            <div class="s">${esc(mdDate(g.date))}${gameTour(g)?" · "+esc(gameTour(g)):""}${g.venue?" · "+esc(g.venue):""}</div></div>
+            <div class="s">${esc(mdDate(g.date))}${gameTour(g)?" · "+esc(gameTour(g)):""}${g.venue?" · "+esc(g.venue):""}</div>
+            <div class="gi">${(()=>{ const hs = g.myScore!=="" && g.myScore!=null && g.oppScore!=="" && g.oppScore!=null, r = gameResult(g), t = battingOf(g.pas);
+              return `<span class="ty ${gameType(g)==="practice"?"prac":"off"}">${gameType(g)==="practice"?"Practice":"Official"}</span>`
+                + (hs? `<span>${esc(String(g.myScore))} : ${esc(String(g.oppScore))}${r? ` <b class="${r==="승"?"w":r==="패"?"l":""}">${r}</b>` : ""}</span>` : "")
+                + (t.PA? `<span>${t.AB}타수 ${t.H}안타${t.RBI? " "+t.RBI+"타점" : ""}</span>` : "")
+                + `<span>영상 ${g.videos.length}개</span>`; })()}</div></div>
         </button>
         <button class="vgame" hidden data-act="toggleVG" data-id="${g.id}" aria-expanded="${open}"
           aria-label="${esc(fmtDate(g.date))} ${esc(g.opponent||"-")} 영상 ${g.videos.length}개">
