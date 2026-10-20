@@ -130,7 +130,10 @@
   "g:mv7jqi3e0iscu": 1791948289296,
   "g:mv97qiv26fwj8": 1792049068563,
   "g:mvelq442ug7m8": 1792375087937,
-  "d:mvelqhvf7o65k": 1792375087937
+  "d:mvelqhvf7o65k": 1792375087937,
+  "p:mvg0duxcj5zmy": 1792460342749,
+  "p:mvg3v0vl0qx8s": 1792465822922,
+  "p:muy1m4f59jv9g": 1792465936658
  },
  "games": [
   {
@@ -1769,19 +1772,6 @@
   {
    "id": "mukgecrqdapiw",
    "pas": [
-    {
-     "id": "muy1m4f59jv9g",
-     "inning": 2,
-     "pitcherNo": "",
-     "pitcher": "",
-     "result": "BB",
-     "zone": null,
-     "rbi": 0,
-     "runs": 1,
-     "sb": 0,
-     "cs": 0,
-     "note": ""
-    },
     {
      "id": "muy1m9rrp4eir",
      "inning": 5,
@@ -4920,6 +4910,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-19T01:58:27.951Z",
+ "savedAt": "2026-10-20T03:19:55.914Z",
  "by": "Sung YeonJei"
 }
