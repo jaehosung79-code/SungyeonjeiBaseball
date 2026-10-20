@@ -1453,10 +1453,31 @@ nav.tabs{position:relative!important;left:auto!important;right:auto!important;bo
 #ptr.ready{color:#CC4A3A}
 @keyframes ptrSpin{to{transform:translateX(-50%) rotate(360deg)}}
 #ptr.spin{animation:ptrSpin .7s linear infinite;opacity:1!important}
-@keyframes batSwing{0%{opacity:0;transform:rotate(-90deg) scaleY(-1)}12%{opacity:1;transform:rotate(-88deg) scaleY(-.95)}
-  30%{transform:rotate(-90deg) scaleY(-.15)}45%{transform:rotate(-92deg) scaleY(1)}
-  70%{opacity:1;transform:rotate(-80deg) scaleY(.35)}100%{opacity:0;transform:rotate(-72deg) scaleY(-.2)}}
+@keyframes batSwing{0%{opacity:0;transform:rotate(-78deg) scaleY(-1)}12%{opacity:1;transform:rotate(-80deg) scaleY(-.95)}
+  30%{transform:rotate(-88deg) scaleY(-.15)}45%{transform:rotate(-98deg) scaleY(1)}
+  70%{opacity:1;transform:rotate(-72deg) scaleY(.35)}100%{opacity:0;transform:rotate(-60deg) scaleY(-.2)}}
 .mcard svg.hbfx .hbat{opacity:0;transform-origin:0 0;animation:batSwing .55s cubic-bezier(.5,0,.3,1) both}
+/* 홈런 전광판 */
+.mcard .hrboard{position:absolute;inset:4px;z-index:6;border-radius:10px;overflow:hidden;pointer-events:none;
+  background:#0d0f10;background-image:radial-gradient(rgba(255,255,255,.06) 1px, transparent 1.4px);background-size:5px 5px;
+  display:flex;align-items:center;justify-content:center;gap:10px;animation:hrIn .35s cubic-bezier(.2,.9,.3,1.2) both;box-shadow:0 0 0 2px #1d2124 inset}
+.mcard .hrboard.out{animation:hrOut .45s ease-in both}
+.mcard .hrboard .bulbs{position:absolute;inset:3px;border-radius:8px;border:3px dotted #FFC531;opacity:.85;animation:bulb .25s steps(2) infinite}
+.mcard .hrboard .led{position:relative;overflow:hidden;width:78%;text-align:center}
+.mcard .hrboard .led span{display:inline-block;font-family:"Courier New",ui-monospace,monospace;font-weight:900;font-size:30px;letter-spacing:4px;color:#FFC531;
+  text-shadow:0 0 6px #FF9F1C,0 0 14px rgba(255,140,0,.75);animation:ledScroll .9s cubic-bezier(.2,.8,.3,1) both, ledBlink .32s steps(2) .95s 6}
+.mcard .hrboard .led::after{content:"";position:absolute;inset:0;background:radial-gradient(transparent 55%, rgba(13,15,16,.55) 60%);background-size:3px 3px;pointer-events:none}
+.mcard .hrboard .cnt{position:relative;font-family:"Courier New",monospace;font-weight:900;font-size:22px;color:#ff5a3c;text-shadow:0 0 8px #ff3b1f}
+.mcard .hrboard .sparks{position:absolute;left:50%;top:50%}
+.mcard .hrboard .spark{position:absolute;width:5px;height:5px;border-radius:50%;background:#FFE08A;box-shadow:0 0 6px #FFC531;opacity:0;animation:spark .8s ease-out both}
+.mcard .hrboard .spark:nth-child(3n){background:#ff7a5c;box-shadow:0 0 6px #ff3b1f}
+.mcard .hrboard .spark:nth-child(3n+1){background:#7fe3ff;box-shadow:0 0 6px #31c4ff}
+@keyframes hrIn{from{opacity:0;transform:scaleY(.1)}to{opacity:1;transform:none}}
+@keyframes hrOut{to{opacity:0;transform:scaleY(.1)}}
+@keyframes bulb{0%{opacity:.95}100%{opacity:.35}}
+@keyframes ledScroll{from{transform:translateX(120%)}to{transform:none}}
+@keyframes ledBlink{0%{opacity:1}100%{opacity:.25}}
+@keyframes spark{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(.4)}}
 </style>
 </head>
 <body>
@@ -3681,7 +3702,7 @@ function matchCard(g){
     ? `<span class="sc2 ${t.me?"":"op"}">${hasSc? esc(String(t.sc)) : ""}</span>${lg}${nm}`
     : `${nm}${lg}<span class="sc2 ${t.me?"":"op"}">${hasSc? esc(String(t.sc)) : ""}</span>`; };
   const tag = [gameType(g)==="practice"? "Practice" : "", gameTour(g)].filter(Boolean).join(" · ");
-  return `<div class="mcard" data-act="openGame" data-id="${g.id}" role="button" tabindex="0" aria-label="${esc(fmtDate(g.date))} ${esc(op.n)}">
+  return `<div class="mcard" data-act="openGame" data-id="${g.id}" data-hr="${battingOf(g.pas).HR}" role="button" tabindex="0" aria-label="${esc(fmtDate(g.date))} ${esc(op.n)}">
     <div class="mh">${ok? `${dt.getFullYear()}.${pad2(dt.getMonth()+1)}.${pad2(dt.getDate())} ${wd}` : "-"}${g.time? " "+esc(g.time) : ""}${g.venue? " "+esc(g.venue) : ""}${(()=>{ const bt = battingOf(g.pas); return bt.H? `<span class="hballs" aria-label="${bt.H}안타">${Array.from({length:Math.min(bt.H,8)},()=>`<i class="hb">${MINI_BALL}</i>`).join("")}</span>` : ""; })()}
       <span class="tg">${gameType(g)==="practice"? `<b class="ty prac">Practice</b>` : `<b class="ty off">Official</b>`}${gameTour(g)? " · "+esc(gameTour(g)) : ""}</span></div>
     <div class="mb">${side(L,false)}<span class="st">${st}${gameResult(g)? `<b class="mres ${gameResult(g)==="승"?"w":gameResult(g)==="패"?"l":"d"}">${gameResult(g)}</b>` : ""}</span>${side(R,true)}</div>
@@ -7215,6 +7236,15 @@ window.addEventListener("resize", setAppH);
 window.addEventListener("orientationchange", ()=> setTimeout(setAppH, 300));
 if(window.visualViewport) visualViewport.addEventListener("resize", ()=>{ if(!typing()) setAppH(); });
 const MINI_BALL = '<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#fff" stroke="#bdb6aa" stroke-width="1.2"/><path d="M7.6 4.2c2.4 4.6 2.4 11 0 15.6M16.4 4.2c-2.4 4.6-2.4 11 0 15.6" fill="none" stroke="#d2312b" stroke-width="1.5" stroke-dasharray="2 1.3"/></svg>';
+function hrBoard(card, n){
+  if(!card.isConnected) return;
+  const sp = Array.from({length:14},(_,i)=>{ const a = i/14*Math.PI*2, d = 60 + (i%3)*18;
+    return `<i class="spark" style="--x:${(Math.cos(a)*d).toFixed(0)}px;--y:${(Math.sin(a)*d*0.55).toFixed(0)}px;animation-delay:${(0.5 + (i%4)*0.08).toFixed(2)}s"></i>`; }).join("");
+  card.insertAdjacentHTML("beforeend", `<div class="hrboard" aria-hidden="true"><div class="bulbs"></div>
+    <div class="led"><span>HOME RUN!</span></div>${n>1? `<div class="cnt">× ${n}</div>` : ""}<div class="sparks">${sp}</div></div>`);
+  const el = card.querySelector(".hrboard:last-of-type");
+  setTimeout(()=>{ if(el && el.isConnected){ el.classList.add("out"); setTimeout(()=> el.remove(), 500); } }, 3000);
+}
 function hitFly(){
   const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   $$("#view .mcard").forEach((card, ci)=>{
@@ -7251,6 +7281,8 @@ function hitFly(){
       flyBalls(ov);
       balls.forEach((b, i)=> setTimeout(()=>{ if(!b.isConnected) return; b.style.opacity = ""; b.classList.add("land"); }, ends[i]*1000));
       setTimeout(()=>{ if(ov.isConnected) ov.remove(); }, (ends[ends.length-1] + 0.6)*1000);
+      const hr = +card.dataset.hr || 0;
+      if(hr > 0) setTimeout(()=> hrBoard(card, hr), (ends[ends.length-1] + 0.25)*1000);
     });
   });
 }
