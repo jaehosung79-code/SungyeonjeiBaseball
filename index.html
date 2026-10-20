@@ -1430,8 +1430,7 @@ svg.chart:not(.go) .ln-draw,svg.chart:not(.go) .ln-area,svg.chart:not(.go) .ln-p
 @keyframes sealInL{0%{opacity:0;transform:translateY(-10px) scale(2.8) rotate(30deg);filter:blur(1.5px)}55%{opacity:.95;transform:scale(.86) rotate(11deg);filter:blur(0)}72%{transform:scale(1.06) rotate(7deg)}100%{opacity:.95;transform:scale(1) rotate(9deg)}}
 @keyframes sealInD{0%{opacity:0;transform:translateY(-10px) scale(2.8) rotate(-20deg);filter:blur(1.5px)}55%{opacity:.95;transform:scale(.86) rotate(-3deg);filter:blur(0)}72%{transform:scale(1.06) rotate(-6deg)}100%{opacity:.95;transform:scale(1) rotate(-4deg)}}
 .mcard .mh .hbadge{display:inline-flex;align-items:center;gap:3px;margin-left:4px;padding:0;background:none;border:0;color:#E2495B;font-size:11px;font-weight:700;white-space:nowrap}
-nav.tabs{box-sizing:border-box;overflow:hidden;transform:translateZ(0)}
-nav.tabs button{height:var(--nav-h);min-height:0!important}
+nav.tabs button{min-height:var(--nav-h)}
 .mcard{position:relative}
 .mcard .mh .hballs{display:inline-flex;align-items:center;gap:2px;margin-left:6px;vertical-align:-2px}
 .mcard .mh .hb{display:inline-flex;width:13px;height:13px}
@@ -1440,7 +1439,7 @@ nav.tabs button{height:var(--nav-h);min-height:0!important}
 .mcard .hb.land{animation:hbLand .3s ease-out}
 /* 앱 셸: 내용만 스크롤 (하단 메뉴 고정) */
 html,body{height:100%;overflow:hidden}
-body{display:flex;flex-direction:column;height:100vh;height:100dvh;padding-bottom:0!important;overscroll-behavior:none}
+body{display:flex;flex-direction:column;height:100vh;height:var(--app-h,100dvh);padding-bottom:0!important;overscroll-behavior:none}
 .headwrap{position:relative!important;flex:none}
 #view{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
   max-width:none!important;width:100%;margin:0!important;
@@ -1448,6 +1447,7 @@ body{display:flex;flex-direction:column;height:100vh;height:100dvh;padding-botto
 nav.tabs{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;flex:none}
 .sect{scroll-margin-top:8px!important}
 @media print{ html,body{height:auto;overflow:visible} body{display:block;height:auto} #view{overflow:visible} }
+.mcard svg.hbfx{position:absolute;left:0;top:0;pointer-events:none;z-index:5;overflow:visible}
 </style>
 </head>
 <body>
@@ -7166,34 +7166,49 @@ function freezeNav(){
   const pb = parseFloat(getComputedStyle(nav).paddingBottom) || 0;
   if(pb > navPadMax){ navPadMax = pb; }
   nav.style.paddingBottom = navPadMax + "px";
-  nav.style.height = "calc(var(--nav-h) + " + navPadMax + "px)";
 }
 window.addEventListener("load", freezeNav);
+function setAppH(){
+  const h = window.innerHeight;
+  if(h > 200) document.documentElement.style.setProperty("--app-h", h + "px");
+}
+setAppH();
+window.addEventListener("resize", setAppH);
+window.addEventListener("orientationchange", ()=> setTimeout(setAppH, 300));
+if(window.visualViewport) visualViewport.addEventListener("resize", ()=>{ if(!typing()) setAppH(); });
 const MINI_BALL = '<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#fff" stroke="#bdb6aa" stroke-width="1.2"/><path d="M7.6 4.2c2.4 4.6 2.4 11 0 15.6M16.4 4.2c-2.4 4.6-2.4 11 0 15.6" fill="none" stroke="#d2312b" stroke-width="1.5" stroke-dasharray="2 1.3"/></svg>';
 function hitFly(){
   const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   $$("#view .mcard").forEach((card, ci)=>{
     const balls = $$(".hballs .hb", card); if(!balls.length) return;
-    const logo = card.querySelector(".mb .tlogo.me"); if(!logo || reduce || !card.animate) return;
+    const logo = card.querySelector(".mh .tg b") || card.querySelector(".mh .tg"); if(!logo || reduce) return;
     balls.forEach(b=> b.style.opacity = "0");
-    const base = 450 + Math.min(ci*60, 600);
+    const base = 0.45 + Math.min(ci*0.06, 0.6);
     requestAnimationFrame(()=>{
       const cr = card.getBoundingClientRect(), lr = logo.getBoundingClientRect();
+      const W = Math.round(cr.width), H = Math.round(cr.height);
       const sx = lr.left + lr.width/2 - cr.left, sy = lr.top + lr.height/2 - cr.top;
+      const fid = "hbw"+(++flySeq);
+      let svg = `<svg class="hbfx" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true"><defs><filter id="${fid}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.6"/></filter></defs>`;
+      const ends = [];
       balls.forEach((b, i)=>{
         const br = b.getBoundingClientRect(), ex = br.left + br.width/2 - cr.left, ey = br.top + br.height/2 - cr.top;
-        const fl = document.createElement("i"); fl.className = "hbfly"; fl.innerHTML = MINI_BALL;
-        fl.style.left = (sx-6.5)+"px"; fl.style.top = (sy-6.5)+"px"; card.appendChild(fl);
-        const dx = ex - sx, dy = ey - sy, peak = Math.max(9, Math.min(sy, ey) - 26) - sy;
-        const an = fl.animate([
-          {transform:"translate(0px,0px) scale(.6) rotate(0deg)", opacity:0, offset:0},
-          {transform:`translate(${dx*0.12}px,${peak*0.45}px) scale(1.25) rotate(140deg)`, opacity:1, offset:0.15},
-          {transform:`translate(${dx*0.5}px,${peak}px) scale(1.6) rotate(420deg)`, opacity:1, offset:0.5},
-          {transform:`translate(${dx*0.88}px,${dy*0.8}px) scale(1.15) rotate(680deg)`, opacity:1, offset:0.85},
-          {transform:`translate(${dx}px,${dy}px) scale(1) rotate(720deg)`, opacity:1, offset:1}
-        ], {duration:900, delay:base + i*170, easing:"cubic-bezier(.3,.05,.45,1)", fill:"both"});
-        an.onfinish = ()=>{ b.style.opacity = ""; b.classList.add("land"); fl.remove(); };
+        const cx = (sx+ex)/2, cy = Math.max(4, Math.min(sy, ey) - 34);
+        const dl = base + i*0.22; ends.push(dl + 0.95);
+        svg += `<g class="sp-fx" data-q="${sx.toFixed(1)},${sy.toFixed(1)},${cx.toFixed(1)},${cy.toFixed(1)},${ex.toFixed(1)},${ey.toFixed(1)}" data-d="${dl.toFixed(2)}" data-r="6.2">`
+          + `<ellipse class="sp-shadow" cx="${sx}" cy="${sy}" rx="0" ry="0" fill="rgba(0,0,0,.2)" opacity="0"/>`
+          + `<path class="sp-wind w1" d="" fill="none" stroke="rgba(120,140,150,.38)" stroke-width="9" stroke-linecap="round" filter="url(#${fid})"/>`
+          + `<path class="sp-wind w2" d="" fill="none" stroke="rgba(255,255,255,.95)" stroke-width="3.4" stroke-linecap="round" filter="url(#${fid})"/>`
+          + `<path class="sp-wind w3" d="" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="1.2" stroke-linecap="round"/>`
+          + `<g class="sp-ball" opacity="0"><circle r="1" fill="#fff" stroke="#bdb6aa" stroke-width=".12"/>`
+          + `<path d="M-.5,-.86 Q-.12,0 -.5,.86 M.5,-.86 Q.12,0 .5,.86" fill="none" stroke="#d2312b" stroke-width=".16" stroke-dasharray=".18 .1"/></g></g>`;
       });
+      svg += `</svg>`;
+      card.insertAdjacentHTML("beforeend", svg);
+      const ov = card.querySelector("svg.hbfx:last-of-type");
+      flyBalls(ov);
+      balls.forEach((b, i)=> setTimeout(()=>{ if(!b.isConnected) return; b.style.opacity = ""; b.classList.add("land"); }, ends[i]*1000));
+      setTimeout(()=>{ if(ov.isConnected) ov.remove(); }, (ends[ends.length-1] + 0.6)*1000);
     });
   });
 }
