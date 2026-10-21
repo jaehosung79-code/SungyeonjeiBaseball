@@ -840,6 +840,20 @@
   },
   {
    "id": "mtl71967i58lm",
+   "pdec": "",
+   "date": "2026-03-15",
+   "opponent": "수유초",
+   "venue": "용산",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "myScore": "5",
+   "oppScore": "1",
+   "note": "",
+   "inn": 6,
+   "dinn": [],
+   "tour": "26 소체",
+   "mt": 0,
    "pas": [
     {
      "id": "mtl75xiu4ggie",
@@ -854,9 +868,13 @@
      },
      "rbi": 0,
      "runs": 0,
-     "sb": 1,
+     "sb": 0,
      "cs": 0,
-     "note": ""
+     "note": "",
+     "mt": 1792566241656,
+     "fm": {
+      "sb": 1792566241656
+     }
     },
     {
      "id": "mtl7779yptxmb",
@@ -933,20 +951,7 @@
      "note": "",
      "createdAt": 1788420296340
     }
-   ],
-   "pdec": "",
-   "date": "2026-03-15",
-   "opponent": "수유초",
-   "venue": "용산",
-   "homeAway": "홈",
-   "level": "",
-   "type": "official",
-   "myScore": "5",
-   "oppScore": "1",
-   "note": "",
-   "inn": 6,
-   "dinn": [],
-   "tour": "26 소체"
+   ]
   },
   {
    "id": "mtl7j9ce5ymlm",
@@ -4936,6 +4941,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-21T07:03:52.714Z",
+ "savedAt": "2026-10-21T07:04:10.922Z",
  "by": "Sung YeonJei"
 }
