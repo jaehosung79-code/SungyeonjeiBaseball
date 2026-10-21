@@ -4539,11 +4539,7 @@ function viewStats(){
   + (posRows.length? (()=>{ const ft = fieldingOf(defs, gs); return `<div class="card"><div class="hd"><div style="flex:1"><h3>포지션별 수비</h3></div></div>
       ${tableHTML(["포지션","이닝","자살","보살","실책","병살","수비율"],
         posRows.map(r=>[esc(PMAP[r.pos]||r.pos), fmtInn(r.f.outs), r.f.PO, r.f.A, r.f.E, r.f.DP, avg3(r.f.FPCT)]),
-        ["합계", fmtInn(ft.outs), ft.PO, ft.A, ft.E, ft.DP, avg3(ft.FPCT)])}${insBox(iPos)}</div>`; })() : "")
-  + `<details class="note gl"><summary>타격 지표 설명</summary><b>OPS</b> 출루율+장타율 · <b>ISO</b> 순수 장타력 · <b>가중출루율 wOBA</b> 종합 타격 ·
-      <b>인플레이타구 BABIP</b> 인플레이 안타율 · <b>SecA</b> 안타 외 생산 · <b>RC</b> 추정 득점
-      <br><b>색상 기준</b> KBO 최근 시즌 리그 평균(근사) — AVG .270 · OBP .345 · SLG .400 · OPS .745 · ISO .130 · wOBA .335 · BABIP .310 · K% 18.5% · BB% 9.5% · BB/K 0.52 · SecA .240 · 타수/홈런 42 · 도루 성공률 70% · 기준 ±5% 이내 평균 (K%·타수/홈런은 낮을수록 우수)
-      ${insOn()? `<br><b>자동 분석</b> 학생야구 대략 기준과 비교 · 표본 적으면 참고용` : ""}</details>`;
+        ["합계", fmtInn(ft.outs), ft.PO, ft.A, ft.E, ft.DP, avg3(ft.FPCT)])}${insBox(iPos)}</div>`; })() : "");
 }
 
 /* 투수 분석 */
