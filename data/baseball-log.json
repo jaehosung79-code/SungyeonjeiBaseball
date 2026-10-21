@@ -1053,12 +1053,19 @@
    "homeAway": "홈",
    "level": "",
    "type": "official",
-   "myScore": "4",
-   "oppScore": "7",
+   "myScore": "7",
+   "oppScore": "14",
    "note": "",
    "inn": 6,
    "dinn": [],
-   "tour": "26 소체"
+   "tour": "26 소체",
+   "time": "",
+   "fm": {
+    "myScore": 1792566380836,
+    "oppScore": 1792566380836,
+    "time": 1792566380836
+   },
+   "mt": 1792566380836
   },
   {
    "id": "mtmiol8rajy2d",
@@ -4943,6 +4950,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-21T07:05:22.772Z",
+ "savedAt": "2026-10-21T07:06:29.352Z",
  "by": "Sung YeonJei"
 }
