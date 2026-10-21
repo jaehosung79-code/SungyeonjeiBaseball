@@ -4490,12 +4490,10 @@ function viewStats(){
         ${gaugeHTML(IC.eye, "볼넷율 BB%", b.BBP, pct1, .25, .1, "기준 10%")}
       </div></div>` : "")
   + `<div class="card">
-      <div class="hd" style="align-items:center;margin-bottom:4px">
+      <div class="hd" style="align-items:center;margin-bottom:10px">
         <h3 style="flex:1">타격 지표</h3>
         ${modeSeg("bmode", bm, [["classic","Classic"],["saber","Sabermetrics"]], "타격 지표 종류")}
       </div>
-      <div class="cap" style="margin:0 0 10px">${S.ui.year==="all"?"전체 기간":S.ui.year+"시즌"} · ${gtypeLabel()} · ${gs.length}경기 ${b.PA}타석
- · KBO 리그 평균 대비 <b style="color:#E2495B">이상</b> · <b style="color:#0C4A60">평균(±5%)</b> · <b style="color:#DBC1AD">미만</b></div>
       ${bm==="saber"? bSaber : bClassic}${insBox(iBat)}</div>`
   + ((b.SB+b.CS)? `<div class="card stealc"><div class="hd"><div style="flex:1"><div class="tinl"><h3>도루</h3><span class="cap">도루 시도 ${b.SB+b.CS}회</span></div></div></div>
       <div class="tiles">${tile("시도", b.SB+b.CS)+tile("성공", b.SB)+tile("실패", b.CS)+tile("성공률", b.SBP==null? "-" : (b.SBP*100).toFixed(1), b.SBP==null? "" : "%")
