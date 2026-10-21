@@ -3303,7 +3303,7 @@ function paClass(code){
   if(RMAP[code] && RMAP[code].g==="onbase") return "ob";
   return "out";
 }
-const SPRAY_COLOR = {hit:"var(--s1)", xbh:"#E2495B", out:"var(--out-mark)", ob:"var(--s3)"};
+const SPRAY_COLOR = {hit:"var(--s1)", xbh:"#E2495B", out:"var(--out-mark)", ob:"#1E3A8A"};
 const SPRAY_LABEL = {hit:"단타", xbh:"장타(2·3루타·홈런)", out:"인플레이 아웃", ob:"출루(실책·야선)"};
 
 const SPRAY_R = 2.5;
@@ -4648,13 +4648,7 @@ function pitchingSection(gs, defs){
         pt.games.map(e=>[fmtDate(e.g? e.g.date:""), esc((e.g&&e.g.opponent)||"-"), fmtInn(e.outs),
           e.inns.length? (e.inns[0]===e.inns[e.inns.length-1]? e.inns[0]+"회" : e.inns[0]+"~"+e.inns[e.inns.length-1]+"회") : "-",
           e.TBF||"-", e.H, e.BB, e.SO, e.R, e.ER, e.NP||"-", esc(e.dec? decKo(e.dec):"-"), fx2(e.ERA)]),
-        ["합계","",fmtInn(pt.outs),"",pt.TBF||"-",pt.H,pt.BB,pt.SO,pt.R,pt.ER,pt.NP||"-",`${pt.W}W ${pt.L}L`,fx2(pt.ERA)])}${insBox(insPitGames(pt.games))}</div>`
-  + `<details class="note gl"><summary>투수 지표 설명</summary><b>ERA</b> 9이닝당 자책점 · <b>WHIP</b> 이닝당 출루 허용(피안타+볼넷) ·
-      <b>FIP</b> 홈런·볼넷·삼진만으로 계산해 수비·운의 영향을 뺀 방어율 (13·HR + 3·(BB+HBP) − 2·K) ÷ 이닝 + ${FIP_C.toFixed(2)} ·
-      <b>ERA−FIP</b> 값이 크면 수비 도움이나 운이 좋았다는 뜻 · <b>K−BB%</b> 삼진율에서 볼넷율을 뺀 제어력 지표 ·
-      <b>스트라이크%</b> 전체 투구 중 스트라이크(파울·인플레이 포함) 비율 · <b>헛스윙%</b> 전체 투구 중 헛스윙 비율<br>
-      승패 자동 판정 — 선발은 정규이닝의 절반 이상을 던지고 팀이 이기면 <b>W</b>, 구원은 마지막 이닝을 3점 차 이내로 지키면 <b>SV</b>,
-      중간에 내려가고 팀이 이기면 <b>HLD</b>, 실점 후 팀이 지면 <b>L</b>로 판정 · 다르면 경기 정보에서 직접 지정</details>`;
+        ["합계","",fmtInn(pt.outs),"",pt.TBF||"-",pt.H,pt.BB,pt.SO,pt.R,pt.ER,pt.NP||"-",`${pt.W}W ${pt.L}L`,fx2(pt.ERA)])}${insBox(insPitGames(pt.games))}</div>`;
 }
 
 /* 영상 */
