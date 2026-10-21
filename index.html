@@ -688,6 +688,7 @@ td.ind{padding-left:20px}
 .legend{display:flex;gap:12px;flex-wrap:wrap;margin:2px 0 8px;font-size:12px;color:var(--text-2)}
 .legend i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:5px;vertical-align:-1px}
 .legend i.dot{border-radius:50%}
+.legend i.dot.dia{border-radius:1px;transform:rotate(45deg) scale(.85)}
 .legend i.dot.hollow{background:none!important;border:1px solid var(--out-mark);width:10px;height:10px}
 .dlbl{font-size:var(--cfs,10.5px);font-weight:650;fill:var(--text-1);font-family:var(--font-ui);font-variant-numeric:tabular-nums}
 .dlbl .pc{font-weight:400;fill:var(--text-3)}
@@ -3363,14 +3364,17 @@ function sprayChart(pas, lv, opt){
     pts.filter(p=>paClass(p.result)===cls).forEach(p=>{
       const z = zoneOf(p.zone, p._g? gameLevel(p._g) : lv);
       const tip = `<b>${esc(RMAP[p.result].ko)}</b><br>${esc(fmtDate(p._g? p._g.date : ""))} ${p.inning?p.inning+"회":""}<br>${esc(z.label)} · 약 ${Math.round(z.m)}m`;
-      inner += (cls==="out")
+      const dx = p.zone.x, dy = p.zone.y, dd = R*1.35;
+      inner += (cls==="ob")
+        ? `<polygon points="${dx.toFixed(1)},${(dy-dd).toFixed(2)} ${(dx+dd).toFixed(2)},${dy.toFixed(1)} ${dx.toFixed(1)},${(dy+dd).toFixed(2)} ${(dx-dd).toFixed(2)},${dy.toFixed(1)}" fill="${SPRAY_COLOR.ob}" stroke="var(--surface-1)" stroke-width="0.5" stroke-linejoin="round" data-tip="${esc(tip)}"/>`
+        : (cls==="out")
         ? `<circle cx="${p.zone.x.toFixed(1)}" cy="${p.zone.y.toFixed(1)}" r="${R}" fill="var(--surface-1)" fill-opacity=".55" stroke="${SPRAY_COLOR.out}" stroke-width="0.28" data-tip="${esc(tip)}"/>`
         : `${(opt.anim && (cls==="hit"||cls==="xbh"))? flyHTML(p.zone, SPRAY_COLOR[cls], R, fi++) : ""}<circle${(opt.anim && (cls==="hit"||cls==="xbh"))? ` class="sp-land" style="animation-delay:${(0.25*(fi-1)+0.93).toFixed(2)}s"` : ""} cx="${p.zone.x.toFixed(1)}" cy="${p.zone.y.toFixed(1)}" r="${R}" fill="${SPRAY_COLOR[cls]}" stroke="var(--surface-1)" stroke-width="${SW}" data-tip="${esc(tip)}"/>`;
       inner += `<circle cx="${p.zone.x.toFixed(1)}" cy="${p.zone.y.toFixed(1)}" r="${(R*3).toFixed(2)}" fill="transparent" data-tip="${esc(tip)}"/>`;
     });
   });
   const legend = `<div class="legend">`+["xbh","hit","ob","out"].map(c=>
-    `<span><i class="dot${c==="out"?" hollow":""}" style="background:${SPRAY_COLOR[c]}"></i>${SPRAY_LABEL[c]}</span>`).join("")+`</div>`;
+    `<span><i class="dot${c==="out"?" hollow":c==="ob"?" dia":""}" style="background:${SPRAY_COLOR[c]}"></i>${SPRAY_LABEL[c]}</span>`).join("")+`</div>`;
   return legend + fieldSVG(inner, fopt);
 }
 
@@ -3519,6 +3523,17 @@ function tableHTML(head, rows, foot, cls){
     + (foot?`<tfoot><tr>${foot.map(c=>`<td>${c}</td>`).join("")}</tr></tfoot>`:"")+`</table></div>`;
 }
 
+/* 타격 지표 리그 기준(KBO 최근 시즌 리그 평균 근사) · ±5% 이내 = 평균 */
+const LG_BAT = {AVG:.270, OBP:.345, SLG:.400, OPS:.745, ISO:.130, wOBA:.335, BABIP:.310,
+  KP:[.185,1], BBP:.095, BBK:.52, SecA:.240, PSO:.815, ABHR:[42,1], SBP:.70};
+const LG_BAND = .05;
+function lgC(k, v, txt){
+  const d = LG_BAT[k]; if(d==null || v==null || !isFinite(v)) return txt;
+  const base = Array.isArray(d)? d[0] : d, low = Array.isArray(d) && d[1];
+  let r = v/base - 1; if(low) r = -r;
+  const c = r > LG_BAND? "#E2495B" : r < -LG_BAND? "#DBC1AD" : "#0C4A60";
+  return `<b style="color:${c}">${txt}</b>`;
+}
 function hi300(v){ return v!=null && isFinite(v) && v >= 0.3; }
 function hi400(v){ return v!=null && isFinite(v) && v >= 0.4; }
 function vsPitcherTable(teams){
@@ -4439,19 +4454,19 @@ function viewStats(){
   }).sort((a,c)=> (c.f.outs-a.f.outs) || ((c.f.PO+c.f.A)-(a.f.PO+a.f.A)));
 
   const bClassic = tableHTML(["항목","값","항목","값"],
-    [["경기",gs.length,"타율 AVG",avg3(b.AVG)],["타석 PA",b.PA,"출루율 OBP",avg3(b.OBP)],
-     ["타수 AB",b.AB,"장타율 SLG",avg3(b.SLG)],["안타 H",b.H,"총루타 TB",b.TB],
+    [["경기",gs.length,"타율 AVG",lgC("AVG",b.AVG,avg3(b.AVG))],["타석 PA",b.PA,"출루율 OBP",lgC("OBP",b.OBP,avg3(b.OBP))],
+     ["타수 AB",b.AB,"장타율 SLG",lgC("SLG",b.SLG,avg3(b.SLG))],["안타 H",b.H,"총루타 TB",b.TB],
      ["2루타",b.s2,"타점 RBI",b.RBI],["3루타",b.s3,"득점 R",b.R],
      ["홈런 HR",b.HR,"볼넷 BB",b.BB],["삼진 SO",b.SO,"몸에 맞는 공",b.HBP],
      ["희생타",b.SF+b.SH,"도루 성공 SB",b.SB],
      ["도루 실패 CS",b.CS,"도루 시도",b.SB+b.CS]], null, "kv");
   const bSaber = tableHTML(["항목","값","항목","값"],
-    [["OPS",avg3(b.OPS),"삼진율 K%",pct1(b.KP)],
-     ["순장타율 ISO",avg3(b.ISO),"볼넷율 BB%",pct1(b.BBP)],
-     ["wOBA",avg3(b.wOBA),"볼넷/삼진 BB/K",fx2(b.BBK)],
-     ["BABIP",avg3(b.BABIP),"2차 타율 SecA",avg3(b.SecA)],
-     ["득점생산 RC",fx2(b.RC),"인플레이 전환율",pct1(b.PSO)],
-     ["타수/홈런",fx2(b.ABHR),"도루 성공률",pct1(b.SBP)]], null, "kv");
+    [["OPS",lgC("OPS",b.OPS,avg3(b.OPS)),"삼진율 K%",lgC("KP",b.KP,pct1(b.KP))],
+     ["순장타율 ISO",lgC("ISO",b.ISO,avg3(b.ISO)),"볼넷율 BB%",lgC("BBP",b.BBP,pct1(b.BBP))],
+     ["가중출루율 wOBA",lgC("wOBA",b.wOBA,avg3(b.wOBA)),"볼넷/삼진 BB/K",lgC("BBK",b.BBK,fx2(b.BBK))],
+     ["인플레이타구 BABIP",lgC("BABIP",b.BABIP,avg3(b.BABIP)),"2차 타율 SecA",lgC("SecA",b.SecA,avg3(b.SecA))],
+     ["득점생산 RC",fx2(b.RC),"인플레이 전환율",lgC("PSO",b.PSO,pct1(b.PSO))],
+     ["타수/홈런",lgC("ABHR",b.ABHR,fx2(b.ABHR)),"도루 성공률",lgC("SBP",b.SBP,pct1(b.SBP))]], null, "kv");
 
   const bm = bMode();
   const iBat = insBatting(b, gs), iSteal = insSteal(b, gs), iDir = insDirs(dirs, bip), iDepth = insDepth(depth, b),
@@ -4480,7 +4495,7 @@ function viewStats(){
         ${modeSeg("bmode", bm, [["classic","Classic"],["saber","Sabermetrics"]], "타격 지표 종류")}
       </div>
       <div class="cap" style="margin:0 0 10px">${S.ui.year==="all"?"전체 기간":S.ui.year+"시즌"} · ${gtypeLabel()} · ${gs.length}경기 ${b.PA}타석
-</div>
+ · KBO 리그 평균 대비 <b style="color:#E2495B">이상</b> · <b style="color:#0C4A60">평균(±5%)</b> · <b style="color:#DBC1AD">미만</b></div>
       ${bm==="saber"? bSaber : bClassic}${insBox(iBat)}</div>`
   + ((b.SB+b.CS)? `<div class="card stealc"><div class="hd"><div style="flex:1"><div class="tinl"><h3>도루</h3><span class="cap">도루 시도 ${b.SB+b.CS}회</span></div></div></div>
       <div class="tiles">${tile("시도", b.SB+b.CS)+tile("성공", b.SB)+tile("실패", b.CS)+tile("성공률", b.SBP==null? "-" : (b.SBP*100).toFixed(1), b.SBP==null? "" : "%")
@@ -4525,8 +4540,9 @@ function viewStats(){
       ${tableHTML(["포지션","이닝","자살","보살","실책","병살","수비율"],
         posRows.map(r=>[esc(PMAP[r.pos]||r.pos), fmtInn(r.f.outs), r.f.PO, r.f.A, r.f.E, r.f.DP, avg3(r.f.FPCT)]),
         ["합계", fmtInn(ft.outs), ft.PO, ft.A, ft.E, ft.DP, avg3(ft.FPCT)])}${insBox(iPos)}</div>`; })() : "")
-  + `<details class="note gl"><summary>타격 지표 설명</summary><b>OPS</b> 출루율+장타율 · <b>ISO</b> 순수 장타력 · <b>wOBA</b> 종합 타격 ·
-      <b>BABIP</b> 인플레이 안타율 · <b>SecA</b> 안타 외 생산 · <b>RC</b> 추정 득점
+  + `<details class="note gl"><summary>타격 지표 설명</summary><b>OPS</b> 출루율+장타율 · <b>ISO</b> 순수 장타력 · <b>가중출루율 wOBA</b> 종합 타격 ·
+      <b>인플레이타구 BABIP</b> 인플레이 안타율 · <b>SecA</b> 안타 외 생산 · <b>RC</b> 추정 득점
+      <br><b>색상 기준</b> KBO 최근 시즌 리그 평균(근사) — AVG .270 · OBP .345 · SLG .400 · OPS .745 · ISO .130 · wOBA .335 · BABIP .310 · K% 18.5% · BB% 9.5% · BB/K 0.52 · SecA .240 · 타수/홈런 42 · 도루 성공률 70% · 기준 ±5% 이내 평균 (K%·타수/홈런은 낮을수록 우수)
       ${insOn()? `<br><b>자동 분석</b> 학생야구 대략 기준과 비교 · 표본 적으면 참고용` : ""}</details>`;
 }
 
