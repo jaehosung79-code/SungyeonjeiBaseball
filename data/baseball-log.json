@@ -732,6 +732,20 @@
   },
   {
    "id": "mtkwdv0pnhq1o",
+   "pdec": "",
+   "date": "2026-03-14",
+   "opponent": "효제초",
+   "venue": "용산",
+   "homeAway": "홈",
+   "level": "",
+   "type": "official",
+   "myScore": "6",
+   "oppScore": "5",
+   "note": "",
+   "inn": 6,
+   "dinn": [],
+   "tour": "26 소체",
+   "mt": 0,
    "pas": [
     {
      "id": "mtkwezq0g7sz4",
@@ -779,11 +793,15 @@
      "pitcher": "신예준",
      "result": "BB",
      "zone": null,
-     "rbi": 0,
+     "rbi": 1,
      "runs": 0,
      "sb": 0,
      "cs": 0,
-     "note": ""
+     "note": "",
+     "mt": 1792566111385,
+     "fm": {
+      "rbi": 1792566111385
+     }
     }
    ],
    "def": [],
@@ -818,20 +836,7 @@
      "note": "",
      "createdAt": 1788417995223
     }
-   ],
-   "pdec": "",
-   "date": "2026-03-14",
-   "opponent": "효제초",
-   "venue": "용산",
-   "homeAway": "홈",
-   "level": "",
-   "type": "official",
-   "myScore": "6",
-   "oppScore": "5",
-   "note": "",
-   "inn": 6,
-   "dinn": [],
-   "tour": "26 소체"
+   ]
   },
   {
    "id": "mtl71967i58lm",
@@ -4926,6 +4931,6 @@
    "note": ""
   }
  ],
- "savedAt": "2026-10-21T07:01:47.903Z",
+ "savedAt": "2026-10-21T07:02:04.120Z",
  "by": "Sung YeonJei"
 }
